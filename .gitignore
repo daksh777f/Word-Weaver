@@ -1,0 +1,22 @@
+.env*
+onboarding/config.php
+
+# Dependencies
+vendor/
+
+# PHPMailer
+onboarding/otp/PHPMailer/examples/
+
+# Logs
+*.log
+
+# Editor
+.vscode/
+
+wordweavers_redirect.html
+wordweaversbg_redirect.jpg
+wordweaverslogo_redirect.png
+ww_logo.webp
+
+database/
+landing_page/

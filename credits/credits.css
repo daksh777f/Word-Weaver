@@ -1,0 +1,862 @@
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');
+}
+
+body {
+    background-image: url('../assets/menu/menubg.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    min-height: 100vh;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.credits-container {
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 2px solid rgba(96, 239, 255, 0.5);
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    margin: 2rem auto;
+    box-shadow: 0 0 20px rgba(0, 255, 135, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    /* Prevent scrolling on tablets */
+    html, body {
+        height: 100%;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+    }
+    
+    .main-content {
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .credits-container {
+        margin: 0.5rem auto;
+        padding: 1rem;
+        width: 85%;
+        max-width: 100%;
+        border-radius: 12px;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Prevent scrolling on mobile */
+    html, body {
+        height: 100%;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+    }
+    
+    .main-content {
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .credits-container {
+        margin: 0.25rem auto;
+        padding: 0.75rem;
+        width: 80%;
+        border-radius: 10px;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+    }
+}
+
+.credits-container.slide-out {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+.credits-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../assets/menu/hcccibg.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.credits-title {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.credits-logo {
+    max-width: 200px;
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+/* Styling for the additional Word Weavers logo */
+.credits-big-logo {
+    max-width: 300px;
+    height: auto;
+    margin-top: 2rem;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+@media (max-width: 768px) {
+    .credits-title {
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .credits-title {
+        margin-bottom: 0.3rem;
+    }
+}
+
+/* Mobile scaling for Word Weavers logo */
+@media (max-width: 768px) {
+    .credits-big-logo {
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .credits-big-logo {
+        max-width: 180px;
+    }
+}
+
+/* Existing scaling for credits logo */
+@media (max-width: 768px) {
+    .credits-logo {
+        max-width: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .credits-logo {
+        max-width: 110px;
+    }
+}
+
+.credits-section {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .credits-section {
+        margin-bottom: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .credits-section {
+        margin-bottom: 1rem;
+    }
+}
+
+.credits-section h2 {
+    font-family: 'Press Start 2P', cursive;
+    color: #ffffff;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+    .credits-section h2 {
+        font-size: 0.5rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .developer-container h2 {
+        font-size: 0.6rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .credits-section h2 {
+        font-size: 0.4rem;
+        margin-bottom: 0.4rem;
+        margin-top: -1%;
+    }
+    
+    .developer-container h2 {
+        font-size: 0.5rem !important;
+    }
+}
+
+.members-container,
+.developer-container,
+.github-container {
+    margin: 0 auto 1.5rem;
+    padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+
+    .members-container,
+    .developer-container,
+    .github-container {
+        margin: 0 auto 1.2rem;
+        padding: 0.4rem;
+    }
+    
+    .developer-container {
+        margin-top: -1.2rem;
+    }
+    
+    .github-container {
+        margin-top: -1rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .members-container,
+    .developer-container,
+    .github-container {
+        margin: 0 auto 1rem;
+        padding: 0.3rem;
+    }
+    
+    .developer-container {
+        margin-top: -1rem;
+    }
+    
+    .github-container {
+        margin-top: -0.8rem;
+    }
+}
+
+.members-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .members-list {
+        gap: 0.4rem;
+        margin-bottom: 0.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .members-list {
+        gap: 0.3rem;
+        margin-bottom: 0.3rem;
+    }
+}
+
+.member-card,
+.developer-card {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+    text-align: center;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+
+    .member-card,
+    .developer-card {
+        font-size: 0.4rem;
+        line-height: 1.2;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .member-card,
+    .developer-card {
+        font-size: 0.3rem;
+        line-height: 1.1;
+    }
+}
+
+.member-card:hover,
+.developer-card:hover {
+    color: #ffd700;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+#developerName {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#developerName:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .credits-title {
+        font-size: 0.6rem;
+    }
+
+    .credits-section h2 {
+        font-size: 0.5rem;
+    }
+    
+    .developer-container h2 {
+        font-size: 0.6rem !important;
+    }
+
+    .members-list {
+        grid-template-columns: 1fr;
+    }
+
+    .member-card,
+    .developer-card {
+        font-size: 0.4rem;
+    }
+
+    .developer-card {
+        font-size: 0.5rem;
+    }
+
+    .members-container,
+    .developer-container {
+        padding: 1.5rem;
+    }
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.back-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    color: white;
+    font-size: 0.9rem;
+    font-family: 'Press Start 2P', cursive;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .back-button {
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-button {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.7rem;
+        gap: 6px;
+    }
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-5px);
+}
+
+.github-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.github-link,
+.discord-link,
+.email-link {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.github-logo,
+.discord-logo,
+.email-logo {
+    font-size: 1.2rem;
+    color: #ffffff;
+    transition: all 0.3s ease;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.github-logo:hover {
+    color: #87CEEB;
+    text-shadow: 0 0 10px rgba(135, 206, 235, 0.5);
+    transform: scale(1.1);
+}
+
+.discord-logo:hover {
+    color: #7289DA;
+    text-shadow: 0 0 10px rgba(114, 137, 218, 0.5);
+    transform: scale(1.1);
+}
+
+.email-logo:hover {
+    color: #FFA500;
+    text-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .github-container {
+        gap: 1.5rem;
+    }
+    
+    .github-logo,
+    .discord-logo,
+    .email-logo {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .github-container {
+        gap: 1rem;
+    }
+    
+    .github-logo,
+    .discord-logo,
+    .email-logo {
+        font-size: 0.8rem;
+    }
+}
+
+.credits-footer {
+    text-align: center;
+    padding: 1rem 0 0.5rem 0;
+    margin-top: 1rem;
+}
+
+.credits-footer p {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+    .credits-footer p {
+        font-size: 0.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .credits-footer p {
+        font-size: 0.3rem;
+    }
+}
+
+/* Gravatar Hover Card Styles */
+.gravatar-card-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gravatar-card-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+.gravatar-card-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    z-index: 1001;
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 320px;
+    width: 85%;
+}
+
+.gravatar-card-container.show {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.gravatar-card-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 1002;
+}
+
+.gravatar-card-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Gravatar Hovercard Styles */
+.gravatar-hovercard {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.gravatar-hovercard__inner {
+    position: relative;
+}
+
+.gravatar-hovercard__header-image {
+    width: 100%;
+    height: 90px;
+    background-size: cover !important;
+    background-position: center 10% !important;
+    background-repeat: no-repeat !important;
+}
+
+.gravatar-hovercard__header {
+    position: relative;
+    padding: 0 15px 15px;
+    margin-top: -42px;
+}
+
+.gravatar-hovercard__avatar-link {
+    display: block;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.gravatar-hovercard__avatar-link:hover {
+    transform: scale(1.05);
+}
+
+.gravatar-hovercard__avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gravatar-hovercard__personal-info-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    margin-top: 12px;
+}
+
+.gravatar-hovercard__personal-info-link:hover .gravatar-hovercard__name {
+    color: #0073b1;
+}
+
+.gravatar-hovercard__name {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+    color: #1a1a1a;
+    transition: color 0.2s ease;
+}
+
+.gravatar-hovercard__job {
+    font-size: 12px;
+    color: #666;
+    margin: 4px 0 0;
+    line-height: 1.3;
+}
+
+.gravatar-hovercard__body {
+    padding: 0 15px 15px;
+}
+
+.gravatar-hovercard__description {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.gravatar-hovercard__social-links {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+
+.gravatar-hovercard__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #f5f5f5;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.gravatar-hovercard__social-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gravatar-hovercard__social-link[data-service-name="gravatar"]:hover {
+    background: #1e8e3e;
+}
+
+.gravatar-hovercard__social-link[data-service-name="linkedin"]:hover {
+    background: #0073b1;
+}
+
+.gravatar-hovercard__social-link[data-service-name="github"]:hover {
+    background: #333;
+}
+
+.gravatar-hovercard__social-link[data-service-name="facebook"]:hover {
+    background: #1877f2;
+}
+
+.gravatar-hovercard__social-icon {
+    width: 18px;
+    height: 18px;
+    filter: brightness(0.7);
+    transition: filter 0.2s ease;
+}
+
+.gravatar-hovercard__social-link:hover .gravatar-hovercard__social-icon {
+    filter: brightness(0) invert(1);
+}
+
+.gravatar-hovercard__footer {
+    padding: 12px 15px;
+    border-top: 1px solid #eee;
+    background: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gravatar-hovercard__profile-url {
+    font-size: 12px;
+    color: #666;
+    text-decoration: none;
+    font-weight: 500;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gravatar-hovercard__profile-url:hover {
+    color: #0073b1;
+}
+
+.gravatar-hovercard__profile-link {
+    font-size: 12px;
+    color: #0073b1;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: gap 0.2s ease;
+}
+
+.gravatar-hovercard__profile-link:hover {
+    gap: 8px;
+}
+
+.gravatar-hovercard__profile-color {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+/* Mobile responsiveness for Gravatar card */
+@media (max-width: 768px) {
+.gravatar-card-container {
+width: 95%;
+max-width: 300px;
+}
+
+.gravatar-hovercard__header {
+margin-top: -38px;
+padding: 0 12px 12px;
+}
+
+.gravatar-hovercard__avatar-link {
+width: 76px;
+height: 76px;
+border-width: 2px;
+}
+
+.gravatar-hovercard__name {
+font-size: 16px;
+}
+
+.gravatar-hovercard__job {
+font-size: 11px;
+}
+
+.gravatar-hovercard__body {
+padding: 0 12px 12px;
+}
+
+.gravatar-hovercard__description {
+font-size: 12px;
+}
+
+.gravatar-hovercard__social-links {
+padding: 12px;
+gap: 8px;
+}
+
+.gravatar-hovercard__social-link {
+width: 30px;
+height: 30px;
+}
+
+.gravatar-hovercard__social-icon {
+width: 16px;
+height: 16px;
+}
+
+.gravatar-hovercard__footer {
+padding: 10px 12px;
+}
+
+.gravatar-hovercard__profile-url {
+font-size: 11px;
+max-width: 100px;
+}
+
+.gravatar-hovercard__profile-link {
+font-size: 11px;
+}
+}
+
+@media (max-width: 480px) {
+.gravatar-card-container {
+width: 98%;
+max-width: 280px;
+}
+
+.gravatar-hovercard__header-image {
+height: 70px;
+}
+
+.gravatar-hovercard__header {
+margin-top: -35px;
+padding: 0 10px 10px;
+}
+
+.gravatar-hovercard__avatar-link {
+width: 70px;
+height: 70px;
+border-width: 2px;
+}
+
+.gravatar-hovercard__name {
+font-size: 14px;
+}
+
+.gravatar-hovercard__job {
+font-size: 10px;
+}
+
+.gravatar-hovercard__body {
+padding: 0 10px 10px;
+}
+
+.gravatar-hovercard__description {
+font-size: 11px;
+}
+
+.gravatar-hovercard__social-links {
+padding: 10px;
+gap: 8px;
+}
+
+.gravatar-hovercard__social-link {
+width: 28px;
+height: 28px;
+}
+
+.gravatar-hovercard__social-icon {
+width: 14px;
+height: 14px;
+}
+
+.gravatar-hovercard__footer {
+padding: 8px 10px;
+}
+
+.gravatar-hovercard__profile-url {
+font-size: 10px;
+max-width: 90px;
+}
+
+.gravatar-hovercard__profile-link {
+font-size: 10px;
+}
+}

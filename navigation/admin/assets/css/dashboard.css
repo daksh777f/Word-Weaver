@@ -1,0 +1,1419 @@
+/* ============================================
+   MINIMALIST ADMIN DASHBOARD STYLES
+   Clean, modern design with reduced visual noise
+   ============================================ */
+
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('../../../../fonts/PressStart2P-Regular.ttf') format('truetype');
+}
+
+/* Admin Container - Same as Profile */
+.admin-container {
+    background: rgba(10, 10, 15, 0.95);
+    border-radius: 25px;
+    padding: 1.25rem;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    border: 2px solid rgba(96, 239, 255, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.admin-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, rgba(96, 239, 255, 0.8), rgba(0, 255, 135, 0.8));
+}
+
+/* Custom Admin Sidebar Styles */
+.admin-sidebar .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nav-divider {
+    height: 1px;
+    background: rgba(96, 239, 255, 0.2);
+    margin: 0.5rem 0;
+}
+
+.back-link {
+    transition: all 0.3s ease;
+}
+
+.back-link:hover {
+    transform: translateX(-3px);
+}
+
+/* Main Content Area */
+.main-content {
+    padding: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Hero Container (Merged Welcome & Stats) - Matching Teacher Dashboard */
+.hero-container {
+    background:
+        linear-gradient(to right, rgba(19, 32, 51, 0.95) 0%, rgba(19, 32, 51, 0.7) 20%, rgba(19, 32, 51, 0.4) 100%),
+        linear-gradient(135deg, rgba(10, 10, 15, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%),
+        url('../images/admin_cover.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-section {
+    color: white;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    background: none !important;
+    border: none !important;
+    margin-bottom: 0 !important;
+}
+
+.welcome-content {
+    flex: 1;
+}
+
+.welcome-content h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 12px 0;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.welcome-roles {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.welcome-role-badge {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.welcome-role-badge i {
+    font-size: 12px;
+}
+
+.welcome-datetime {
+    display: flex;
+    align-items: center;
+}
+
+.datetime-display {
+    text-align: right;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 20px 28px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+.date-text {
+    font-size: 16px;
+    opacity: 0.95;
+    margin-bottom: 4px;
+    color: white;
+}
+
+.time-text {
+    font-size: 28px;
+    font-weight: 600;
+    opacity: 1;
+    color: white;
+}
+
+/* Quick Stats Grid */
+.quick-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.quick-stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.quick-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    border-color: rgba(96, 239, 255, 0.3);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat-content {
+    flex: 1;
+    text-align: left;
+}
+
+.stat-content h3 {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 6px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.stat-content .value {
+    font-size: 28px;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+}
+
+.stat-sublabel {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+
+/* Admin Section Styling */
+.admin-nav-section {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.admin-nav-row {
+    background: #142033;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.admin-header-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.admin-header-label i {
+    color: #4cc9f0;
+    font-size: 1.2rem;
+}
+
+.admin-header-label h3 {
+    color: white;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+
+    /* Main Content Padding */
+    .main-content {
+        padding: 1rem;
+    }
+
+    /* Hero Mobile Adaptations */
+    .hero-container {
+        padding: 1.25rem 1rem;
+        gap: 1.2rem;
+        border-radius: 15px;
+        margin-bottom: 0.5rem;
+    }
+
+    .welcome-section {
+        padding: 0;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 0;
+        min-height: auto;
+    }
+
+    .welcome-content h2 {
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+    }
+
+    .welcome-roles {
+        display: none;
+        /* Hide roles on mobile to save space if needed, or keep smaller */
+    }
+
+    .weather-icon {
+        display: none !important;
+    }
+
+    /* 2 Stat cards per row on mobile */
+    .quick-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 0;
+    }
+
+    .quick-stat-card {
+        padding: 10px;
+        gap: 8px;
+        border-radius: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stat-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+        flex-shrink: 0;
+    }
+
+    .stat-content {
+        width: 100%;
+    }
+
+    .stat-content h3 {
+        font-size: 10px;
+        margin-bottom: 2px;
+    }
+
+    .stat-content .value {
+        font-size: 18px;
+        margin-bottom: 2px;
+    }
+
+    .stat-sublabel {
+        font-size: 9px;
+    }
+
+    .datetime-display {
+        padding: 10px 15px;
+        border-radius: 12px;
+    }
+
+    .time-text {
+        font-size: 16px;
+    }
+
+    .date-text {
+        font-size: 10px;
+    }
+}
+
+/* Navigation Buttons Section - Replicated from Teacher Dashboard */
+.dashboard-navigation {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.admin-management-section {
+    margin-top: 0.5rem;
+    background: #142033;
+    border-radius: 16px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #1a2a40;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.admin-nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.management-header {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 12px;
+}
+
+/* Removed icon sizing as it's now handled inline/stat-icon class */
+
+.management-header h3 {
+    color: white;
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.admin-cards-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex: 1;
+}
+
+.nav-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    padding: 1rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(96, 239, 255, 0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    position: relative;
+    overflow: hidden;
+    transform: translate3d(0, 0, 0);
+    transition: all 0.3s ease;
+    min-width: 200px;
+}
+
+.nav-card:hover {
+    transform: translate3d(0, -3px, 0);
+    border-color: rgba(96, 239, 255, 0.4);
+    background: rgba(20, 20, 35, 0.95);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.nav-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: rgba(96, 239, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+.nav-card:hover .nav-card-icon {
+    transform: scale(1.05);
+}
+
+.nav-card-content {
+    flex: 1;
+}
+
+.nav-card-content h3 {
+    color: white;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.nav-card-content p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Mobile Responsive Updates */
+@media (max-width: 768px) {
+
+    .admin-sidebar .sidebar-nav {
+        gap: 0.5rem;
+    }
+
+    .dashboard-navigation {
+        width: 100%;
+        padding: 0;
+    }
+
+    .admin-nav-row {
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 0;
+    }
+
+    .admin-management-section {
+        padding: 0.8rem 1rem;
+        border-radius: 12px;
+        margin-top: 2rem;
+    }
+
+    .management-header h3 {
+        display: block;
+        font-size: 0.9rem;
+    }
+
+    .management-header i {
+        font-size: 1.2rem;
+    }
+
+    .admin-cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .nav-card {
+        padding: 0.5rem;
+        gap: 0.5rem;
+        justify-content: flex-start;
+        min-width: calc(50% - 0.5rem);
+        background: rgba(10, 10, 15, 0.8);
+    }
+
+    .nav-card-content {
+        display: block;
+    }
+
+    .nav-card-content h3 {
+        font-size: 0.75rem;
+    }
+
+    .nav-card-content p {
+        display: none;
+    }
+
+    .nav-card-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 0.85rem;
+    }
+
+    /* Dashboard Grid fix for mobile */
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .role-stats {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-container {
+        padding: 1rem;
+    }
+
+    .welcome-content h2 {
+        font-size: 1rem;
+    }
+
+    .stat-content .value {
+        font-size: 16px;
+    }
+
+    .nav-card {
+        min-width: 100%;
+    }
+}
+
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+/* Daily traffic chart container (Full width on desktop) */
+.dashboard-card.full-width {
+    width: 100%;
+}
+
+/* Dashboard Cards - Minimalist */
+.dashboard-card {
+    background: #0d1623;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #2a2a2a;
+    width: 100%;
+}
+
+/* Card Header - Minimalist (Text + Line) */
+.card-header {
+    background: transparent;
+    padding: 16px 20px 12px 20px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.card-header h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-header h3 i {
+    font-size: 0.9rem;
+    color: #4cc9f0;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-action {
+    background: transparent;
+    color: #4cc9f0;
+    border: 1px solid #4cc9f0;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-action:hover {
+    background: rgba(76, 201, 240, 0.1);
+}
+
+/* Chart Filter Dropdown - Minimalist */
+.chart-filter {
+    display: flex;
+    align-items: center;
+}
+
+.chart-filter select {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border: 1px solid #4cc9f0;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.chart-filter select option {
+    background: #fff;
+    color: #000;
+}
+
+.chart-filter select:hover {
+    background: rgba(76, 201, 240, 0.05);
+}
+
+.card-body {
+    padding: 12px 20px;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Dedicated responsive wrapper for Chart.js */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Chart Styling */
+#gradeChart {
+    max-height: 280px;
+}
+
+/* Activity Timeline - Minimalist */
+.activity-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    padding-left: 24px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 20px;
+    bottom: -12px;
+    width: 1px;
+    background: #333;
+}
+
+.timeline-item:last-child::before {
+    display: none;
+}
+
+.timeline-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #4cc9f0;
+    border: 2px solid #1e1e1e;
+    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    top: 3px;
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-title {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 3px;
+    font-size: 0.85rem;
+}
+
+.timeline-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.timeline-badge {
+    background: rgba(76, 201, 240, 0.15);
+    color: #4cc9f0;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.timeline-time {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Top Performers - Minimalist */
+.performers-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.performer-card {
+    background: #252525;
+    border-radius: 4px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+}
+
+.performer-card:hover {
+    background: #2a2a2a;
+}
+
+.performer-rank {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    background: rgba(76, 201, 240, 0.2);
+    color: #4cc9f0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.performer-info {
+    flex: 1;
+}
+
+.performer-name {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 3px;
+    font-size: 0.85rem;
+}
+
+.performer-stats {
+    display: flex;
+    gap: 12px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.performer-stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.performer-score {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4cc9f0;
+}
+
+.leaderboard-content {
+    display: block;
+}
+
+/* Admin Activity Log - Minimalist */
+.log-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.log-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px;
+    background: #252525;
+    border-radius: 4px;
+    border-left: 2px solid #4cc9f0;
+    align-items: flex-start;
+}
+
+.log-time {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.7rem;
+}
+
+.log-content {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+}
+
+.log-admin {
+    color: #4cc9f0;
+    font-weight: 500;
+}
+
+.log-action {
+    margin-left: 8px;
+}
+
+/* User Table Enhancements */
+.grade-badge {
+    background: rgba(76, 201, 240, 0.15);
+    color: #4cc9f0;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+/* Table Controls - Minimalist */
+.table-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.grade-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.grade-filter label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+}
+
+.grade-filter select {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    border: 1px solid #404040;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.grade-filter select:focus {
+    outline: none;
+    border-color: #4cc9f0;
+}
+
+/* Search Box - Minimalist */
+.search-box {
+    position: relative;
+    width: 280px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 8px 12px 8px 32px;
+    background: #2d2d2d;
+    border: 1px solid #404040;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #4cc9f0;
+}
+
+/* Table Styles - Minimalist */
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 10px;
+    position: relative;
+    border-radius: 6px;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+
+.user-table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+    background: transparent;
+    font-size: 0.8rem;
+}
+
+.user-table th,
+.user-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.user-table th {
+    background: #252525;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+}
+
+.user-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.user-table tbody tr:hover {
+    background: #252525;
+}
+
+.user-table td {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Sortable Headers */
+.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.sortable:hover {
+    color: #4cc9f0;
+}
+
+/* Action Buttons - Minimalist */
+.actions {
+    display: flex;
+    gap: 6px;
+}
+
+.actions button {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.actions button:hover:not(:disabled) {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.actions button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.btn-view {
+    color: #4cc9f0;
+}
+
+.btn-warn {
+    color: #ffc107;
+}
+
+.btn-delete {
+    color: #f44336;
+}
+
+/* Loading Indicator */
+#loadingIndicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    border-radius: 6px;
+}
+
+#loadingIndicator .loading-content {
+    text-align: center;
+    color: #4cc9f0;
+    font-size: 0.9rem;
+}
+
+#loadingIndicator i {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+    display: block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* No Data Message */
+.no-data {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 20px;
+    font-style: italic;
+    font-size: 0.8rem;
+}
+
+.no-users {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 20px;
+    font-size: 0.8rem;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 10px;
+        margin: 5px;
+        border-radius: 6px;
+    }
+
+    .dashboard-header {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 0.85rem;
+    }
+
+    .dashboard-header p {
+        font-size: 0.65rem;
+    }
+
+    .dashboard-header .header-logo {
+        width: 24px;
+        height: 24px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .stat-card {
+        padding: 10px;
+        gap: 8px;
+    }
+
+    .stat-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+
+    .stat-value {
+        font-size: 1.1rem;
+    }
+
+    .stat-label {
+        font-size: 0.65rem;
+    }
+
+    .stat-sublabel {
+        font-size: 0.6rem;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .card-header {
+        padding: 10px 12px 8px 12px;
+    }
+
+    .card-header h3 {
+        font-size: 0.7rem;
+        gap: 6px;
+    }
+
+    .card-header h3 i {
+        font-size: 0.75rem;
+    }
+
+    .card-body {
+        padding: 12px;
+    }
+
+    .chart-filter select {
+        font-size: 0.65rem;
+        padding: 3px 8px;
+    }
+
+    #gradeChart {
+        max-height: 200px;
+    }
+
+    .timeline-item {
+        padding-left: 20px;
+        gap: 8px;
+    }
+
+    .timeline-dot {
+        width: 12px;
+        height: 12px;
+    }
+
+    .timeline-title {
+        font-size: 0.75rem;
+    }
+
+    .timeline-badge {
+        font-size: 0.6rem;
+        padding: 2px 6px;
+    }
+
+    .timeline-time {
+        font-size: 0.6rem;
+    }
+
+    .performer-card {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .performer-rank {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+
+    .performer-name {
+        font-size: 0.75rem;
+    }
+
+    .performer-stats {
+        font-size: 0.65rem;
+        gap: 8px;
+    }
+
+    .performer-score {
+        font-size: 0.85rem;
+    }
+
+    /* Mobile table - card layout */
+    .user-table {
+        min-width: auto;
+        border: 0;
+        background: transparent;
+    }
+
+    .user-table thead {
+        display: none;
+    }
+
+    .user-table tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        background: #1e1e1e;
+        border: 1px solid #2a2a2a;
+        border-radius: 12px;
+        padding: 1rem;
+    }
+
+    .user-table tbody tr:hover {
+        background: #252525;
+    }
+
+    .user-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border: none;
+        text-align: right;
+        font-size: 0.85rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .user-table td:last-child {
+        border-bottom: none;
+        justify-content: flex-end;
+        padding-top: 1rem;
+        margin-top: 0.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .user-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #4cc9f0;
+        text-align: left;
+        flex: 0 0 40%;
+    }
+
+    /* Hide label for actions column if desired, or keep it */
+    .user-table td[data-label="Actions"]::before {
+        display: none;
+    }
+
+    .user-table td[data-label="Actions"] {
+        justify-content: flex-end;
+    }
+
+    /* Analytics Mobile Optimizations */
+    .role-item,
+    .gwa-grade-item {
+        padding: 10px 12px;
+        border-radius: 8px;
+    }
+
+    .role-label,
+    .gwa-grade-name {
+        font-size: 0.75rem;
+    }
+
+    .role-value,
+    .gwa-grade-stats {
+        font-size: 0.75rem;
+        gap: 8px;
+    }
+
+    #distributionChart,
+    #gwaChart {
+        max-height: 220px;
+    }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stat-card,
+.dashboard-card {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+.stat-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.stat-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+/* Analytics Items Styling */
+.role-stats,
+.gwa-grade-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.role-item,
+.gwa-grade-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.role-item:hover,
+.gwa-grade-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(4px);
+    border-color: rgba(76, 201, 240, 0.3);
+}
+
+.role-label,
+.gwa-grade-name {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.role-value,
+.gwa-grade-stats {
+    color: #4cc9f0;
+    font-size: 0.9rem;
+    display: flex;
+    gap: 15px;
+    font-weight: 500;
+}

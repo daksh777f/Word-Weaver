@@ -1,0 +1,129 @@
+/* Mobile Sidebar Styles */
+.mobile-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100vh;
+    background: #101926;
+    /* var(--card-bg) */
+    z-index: 10000;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    /* var(--card-border) */
+}
+
+.mobile-sidebar.open {
+    transform: translateX(0);
+}
+
+.mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.mobile-nav-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-header .brand {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.55rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mobile-nav-links a {
+    color: rgba(255, 255, 255, 0.7);
+    /* var(--text-muted) */
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mobile-nav-links a:hover,
+.mobile-nav-links a.active {
+    color: #009bd9;
+    /* var(--primary) */
+    transform: translateX(4px);
+}
+
+.mobile-nav-links .nav-cta {
+    margin-top: 12px;
+    background: #009bd9;
+    color: #fff !important;
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 101;
+}
+
+.hamburger-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+@media (max-width: 900px) {
+    .hamburger-btn {
+        display: block;
+    }
+}
