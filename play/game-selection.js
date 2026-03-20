@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (gameType === 'grammarbg') {
                     const logData = JSON.stringify({
                         action: 'Clicked Grammar Heroes',
-                        details: 'User selected Grammar Heroes game'
+                        details: 'User selected coding concepts Heroes game'
                     });
 
                     if (navigator.sendBeacon) {
@@ -114,6 +114,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     setTimeout(() => {
                         window.location.href = '../MainGame/grammarheroes/index.php';
+                    }, 100);
+                } else if (gameType === 'bughunt') {
+                    const logData = JSON.stringify({
+                        action: 'Clicked Bug Hunt Arena',
+                        details: 'User selected Bug Hunt Arena game'
+                    });
+
+                    if (navigator.sendBeacon) {
+                        navigator.sendBeacon('../api/admin-log.php', logData);
+                    } else {
+                        fetch('../api/admin-log.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: logData,
+                            keepalive: true
+                        }).catch(err => console.error('Log failed', err));
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = 'bug-hunt.php';
+                    }, 100);
+                } else if (gameType === 'dailysprint') {
+                    const logData = JSON.stringify({
+                        action: 'Clicked Daily Bug Sprint',
+                        details: 'User started Daily Bug Sprint'
+                    });
+
+                    if (navigator.sendBeacon) {
+                        navigator.sendBeacon('../api/admin-log.php', logData);
+                    } else {
+                        fetch('../api/admin-log.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: logData,
+                            keepalive: true
+                        }).catch(err => console.error('Log failed', err));
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = 'daily-sprint.php';
+                    }, 100);
+                } else if (gameType === 'dailysprint_done') {
+                    setTimeout(() => {
+                        window.location.href = '../navigation/leaderboards/leaderboards.php?game=daily_sprint';
+                    }, 100);
+                } else if (gameType === 'livecoding') {
+                    const logData = JSON.stringify({
+                        action: 'Clicked Live Coding Arena',
+                        details: 'User selected Live Coding Arena game'
+                    });
+
+                    if (navigator.sendBeacon) {
+                        navigator.sendBeacon('../api/admin-log.php', logData);
+                    } else {
+                        fetch('../api/admin-log.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: logData,
+                            keepalive: true
+                        }).catch(err => console.error('Log failed', err));
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = 'live-coding.php';
                     }, 100);
                 } else if (!gameType) {
                     showToast('Coming Soon!');

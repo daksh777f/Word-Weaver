@@ -43,6 +43,21 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         'max_level' => $maxLevel
     ];
 }
+
+$bugCountStmt = $pdo->query("SELECT COUNT(*) FROM bug_challenges WHERE challenge_type = 'bug_fix'");
+$bugChallengeCount = (int)$bugCountStmt->fetchColumn();
+
+$dailySprintCheckStmt = $pdo->prepare("SELECT completed FROM daily_sprint_locks WHERE user_id = ? AND sprint_date = CURDATE() LIMIT 1");
+$dailySprintCheckStmt->execute([$user_id]);
+$dailySprintRow = $dailySprintCheckStmt->fetch(PDO::FETCH_ASSOC);
+$dailySprintCompleted = $dailySprintRow && (int)$dailySprintRow['completed'] === 1;
+
+$liveCodingCountStmt = $pdo->query("SELECT COUNT(*) FROM live_coding_challenges");
+$liveCodingChallengeCount = (int)$liveCodingCountStmt->fetchColumn();
+
+$conceptGraphCountStmt = $pdo->prepare("SELECT COUNT(*) FROM concept_graph WHERE user_id = ?");
+$conceptGraphCountStmt->execute([$user_id]);
+$conceptGraphCount = (int)$conceptGraphCountStmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +65,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include '../includes/favicon.php'; ?>
-    <title>Select Game - Word Weavers</title>
+    <title>Select Game - CodeDungeon</title>
     <link rel="stylesheet" href="../styles.css?v=<?php echo filemtime('../styles.css'); ?>">
     <link rel="stylesheet" href="../navigation/shared/navigation.css?v=<?php echo filemtime('../navigation/shared/navigation.css'); ?>">
     <link rel="stylesheet" href="game-selection.css?v=<?php echo filemtime('game-selection.css'); ?>">
@@ -67,7 +82,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-logo">
-            <img src="../assets/menu/Word-Weavers.png" alt="Word Weavers" class="sidebar-logo-img">
+            <span class="codedungeon-logo sidebar-logo-img"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
         </div>
         <nav class="sidebar-nav">
             <a href="../menu.php?from=selection" class="nav-link">
@@ -208,11 +223,114 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <div class="btns">
                         <div class="likes">
                             <svg class="likes_svg" viewBox="-2 0 105 92"><path d="M85.24 2.67C72.29-3.08 55.75 2.67 50 14.9 44.25 2 27-3.8 14.76 2.67 1.1 9.14-5.37 25 5.42 44.38 13.33 58 27 68.11 50 86.81 73.73 68.11 87.39 58 94.58 44.38c10.79-18.7 4.32-35.24-9.34-41.71Z"></path></svg>
-                            <span class="likes_text"><?php echo isset($game_progress['grammar-heroes']) ? $game_progress['grammar-heroes']['best_score'] : '0'; ?></span>
+                            <span class="likes_text"><?php echo isset($game_progress['coding concepts-heroes']) ? $game_progress['grammar-heroes']['best_score'] : '0'; ?></span>
                         </div>
                         <div class="comments">
                             <svg class="comments_svg" viewBox="-405.9 238 56.3 54.8" title="Level"><path d="M-391 291.4c0 1.5 1.2 1.7 1.9 1.2 1.8-1.6 15.9-14.6 15.9-14.6h19.3c3.8 0 4.4-.8 4.4-4.5v-31.1c0-3.7-.8-4.5-4.4-4.5h-47.4c-3.6 0-4.4.9-4.4 4.5v31.1c0 3.7.7 4.4 4.4 4.4h10.4v13.5z"></path></svg>
-                            <span class="comments_text"><?php echo isset($game_progress['grammar-heroes']) ? $game_progress['grammar-heroes']['max_level'] : '1'; ?></span>
+                            <span class="comments_text"><?php echo isset($game_progress['coding concepts-heroes']) ? $game_progress['grammar-heroes']['max_level'] : '1'; ?></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bug Hunt Arena Card -->
+                <div class="main card game-card" data-game="bughunt">
+                    <div class="card_content">
+                        <img src="../assets/selection/Grammarbg.webp" alt="Bug Hunt Arena Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 7px;">
+                        <div class="play-icon-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="card_back"></div>
+                    <div class="data">
+                        <div class="img">
+                            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+                        </div>
+                        <div class="text">
+                            <div class="text_m">Bug Hunt Arena</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">Drop into broken code. Find the bug. Fix it before it ships.</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">Debug · Beginner → Advanced</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;"><?php echo $bugChallengeCount; ?> bugs available</div>
+                            <a href="bug-hunt.php" style="display:none;" aria-hidden="true">Play Bug Hunt Arena</a>
+                        </div>
+                    </div>
+                    <div class="btns">
+                        <div class="likes">
+                            <svg class="likes_svg" viewBox="-2 0 105 92"><path d="M85.24 2.67C72.29-3.08 55.75 2.67 50 14.9 44.25 2 27-3.8 14.76 2.67 1.1 9.14-5.37 25 5.42 44.38 13.33 58 27 68.11 50 86.81 73.73 68.11 87.39 58 94.58 44.38c10.79-18.7 4.32-35.24-9.34-41.71Z"></path></svg>
+                            <span class="likes_text"><?php echo $bugChallengeCount; ?></span>
+                        </div>
+                        <div class="comments">
+                            <svg class="comments_svg" viewBox="-405.9 238 56.3 54.8" title="Difficulty"><path d="M-391 291.4c0 1.5 1.2 1.7 1.9 1.2 1.8-1.6 15.9-14.6 15.9-14.6h19.3c3.8 0 4.4-.8 4.4-4.5v-31.1c0-3.7-.8-4.5-4.4-4.5h-47.4c-3.6 0-4.4.9-4.4 4.5v31.1c0 3.7.7 4.4 4.4 4.4h10.4v13.5z"></path></svg>
+                            <span class="comments_text">B-A</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Bug Sprint Card -->
+                <div class="main card game-card" data-game="<?php echo $dailySprintCompleted ? 'dailysprint_done' : 'dailysprint'; ?>" style="<?php echo $dailySprintCompleted ? 'opacity:0.6; filter: grayscale(0.15);' : ''; ?>">
+                    <div class="card_content">
+                        <img src="../assets/selection/vocabbg.webp" alt="Daily Bug Sprint Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 7px;">
+                        <div class="play-icon-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <?php if ($dailySprintCompleted): ?>
+                            <div style="position:absolute; top:8px; right:8px; background: rgba(103,229,159,0.9); color:#08151b; font-size:0.65rem; font-weight:700; padding:0.2rem 0.45rem; border-radius:999px;">✅ Completed today</div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="card_back"></div>
+                    <div class="data">
+                        <div class="img">
+                            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+                        </div>
+                        <div class="text">
+                            <div class="text_m">Daily Bug Sprint</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">3 bugs. 10 minutes. One shot per day. Climb the board.</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">Daily</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;"><?php echo $dailySprintCompleted ? 'View Leaderboard' : 'Start Sprint'; ?></div>
+                            <a href="<?php echo $dailySprintCompleted ? '../navigation/leaderboards/leaderboards.php?game=daily_sprint' : 'daily-sprint.php'; ?>" style="display:none;" aria-hidden="true"><?php echo $dailySprintCompleted ? 'View Leaderboard' : 'Play Daily Bug Sprint'; ?></a>
+                        </div>
+                    </div>
+                    <div class="btns">
+                        <div class="likes">
+                            <svg class="likes_svg" viewBox="-2 0 105 92"><path d="M85.24 2.67C72.29-3.08 55.75 2.67 50 14.9 44.25 2 27-3.8 14.76 2.67 1.1 9.14-5.37 25 5.42 44.38 13.33 58 27 68.11 50 86.81 73.73 68.11 87.39 58 94.58 44.38c10.79-18.7 4.32-35.24-9.34-41.71Z"></path></svg>
+                            <span class="likes_text">10:00</span>
+                        </div>
+                        <div class="comments">
+                            <svg class="comments_svg" viewBox="-405.9 238 56.3 54.8" title="Daily"><path d="M-391 291.4c0 1.5 1.2 1.7 1.9 1.2 1.8-1.6 15.9-14.6 15.9-14.6h19.3c3.8 0 4.4-.8 4.4-4.5v-31.1c0-3.7-.8-4.5-4.4-4.5h-47.4c-3.6 0-4.4.9-4.4 4.5v31.1c0 3.7.7 4.4 4.4 4.4h10.4v13.5z"></path></svg>
+                            <span class="comments_text">3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Coding Arena Card -->
+                <div class="main card game-card" data-game="livecoding">
+                    <div class="card_content">
+                        <img src="../assets/selection/Grammarbg.webp" alt="Live Coding Arena Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 7px;">
+                        <div class="play-icon-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="card_back"></div>
+                    <div class="data">
+                        <div class="img">
+                            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+                        </div>
+                        <div class="text">
+                            <div class="text_m">Live Coding Arena</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">Write real solutions from scratch. Your AI mentor watches as you type. Grow your knowledge graph.</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">Code · Beginner → Advanced</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;"><?php echo $liveCodingChallengeCount; ?> challenges available</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;"><?php echo $conceptGraphCount > 0 ? ($conceptGraphCount . ' concepts in your graph') : 'Start building your graph →'; ?></div>
+                            <a href="live-coding.php" style="display:none;" aria-hidden="true">Play Live Coding Arena</a>
+                        </div>
+                    </div>
+                    <div class="btns">
+                        <div class="likes">
+                            <svg class="likes_svg" viewBox="-2 0 105 92"><path d="M85.24 2.67C72.29-3.08 55.75 2.67 50 14.9 44.25 2 27-3.8 14.76 2.67 1.1 9.14-5.37 25 5.42 44.38 13.33 58 27 68.11 50 86.81 73.73 68.11 87.39 58 94.58 44.38c10.79-18.7 4.32-35.24-9.34-41.71Z"></path></svg>
+                            <span class="likes_text"><?php echo $liveCodingChallengeCount; ?></span>
+                        </div>
+                        <div class="comments">
+                            <svg class="comments_svg" viewBox="-405.9 238 56.3 54.8" title="Concepts"><path d="M-391 291.4c0 1.5 1.2 1.7 1.9 1.2 1.8-1.6 15.9-14.6 15.9-14.6h19.3c3.8 0 4.4-.8 4.4-4.5v-31.1c0-3.7-.8-4.5-4.4-4.5h-47.4c-3.6 0-4.4.9-4.4 4.5v31.1c0 3.7.7 4.4 4.4 4.4h10.4v13.5z"></path></svg>
+                            <span class="comments_text"><?php echo $conceptGraphCount; ?></span>
                         </div>
                     </div>
                 </div>
