@@ -1,100 +1,79 @@
-## Project Overview
+# CodeDungeon
 
-**CodeDungeon** is designed as an accessible English-learning platform for anyone who wants playful, structured language practice. Through interactive games, guided lessons, progress tracking, and social features, learners can improve debugging skills, coding concepts, reading comprehension, and communication skills while enjoying the process.
+CodeDungeon is a PHP + MySQL web platform that teaches coding through game-based challenges, AI mentoring, and social progression.
 
-## Key Features
+## What’s Included
 
-### Public Access
+### Core Coding Modes
+- **Bug Hunt Arena**: Fix broken production-style snippets and receive AI obituary feedback.
+- **Daily Bug Sprint**: Time-boxed daily challenge flow with score locking and leaderboard integration.
+- **Live Coding Arena**: Solve from scratch with hint penalties and concept-graph updates.
 
-- Secure user registration with email verification
-- OTP-based authentication system
-- Real-time progress tracking and platform performance scoring
-- Global leaderboards and achievement system
-- Interactive game selection interface
-- Guided learning paths with creator-curated lessons
+### Existing Learning Worlds
+- **VocabWorld**: RPG-style progression game with character systems and persistent saves.
+- **Grammar Heroes**: Action-oriented learning mode integrated into the same platform shell.
 
-### Game Experiences
+### Platform Features
+- OTP-backed onboarding and authentication
+- Friends, notifications, profile and favorites
+- Creator Studio for lesson/content workflows
+- Admin dashboards for analytics and audit visibility
 
-- **Vocabworld**: Top-down educational vocabulary RPG with level-based progression
-- Character customization and progression system
-- Save/load game functionality
-- Multiple game worlds and environments
-- Auto-detection currency system (Essence & Shards)
-- **coding concepts Heroes**: Real-time coding concepts action game with waves, enemies, and boss encounters
-
-### Social Features
-
-- Profile avatar
-- Friends system with request management
-- Favorites and bookmarking system
-- Global Leaderboards
-- Real-time notification system
-
-### Creator Studio
-
-- vocabulary wordbank management
-- Course and lesson management
-- Learner management
-- Real-time learner performance analytics
-- Individual progress monitoring
-
-### Admin Console
-
-- User moderation and management
-- Profile management tools
-- System audit logs and tracking
-- System analytics and reporting
-- Complete platform oversight
-
-## Quick Start
-
-Access the application:
-
-- **Web Interface**: http://localhost:8080 
-- **phpMyAdmin**: http://localhost:8081
-
-## Game System
-
-The platform implements an engaging educational game ecosystem:
-
-### Vocabworld Features
-
-1. **Character Selection**: Choose from Ethan, Emma, Amber, and more characters
-2. **Currency System**: Dual currency with Essence and Shards
-3. **Level Progression**: Advance through vocabulary challenges
-4. **Save System**: Persistent game progress
-5. **Multiple Worlds**: Diverse game environments
-
-### Progression Rules
-
-- **Mastery Score Tracking**: Automatic learning progress calculation based on performance
-- **Achievement System**: Unlock badges and rewards through gameplay
-- **Leaderboard Rankings**: Compete globally with other learners
-- **Social Integration**: Share progress and compare with friends
-
-## Technology Stack
+## Tech Stack
 
 <p align="center">
   <img src="https://skillicons.dev/icons?i=html,css,js,php,mysql,docker,vscode" alt="Technology Stack" />
 </p>
 
-## Security Features
+## Local Setup (Docker)
 
-- **Password Hashing**: bcrypt encryption for all passwords
-- **Prepared Statements**: PDO with parameterized queries
-- **Input Sanitization**: All user inputs are sanitized and validated
-- **Session Management**: Secure session handling with HTTP-only cookies
-- **Email Verification**: OTP-based account verification
-- **SQL Injection Prevention**: Prepared statements throughout the application
+### 1) Start services
+```bash
+docker compose up -d --build
+```
 
-## Usage Guide
+### 2) Open apps
+- Web: http://localhost:8080
+- phpMyAdmin: http://localhost:8081
 
-1. **Register**: Create a new account and verify your email via OTP
-2. **Profile Setup**: Complete your profile information
-3. **Select Game**: Choose from available game modes
-4. **Character Selection**: Pick your character and customize
-5. **Play & Learn**: Progress through vocabulary challenges
-6. **Track Progress**: Monitor your Mastery Score and achievements
-7. **Social Features**: Connect with friends and compare progress
-8. **Favorites**: Bookmark content for quick access
+### 3) Database defaults (docker-compose)
+- Host: `db` (from containers) / `localhost:3307` (from host)
+- Database: `school_portal`
+- Root user: `root`
+- Root password: `rootpassword`
+
+## First-Run Data Seeding
+
+If challenge content is missing, run seed routes once while logged in:
+
+- Bug Hunt seed: `/play/seed.php`
+- Live Coding seed: `/play/live_coding_seed.php`
+
+## AI Integration Notes
+
+- Cerebras integration is used by:
+  - `/play/intent_api.php`
+  - `/play/obituary.php`
+- Diagnostics page:
+  - `/cerebras_test.php`
+- Shared backend utility:
+  - `callCerebras(...)` in `onboarding/config.php`
+
+## Security Practices
+
+- Password hashing for stored credentials
+- Prepared PDO statements throughout critical data paths
+- Input sanitization and validation on user-facing flows
+- Session-based access control on protected endpoints
+
+## Project Structure (high-level)
+
+- `onboarding/` authentication, session bootstrapping, config
+- `play/` game modes, AI APIs, and challenge workflows
+- `navigation/` social, profile, leaderboards, teacher/admin areas
+- `MainGame/` legacy game worlds (VocabWorld, Grammar Heroes)
+
+## Status
+
+The project is actively evolving from the original Word Weavers platform into CodeDungeon, including rebranding, new coding game loops, and AI-assisted feedback flows.
 
