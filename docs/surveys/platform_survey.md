@@ -1,6 +1,6 @@
 # Student Experience Survey: Platform & Social Features
 
-This survey evaluates your experience with the **Word Weavers Platform** features outside of the main games, including the dashboard, profile management, and social tools.
+This survey evaluates your experience with the **CodeDungeon Platform** features outside of the main games, including the dashboard, profile management, and social tools.
 
 ---
 

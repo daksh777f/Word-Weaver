@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learner Guide — Word Weavers</title>
-    <link rel="icon" type="image/webp" href="../assets/menu/ww_logo_main.webp">
+    <title>Learner Guide — CodeDungeon</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../includes/loader.css">
     <link rel="stylesheet" href="../includes/mobile-sidebar.css">
@@ -112,8 +112,8 @@
     <div class="bg"><div class="aurora"></div></div>
     <nav class="top-bar">
         <a href="../index.php" class="brand">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers">
-            <span>Word Weavers</span>
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+            <span>CodeDungeon</span>
         </a>
         <div class="nav-links">
             <a href="../index.php">Home</a>
@@ -144,7 +144,7 @@
 
         <section class="glass-panel">
             <p style="font-size: 1.05rem;">
-                Welcome to Word Weavers! This guide will help you get started with the platform and make the most of your learning experience.
+                Welcome to CodeDungeon! This guide will help you get started with the platform and make the most of your learning experience.
             </p>
         </section>
 
@@ -157,13 +157,13 @@
             <p>Personalize your profile by uploading a picture and updating your details. You can also search for classmates and add them as friends to see their progress.</p>
 
             <h3><span class="step-number">3</span> Choose a Game</h3>
-            <p>Browse the available games from your dashboard. Each game is designed to strengthen different English skills — from vocabulary to spelling and reading comprehension.</p>
+            <p>Browse the available games from your dashboard. Each game is designed to strengthen different coding skills — from debugging to problem solving and reading code comprehension.</p>
 
             <h3><span class="step-number">4</span> See Your Rank (Leaderboards)</h3>
             <p>Check the leaderboards to see how you rank against other learners. Your scores and Mastery Score are tracked automatically as you play and complete lessons.</p>
 
-            <h3><span class="step-number">5</span> Explore the Platform (Word Weavers)</h3>
-            <p>Discover all the features Word Weavers has to offer — from VocabWorld's immersive RPG experience to creator-assigned lessons, favorites, and more.</p>
+            <h3><span class="step-number">5</span> Explore the Platform (CodeDungeon)</h3>
+            <p>Discover all the features CodeDungeon has to offer — from VocabWorld's immersive RPG experience to creator-assigned lessons, favorites, and more.</p>
         </section>
 
         <section class="glass-panel">
@@ -201,7 +201,7 @@
         <section class="glass-panel">
             <h2>Tips for Success</h2>
             <ul>
-                <li>Study the vocabulary lessons before playing games for better scores</li>
+                <li>Study the debugging skills lessons before playing games for better scores</li>
                 <li>Practice regularly — consistency is key to learning</li>
                 <li>Try all available game modes to reinforce your vocabulary</li>
                 <li>Check the leaderboard to track your progress against classmates</li>
@@ -223,7 +223,7 @@
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <aside class="mobile-sidebar" id="mobileSidebar">
         <div class="sidebar-header">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers" style="height: 40px; width: auto; object-fit: contain;">
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
             <button class="close-btn" id="closeSidebar">&times;</button>
         </div>
         <nav class="mobile-nav-links">

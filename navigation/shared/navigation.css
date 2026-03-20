@@ -52,7 +52,7 @@
     }
 
     .sidebar-logo-img {
-        content: url('../../assets/menu/ww_logo_main.webp');
+        content: none;
     }
 
     .sidebar.active {

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support — Word Weavers</title>
-    <link rel="icon" type="image/webp" href="../assets/menu/ww_logo_main.webp">
+    <title>Support — CodeDungeon</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../includes/loader.css">
     <link rel="stylesheet" href="../includes/mobile-sidebar.css">
@@ -214,8 +214,8 @@
     </div>
     <nav class="top-bar">
         <a href="../index.php" class="brand">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers">
-            <span>Word Weavers</span>
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+            <span>CodeDungeon</span>
         </a>
         <div class="nav-links">
             <a href="../index.php">
@@ -272,7 +272,7 @@
         
         <section class="glass-panel">
             <p style="font-size: 1.1rem; color: var(--text-muted);">
-                Need assistance with Word Weavers? Our team is here to help you with account issues, bug reports, or general inquiries.
+                Need assistance with CodeDungeon? Our team is here to help you with account issues, bug reports, or general inquiries.
             </p>
             <div class="developer-card">
                 <div style="position: relative; z-index: 2; max-width: 70%;">
@@ -282,16 +282,16 @@
                         <p style="margin-bottom: 4px; font-weight: bold;">Chirag Aggarwal</p>
                         <p style="margin-bottom: 0; font-size: 0.9rem; color: var(--text-muted);">Core Developers</p>
                     </div>
-                    <a href="mailto:wordweavershccci@gmail.com" style="display: inline-flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; font-weight: 500; margin-bottom: 16px;">
+                    <a href="mailto:codedungeonhccci@gmail.com" style="display: inline-flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; font-weight: 500; margin-bottom: 16px;">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        wordweavershccci@gmail.com
+                        codedungeonhccci@gmail.com
                     </a>
                     
                     <div style="display: flex; gap: 16px;"></div>
                 </div>
-                <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers" style="position: absolute; right: 18px; bottom: 18px; width: 120px; height: auto; object-fit: contain; z-index: 1; opacity: 0.9;">
+                <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
             </div>
         </section>
 
@@ -335,7 +335,7 @@
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <aside class="mobile-sidebar" id="mobileSidebar">
         <div class="sidebar-header">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers" style="height: 40px; width: auto; object-fit: contain;">
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
             <button class="close-btn" id="closeSidebar">&times;</button>
         </div>
         <nav class="mobile-nav-links">

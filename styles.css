@@ -35,6 +35,30 @@ body {
     overflow-x: hidden;
 }
 
+.codedungeon-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-pixel, 'Press Start 2P', monospace);
+    font-weight: bold;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-icon {
+    font-size: 1.4em;
+}
+
+.logo-text {
+    font-size: 1.1em;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.logo-accent {
+    color: var(--accent-yellow, #f3c13a);
+}
+
 
 /* What's New Banner */
 .whats-new-banner {
@@ -181,36 +205,36 @@ body {
     .main-content {
         padding: 1.5rem;
     }
-    
+
     .whats-new-banner {
         height: 350px;
     }
-    
+
     .banner-title {
         font-size: 2rem;
     }
-    
+
     .banner-description {
         font-size: 1rem;
     }
-    
+
     .banner-features {
         gap: 1.5rem;
     }
-    
+
     .dashboard-grid {
         gap: 1.5rem;
     }
-    
+
     .dashboard-card {
         padding: 1.5rem;
         min-height: 180px;
     }
-    
+
     .card-icon i {
         font-size: 2.5rem;
     }
-    
+
     .card-content h2 {
         font-size: 1rem;
     }
@@ -221,61 +245,61 @@ body {
         padding: 1rem;
         gap: 1.5rem;
     }
-    
+
     .whats-new-banner {
         height: 300px;
         margin-bottom: 1.5rem;
     }
-    
+
     .banner-content {
         padding: 1.5rem;
     }
-    
+
     .banner-title {
         font-size: 1.5rem;
     }
-    
+
     .banner-description {
         font-size: 0.9rem;
         margin-bottom: 1.5rem;
     }
-    
+
     .banner-features {
         gap: 1rem;
         margin-bottom: 1.5rem;
     }
-    
+
     .feature-item {
         font-size: 0.8rem;
     }
-    
+
     .banner-cta {
         padding: 0.8rem 1.5rem;
         font-size: 1rem;
     }
-    
+
     .dashboard-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .play-card {
         grid-column: 1;
     }
-    
+
     .dashboard-card {
         padding: 1.2rem;
         min-height: 160px;
     }
-    
+
     .card-icon i {
         font-size: 2.2rem;
     }
-    
+
     .card-content h2 {
         font-size: 0.9rem;
     }
-    
+
     .card-content p {
         font-size: 0.8rem;
     }
@@ -286,57 +310,57 @@ body {
         padding: 0.5rem;
         gap: 1rem;
     }
-    
+
     .whats-new-banner {
         height: 250px;
         margin-bottom: 1rem;
     }
-    
+
     .banner-content {
         padding: 1rem;
     }
-    
+
     .banner-title {
         font-size: 1.2rem;
     }
-    
+
     .banner-description {
         font-size: 0.8rem;
         margin-bottom: 1rem;
     }
-    
+
     .banner-features {
         flex-direction: column;
         gap: 0.5rem;
         margin-bottom: 1rem;
     }
-    
+
     .feature-item {
         font-size: 0.75rem;
     }
-    
+
     .banner-cta {
         padding: 0.7rem 1.2rem;
         font-size: 0.9rem;
     }
-    
+
     .dashboard-grid {
         gap: 0.8rem;
     }
-    
+
     .dashboard-card {
         padding: 1rem;
         min-height: 140px;
     }
-    
+
     .card-icon i {
         font-size: 2rem;
     }
-    
+
     .card-content h2 {
         font-size: 0.8rem;
     }
-    
+
     .card-content p {
         font-size: 0.75rem;
     }
@@ -395,7 +419,8 @@ body {
     padding: 5px 10px;
     font-size: 12px;
     z-index: 9999;
-    display: none; /* Set to block for debugging */
+    display: none;
+    /* Set to block for debugging */
 }
 
 /* User Profile Styles */
@@ -433,6 +458,7 @@ body {
         opacity: 0;
         transform: translateY(-30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -476,4 +502,3 @@ html body .main-content {
         width: 100% !important;
     }
 }
-

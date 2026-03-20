@@ -61,7 +61,7 @@ $favorites_count = $favorites['favorites_count'] ?? 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'includes/favicon.php'; ?>
-    <title>Menu - Word Weavers</title>
+    <title>Menu - CodeDungeon</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="navigation/shared/navigation.css?v=<?php echo filemtime('navigation/shared/navigation.css'); ?>">
     <link rel="stylesheet" href="notif/toast.css?v=<?php echo filemtime('notif/toast.css'); ?>">
@@ -78,7 +78,7 @@ $favorites_count = $favorites['favorites_count'] ?? 0;
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-logo">
-            <img src="assets/menu/Word-Weavers.png" alt="Word Weavers" class="sidebar-logo-img">
+            <span class="codedungeon-logo sidebar-logo-img"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
         </div>
         <nav class="sidebar-nav">
             <a href="./menu.php" class="nav-link active">

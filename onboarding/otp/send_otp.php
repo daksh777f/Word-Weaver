@@ -1,35 +1,55 @@
 <?php
 require_once dirname(__DIR__) . '/config.php';
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
+$phpMailerAvailable = false;
+
+$localPhpMailerPath = __DIR__ . '/PHPMailer/src';
+$composerAutoloadPath = dirname(__DIR__, 2) . '/vendor/autoload.php';
+
+if (is_dir($localPhpMailerPath)
+    && file_exists($localPhpMailerPath . '/Exception.php')
+    && file_exists($localPhpMailerPath . '/PHPMailer.php')
+    && file_exists($localPhpMailerPath . '/SMTP.php')) {
+    require_once $localPhpMailerPath . '/Exception.php';
+    require_once $localPhpMailerPath . '/PHPMailer.php';
+    require_once $localPhpMailerPath . '/SMTP.php';
+    $phpMailerAvailable = true;
+} elseif (file_exists($composerAutoloadPath)) {
+    require_once $composerAutoloadPath;
+    $phpMailerAvailable = class_exists('PHPMailer\\PHPMailer\\PHPMailer');
+}
 
 function generateOTP() {
     return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
 }
 
 function sendOTP($email, $username, $otp) {
-    $mail = new PHPMailer(true);
+    global $phpMailerAvailable;
+
+    if (!$phpMailerAvailable) {
+        $_SESSION['dev_otp_plain'] = $otp;
+        error_log("PHPMailer not found. Development OTP for {$email}: {$otp}");
+        return true;
+    }
+
+    $mail = new PHPMailer\PHPMailer\PHPMailer(true);
 
     try {
         // Server settings
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'wordweavershccci@gmail.com';
+        $mail->Username = 'codedungeonhccci@gmail.com';
         $mail->Password = 'zojjemxxjarjszuo'; // App Password with spaces removed
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
         // Recipients
-        $mail->setFrom('wordweavershccci@gmail.com', 'Word Weavers');
+        $mail->setFrom('codedungeonhccci@gmail.com', 'CodeDungeon');
         $mail->addAddress($email, $username);
 
         // Embed Logo
-        $logoPath = dirname(__DIR__, 2) . '/assets/menu/Word-Weavers.png';
+        $logoPath = dirname(__DIR__, 2) . '/assets/menu/codedungeon.png';
         if (file_exists($logoPath)) {
             $mail->addEmbeddedImage($logoPath, 'logo_ww');
             $logoUrl = 'cid:logo_ww';
@@ -40,12 +60,12 @@ function sendOTP($email, $username, $otp) {
 
         // Content
         $mail->isHTML(true);
-        $mail->Subject = 'Email Verification - Word Weavers';
+        $mail->Subject = 'Email Verification - CodeDungeon';
         
         $mail->Body = "
             <div style='background-color: #1a1a2e; padding: 40px 20px; font-family: Arial, sans-serif; color: #ffffff; text-align: center;'>
                 <div style='max-width: 420px; margin: 0 auto; background: rgba(20, 20, 20, 0.95); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); padding: 40px 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.4);'>
-                    " . ($logoUrl ? "<img src='{$logoUrl}' alt='Word Weavers' style='max-width: 160px; margin-bottom: 24px; opacity: 0.9;'>" : "<h1 style='color: #ffffff; font-size: 20px; margin-bottom: 24px;'>Word Weavers</h1>") . "
+                    " . ($logoUrl ? "<img src='{$logoUrl}' alt='CodeDungeon' style='max-width: 160px; margin-bottom: 24px; opacity: 0.9;'>" : "<h1 style='color: #ffffff; font-size: 20px; margin-bottom: 24px;'>CodeDungeon</h1>") . "
                     
                     <h2 style='color: #ffffff; font-size: 18px; font-weight: 600; margin-bottom: 8px;'>Welcome, {$username}!</h2>
                     <p style='color: rgba(255, 255, 255, 0.5); font-size: 14px; line-height: 1.6; margin-bottom: 28px;'>
@@ -64,7 +84,7 @@ function sendOTP($email, $username, $otp) {
                     <div style='height: 1px; background: rgba(255, 255, 255, 0.08); margin-bottom: 20px;'></div>
                     
                     <p style='color: rgba(255, 255, 255, 0.3); font-size: 11px; line-height: 1.6; margin: 0;'>
-                        &copy; " . date('Y') . " WordWeavers HCCCI. All rights reserved.<br>
+                        &copy; " . date('Y') . " CodeDungeon HCCCI. All rights reserved.<br>
                         This is an automated message, please do not reply.
                     </p>
                 </div>
@@ -72,7 +92,7 @@ function sendOTP($email, $username, $otp) {
 
         $mail->send();
         return true;
-    } catch (Exception $e) {
+    } catch (PHPMailer\PHPMailer\Exception $e) {
         error_log("Email sending failed - Error: " . $e->getMessage());
         error_log("SMTP Error Info: " . $mail->ErrorInfo);
         return false;

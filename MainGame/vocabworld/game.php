@@ -191,7 +191,7 @@ if ((getenv('ENABLE_CLASSROOM_GATING') ?: '0') === '1') {
             <h1 class="defeat-title">DEFEATED</h1>
             <h2>You Have Run Out of Health!</h2>
             <div class="stats-summary defeat-stats">
-                <p>Don't give up! Visit "Learn Vocabulary" in the Main Menu to start learning lessons provided by your Teachers.</p>
+                <p>Don't give up! Visit "Learn debugging skills" in the Main Menu to start learning lessons provided by your Teachers.</p>
             </div>
             <div class="victory-buttons">
                 <button class="victory-btn play-again" onclick="playAgain()">Try Again</button>

@@ -1,5 +1,5 @@
 
-# Word Weavers System Architecture
+# CodeDungeon System Architecture
 
 Since the image generation service is currently experiencing high traffic, I have created a comprehensive **Mermaid.js** architecture diagram. This has the added benefit of being version-controllable and editable.
 

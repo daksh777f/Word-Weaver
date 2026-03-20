@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include '../includes/favicon.php'; ?>
-    <title>Register - Word Weavers</title>
+    <title>Register - CodeDungeon</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
@@ -410,7 +410,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="auth-container">
         
         <div class="auth-header">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers" class="auth-logo">
+            <span class="codedungeon-logo auth-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
             <p class="auth-subtitle">Create an Account</p>
         </div>
         

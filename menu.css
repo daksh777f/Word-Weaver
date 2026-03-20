@@ -6,10 +6,9 @@
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }*/
 .menu-container {
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.2), 
-        rgba(255, 255, 255, 0.1)
-    );
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.2),
+            rgba(255, 255, 255, 0.1));
     backdrop-filter: blur(12px);
     border-radius: 25px;
     padding: 1.25rem;
@@ -17,11 +16,35 @@
     max-width: 1200px;
     margin: 0 auto;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 
+    box-shadow:
         0 8px 32px rgba(31, 38, 135, 0.15),
         inset 0 0 32px rgba(255, 255, 255, 0.05);
     position: relative;
     overflow: hidden;
+}
+
+.codedungeon-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-pixel, 'Press Start 2P', monospace);
+    font-weight: bold;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-icon {
+    font-size: 1.4em;
+}
+
+.logo-text {
+    font-size: 1.1em;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.logo-accent {
+    color: var(--accent-yellow, #f3c13a);
 }
 
 .menu-container::before {
@@ -71,8 +94,10 @@
     display: flex;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -96,8 +121,10 @@
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 18px; /* Slightly less than container to fit inside border */
-    pointer-events: none; /* Prevent image dragging interfering with swipe */
+    border-radius: 18px;
+    /* Slightly less than container to fit inside border */
+    pointer-events: none;
+    /* Prevent image dragging interfering with swipe */
 }
 
 /* Dots/bullets/indicators */
@@ -117,7 +144,8 @@
     transition: background-color 0.3s ease;
 }
 
-.active, .dot:hover {
+.active,
+.dot:hover {
     background-color: #717171;
 }
 
@@ -142,12 +170,11 @@
     height: 2px;
     margin: 2rem 0;
     position: relative;
-    background: linear-gradient(90deg, 
-        transparent,
-        rgba(0, 82, 247, 0.8),
-        rgba(0, 82, 247, 0.8),
-        transparent
-    );
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(0, 82, 247, 0.8),
+            rgba(0, 82, 247, 0.8),
+            transparent);
 }
 
 .menu-separator::before {
@@ -338,7 +365,8 @@
 }
 
 .settings-button .button-icon i {
-    color: #95a5a6; /* Grey */
+    color: #95a5a6;
+    /* Grey */
     font-size: 1.5rem;
 }
 
@@ -370,7 +398,8 @@
 }
 
 .overview-button .button-icon i {
-    color: #1abc9c; /* Cyan */
+    color: #1abc9c;
+    /* Cyan */
     font-size: 1.5rem;
 }
 
@@ -406,15 +435,15 @@
     .whats-new-banner {
         height: 350px;
     }
-    
+
     .banner-title {
         font-size: 2rem;
     }
-    
+
     .banner-description {
         font-size: 1rem;
     }
-    
+
     .banner-features {
         gap: 1.5rem;
     }
@@ -425,29 +454,29 @@
         height: 300px;
         margin-bottom: 1.5rem;
     }
-    
+
     .banner-content {
         padding: 1.5rem;
     }
-    
+
     .banner-title {
         font-size: 1.5rem;
     }
-    
+
     .banner-description {
         font-size: 0.9rem;
         margin-bottom: 1.5rem;
     }
-    
+
     .banner-features {
         gap: 1rem;
         margin-bottom: 1.5rem;
     }
-    
+
     .feature-item {
         font-size: 0.8rem;
     }
-    
+
     .banner-cta {
         padding: 0.8rem 1.5rem;
         font-size: 1rem;
@@ -459,30 +488,30 @@
         height: 250px;
         margin-bottom: 1rem;
     }
-    
+
     .banner-content {
         padding: 1rem;
     }
-    
+
     .banner-title {
         font-size: 1.2rem;
     }
-    
+
     .banner-description {
         font-size: 0.8rem;
         margin-bottom: 1rem;
     }
-    
+
     .banner-features {
         flex-direction: column;
         gap: 0.5rem;
         margin-bottom: 1rem;
     }
-    
+
     .feature-item {
         font-size: 0.75rem;
     }
-    
+
     .banner-cta {
         padding: 0.7rem 1.2rem;
         font-size: 0.9rem;
@@ -495,6 +524,7 @@
         opacity: 0;
         transform: translateY(-30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -511,6 +541,7 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -521,10 +552,21 @@
     animation: fadeInUp 0.6s ease-out;
 }
 
-.menu-button:nth-child(1) { animation-delay: 0.1s; }
-.menu-button:nth-child(2) { animation-delay: 0.2s; }
-.menu-button:nth-child(3) { animation-delay: 0.3s; }
-.menu-button:nth-child(4) { animation-delay: 0.4s; }
+.menu-button:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.menu-button:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.menu-button:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.menu-button:nth-child(4) {
+    animation-delay: 0.4s;
+}
 
 /* Override navigation CSS for proper layout - must be at the end to override navigation.css */
 body .main-content {
@@ -639,8 +681,15 @@ html body .main-content {
 }
 
 @keyframes modalPop {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .changelog-close-btn {
@@ -686,7 +735,7 @@ html body .main-content {
         width: 85%;
         max-width: 500px;
     }
-    
+
     .changelog-close-btn {
         top: -8px;
         right: -8px;
@@ -704,7 +753,7 @@ html body .main-content {
     .changelog-modal {
         width: 90%;
     }
-    
+
     .changelog-close-btn {
         top: -6px;
         right: -6px;

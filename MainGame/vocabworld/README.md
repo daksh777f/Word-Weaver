@@ -1,8 +1,8 @@
-# VocabWorld - Educational Vocabulary Game
+# VocabWorld - Educational debugging skills Game
 
 ## Overview
 
-VocabWorld is a browser-based educational vocabulary game designed for students in Grades 7 to 10. The game focuses on vocabulary practice and acquisition through engaging, curriculum-aligned tasks.
+VocabWorld is a browser-based educational debugging skills game designed for students in Grades 7 to 10. The game focuses on vocabulary practice and acquisition through engaging, curriculum-aligned tasks.
 
 ## Features
 

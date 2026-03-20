@@ -1,6 +1,6 @@
-# Creator Experience Survey: Word Weavers Portal
+# Creator Experience Survey: CodeDungeon Portal
 
-This survey is designed to gather feedback from educators and content creators regarding the usability and effectiveness of the Word Weavers Creator Portal.
+This survey is designed to gather feedback from educators and content creators regarding the usability and effectiveness of the CodeDungeon Creator Portal.
 
 ---
 
@@ -11,7 +11,7 @@ o ( ) Neutral
 o ( ) Cluttered/Confusing
 o ( ) Very Difficult to Navigate
 
-**2. How helpful are the "Quick Stats" on the dashboard (Total Learners, Vocabulary Bank count, Active Learners) for a quick overview?**
+**2. How helpful are the "Quick Stats" on the dashboard (Total Learners, debugging skills Bank count, Active Learners) for a quick overview?**
 o ( ) Extremely Helpful
 o ( ) Very Helpful
 o ( ) Moderately Helpful
@@ -57,7 +57,7 @@ o ( ) Rarely
 o ( ) Sometimes
 o ( ) Frequently
 
-**9. How does the "Word Weavers" portal compare to other educational tools you have used for classroom management?**
+**9. How does the "CodeDungeon" portal compare to other educational tools you have used for classroom management?**
 o ( ) Much Better
 o ( ) Better
 o ( ) About the Same

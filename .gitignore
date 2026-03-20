@@ -13,10 +13,10 @@ onboarding/otp/PHPMailer/examples/
 # Editor
 .vscode/
 
-wordweavers_redirect.html
-wordweaversbg_redirect.jpg
-wordweaverslogo_redirect.png
-ww_logo.webp
+codedungeon_redirect.html
+codedungeonbg_redirect.jpg
+codedungeonlogo_redirect.png
+cd_logo.webp
 
 database/
 landing_page/

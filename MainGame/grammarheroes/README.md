@@ -1,6 +1,6 @@
 ## Grammar Heroes
 
-Grammar Heroes is a complete grammar challenge game integrated with Word Weavers.
+coding concepts Heroes is a complete coding concepts challenge game integrated with CodeDungeon.
 
 ### Included
 

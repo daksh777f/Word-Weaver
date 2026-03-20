@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation — Word Weavers</title>
-    <link rel="icon" type="image/webp" href="../assets/menu/ww_logo_main.webp">
+    <title>Documentation — CodeDungeon</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../includes/loader.css">
     <link rel="stylesheet" href="../includes/mobile-sidebar.css">
@@ -163,7 +163,7 @@
             h2 { font-size: 1.5rem !important; }
             h3 { font-size: 1.1rem !important; }
             p, li { font-size: 0.9rem !important; }
-            .ww-logo { height: 60px !important; width: auto !important; max-width: 100% !important; }
+            .cd-logo { height: 60px !important; width: auto !important; max-width: 100% !important; }
         }
     </style>
 </head>
@@ -178,8 +178,8 @@
     </div>
     <nav class="top-bar">
         <a href="../index.php" class="brand">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers">
-            <span>Word Weavers</span>
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+            <span>CodeDungeon</span>
         </a>
         <div class="nav-links">
             <a href="../index.php">
@@ -242,7 +242,7 @@
             </div>
             
             <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 24px;">
-                The survey initiative was a resounding success, garnering over 246 respondents in total! We extend our heartfelt gratitude to both the learners and creators for their invaluable contributions to this research. Your enthusiastic participation in our data collection process has provided us with critical insights that will shape the future of the Word Weavers platform.
+                The survey initiative was a resounding success, garnering over 246 respondents in total! We extend our heartfelt gratitude to both the learners and creators for their invaluable contributions to this research. Your enthusiastic participation in our data collection process has provided us with critical insights that will shape the future of the CodeDungeon platform.
             </p>
             <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 24px;">
                 The depth of feedback received from our learning community not only validates our efforts but also highlights the collective commitment to advancing educational technology. We are deeply thankful for your time and honest insights, which have been instrumental in refining the user experience.
@@ -251,10 +251,10 @@
 
         <section class="glass-panel">
             <div style="text-align: center; margin-bottom: 24px;">
-                <img src="../assets/menu/Word-Weavers.png" alt="Word Weavers Logo" class="ww-logo" style="height: 120px; width: auto; filter: drop-shadow(0 4px 12px rgba(0,155,217,0.3));">
+                <span class="codedungeon-logo cd-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
             </div>
             <p style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.8;">
-                <strong>Word Weavers</strong> is a comprehensive web-based educational platform designed to help anyone improve their English skills through immersive language arts web games. Developed by Daksh Goel and Chirag Aggarwal, it combines vocabulary building, grammar challenges, and social learning.
+                <strong>CodeDungeon</strong> is a comprehensive web-based educational platform designed to help anyone improve their coding skills through immersive coding challenge games. Developed by Daksh Goel and Chirag Aggarwal, it combines debugging skills building, coding concepts challenges, and social learning.
             </p>
             <img src="screencapture-localhost-8080-menu-php-2026-02-15-12_51_18.webp" alt="Main Menu Preview" style="width: 100%; border-radius: 12px; border: 1px solid var(--card-border); margin-top: 20px; opacity: 0.8;">
         </section>
@@ -278,7 +278,7 @@
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <aside class="mobile-sidebar" id="mobileSidebar">
         <div class="sidebar-header">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers" style="height: 40px; width: auto; object-fit: contain;">
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
             <button class="close-btn" id="closeSidebar">&times;</button>
         </div>
         <nav class="mobile-nav-links">

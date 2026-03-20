@@ -50,7 +50,7 @@ $notification_count = count($friend_requests) + count($cresent_notifications);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include '../includes/favicon.php'; ?>
-    <title>Credits - Word Weavers</title>
+    <title>Credits - CodeDungeon</title>
     <link rel="stylesheet" href="../navigation/shared/navigation.css?v=<?php echo filemtime('../navigation/shared/navigation.css'); ?>">
     <link rel="stylesheet" href="../styles.css?v=<?php echo filemtime('../styles.css'); ?>">
     <link rel="stylesheet" href="credits.css?v=<?php echo filemtime('credits.css'); ?>">
@@ -67,7 +67,7 @@ $notification_count = count($friend_requests) + count($cresent_notifications);
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-logo">
-            <img src="../assets/menu/Word-Weavers.png" alt="Word Weavers" class="sidebar-logo-img">
+            <span class="codedungeon-logo sidebar-logo-img"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
         </div>
         <nav class="sidebar-nav">
             <a href="../menu.php" class="nav-link">
@@ -158,7 +158,7 @@ $notification_count = count($friend_requests) + count($cresent_notifications);
         <div class="credits-container">
         <div class="credits-title">
             
-<img src="../assets/menu/Word-Weavers.png" alt="Word Weavers Logo" class="credits-big-logo">
+<span class="codedungeon-logo credits-big-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
         </div>
         <div class="credits-section members-container">
             <h2>Developer</h2>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Changelog — Word Weavers</title>
-    <link rel="icon" type="image/webp" href="../assets/menu/ww_logo_main.webp">
+    <title>Changelog — CodeDungeon</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../includes/loader.css">
     <link rel="stylesheet" href="../includes/mobile-sidebar.css">
@@ -182,8 +182,8 @@
     </div>
     <nav class="top-bar">
         <a href="../index.php" class="brand">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers">
-            <span>Word Weavers</span>
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+            <span>CodeDungeon</span>
         </a>
         <div class="nav-links">
             <a href="../index.php">
@@ -558,7 +558,7 @@
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <aside class="mobile-sidebar" id="mobileSidebar">
         <div class="sidebar-header">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers" style="height: 40px; width: auto; object-fit: contain;">
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
             <button class="close-btn" id="closeSidebar">&times;</button>
         </div>
         <nav class="mobile-nav-links">

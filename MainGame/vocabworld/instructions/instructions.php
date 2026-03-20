@@ -173,7 +173,7 @@ $current_essence = $essenceManager->getEssence($user_id);
                             <img src="../assets/menu/vocabsys.png" alt="Learn">
                         </div>
                         <h2>Learn Lessons</h2>
-                        <p>Navigate Learn Vocabulary in the Main menu to start learning lessons provided by your Teachers</p>
+                        <p>Navigate Learn debugging skills in the Main menu to start learning lessons provided by your Teachers</p>
                     </div>
                 </div>
 

@@ -99,7 +99,7 @@ $notification_count = count($friend_requests) + count($cresent_notifications);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include '../../includes/favicon.php'; ?>
-    <title>My Favorites - Word Weavers</title>
+    <title>My Favorites - CodeDungeon</title>
     <link rel="stylesheet" href="../../styles.css?v=<?php echo filemtime('../../styles.css'); ?>">
     <link rel="stylesheet" href="../shared/navigation.css?v=<?php echo filemtime('../shared/navigation.css'); ?>">
     <link rel="stylesheet" href="../../notif/toast.css?v=<?php echo filemtime('../../notif/toast.css'); ?>">
@@ -116,7 +116,7 @@ $notification_count = count($friend_requests) + count($cresent_notifications);
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-logo">
-            <img src="../../assets/menu/Word-Weavers.png" alt="Word Weavers" class="sidebar-logo-img">
+            <span class="codedungeon-logo sidebar-logo-img"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
         </div>
         <nav class="sidebar-nav">
             <a href="../../menu.php" class="nav-link">

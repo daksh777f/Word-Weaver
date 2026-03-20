@@ -298,7 +298,7 @@ function simulateFriendActivity() {
     if (randomCard) {
         const statusText = randomCard.querySelector('.friend-status');
         const activities = [
-            'Playing Word Weavers',
+            'Playing CodeDungeon',
             'Just finished a game',
             'Online now',
             'Browsing games',
@@ -411,7 +411,7 @@ function refreshUsers() {
     // Show loading state
     if (refreshBtn) refreshBtn.disabled = true;
     if (refreshIcon) refreshIcon.classList.add('fa-spin');
-    
+
     suggestedGrid.classList.add('refreshing');
     loader.classList.add('active');
 
@@ -423,13 +423,13 @@ function refreshUsers() {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        // Add a small delay so the animation is visible
-        setTimeout(() => {
-            if (data.success && data.users) {
-                // Clear and rebuild grid
-                suggestedGrid.innerHTML = data.users.map(user => `
+        .then(response => response.json())
+        .then(data => {
+            // Add a small delay so the animation is visible
+            setTimeout(() => {
+                if (data.success && data.users) {
+                    // Clear and rebuild grid
+                    suggestedGrid.innerHTML = data.users.map(user => `
                     <div class="suggested-card" onclick="viewProfile(${user.id})" style="cursor: pointer;">
                         <div class="suggested-avatar">
                             <img src="${user.profile_image}" alt="${user.username}">
@@ -464,31 +464,31 @@ function refreshUsers() {
                         </div>
                     </div>
                 `).join('');
-                
-                // Re-initialize suggested friends listeners if needed
-                initializeSuggestedFriends();
-            } else {
-                showToast(data.message || 'Error refreshing users', 'error');
-            }
 
-            // Hide loading state
+                    // Re-initialize suggested friends listeners if needed
+                    initializeSuggestedFriends();
+                } else {
+                    showToast(data.message || 'Error refreshing users', 'error');
+                }
+
+                // Hide loading state
+                if (refreshBtn) refreshBtn.disabled = false;
+                if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+
+                suggestedGrid.classList.remove('refreshing');
+                loader.classList.remove('active');
+            }, 1200); // 1.2 seconds delay for the loader animation
+        })
+        .catch(error => {
+            console.error('Refresh error:', error);
+            showToast('Failed to refresh users', 'error');
+
+            // Reset UI on error
             if (refreshBtn) refreshBtn.disabled = false;
             if (refreshIcon) refreshIcon.classList.remove('fa-spin');
-            
             suggestedGrid.classList.remove('refreshing');
             loader.classList.remove('active');
-        }, 1200); // 1.2 seconds delay for the loader animation
-    })
-    .catch(error => {
-        console.error('Refresh error:', error);
-        showToast('Failed to refresh users', 'error');
-        
-        // Reset UI on error
-        if (refreshBtn) refreshBtn.disabled = false;
-        if (refreshIcon) refreshIcon.classList.remove('fa-spin');
-        suggestedGrid.classList.remove('refreshing');
-        loader.classList.remove('active');
-    });
+        });
 }
 
 // View profile functionality
@@ -612,7 +612,7 @@ function openFriendModal(userData) {
     modal.classList.add('active');
 
     // Close modal when clicking outside
-    modal.onclick = function(e) {
+    modal.onclick = function (e) {
         if (e.target === modal) {
             closeFriendModal();
         }

@@ -60,7 +60,7 @@ $grade_levels = $pdo->query("SELECT DISTINCT grade_level FROM users ORDER BY gra
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include '../../includes/favicon.php'; ?>
-    <title>User Management - Admin - Word Weavers</title>
+    <title>User Management - Admin - CodeDungeon</title>
     <link rel="stylesheet" href="../../styles.css?v=<?php echo filemtime('../../styles.css'); ?>">
     <link rel="stylesheet" href="../../navigation/shared/navigation.css?v=<?php echo filemtime('../../navigation/shared/navigation.css'); ?>">
     <link rel="stylesheet" href="../../notif/toast.css?v=<?php echo filemtime('../../notif/toast.css'); ?>">
@@ -104,7 +104,7 @@ $grade_levels = $pdo->query("SELECT DISTINCT grade_level FROM users ORDER BY gra
     <!-- Custom Admin Sidebar -->
     <div class="sidebar admin-sidebar">
         <div class="sidebar-logo">
-            <img src="../../assets/menu/Word-Weavers.png" alt="Word Weavers" class="sidebar-logo-img">
+            <span class="codedungeon-logo sidebar-logo-img"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
         </div>
         <nav class="sidebar-nav">
             <a href="../../menu.php" class="nav-link back-link">
@@ -190,7 +190,7 @@ $grade_levels = $pdo->query("SELECT DISTINCT grade_level FROM users ORDER BY gra
             <div class="welcome-section">
                 <div class="welcome-content">
                     <h2>
-                        <img src="../../assets/menu/ww_logo_main.webp" alt="Word Weavers Logo" style="height: 40px; width: auto; margin-right: 15px;">
+                        <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
                         User Management
                     </h2>
                     <div class="welcome-roles">

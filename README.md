@@ -1,6 +1,6 @@
 ## Project Overview
 
-**Word Weavers** is designed as an accessible English-learning platform for anyone who wants playful, structured language practice. Through interactive games, guided lessons, progress tracking, and social features, learners can improve vocabulary, grammar, reading comprehension, and communication skills while enjoying the process.
+**CodeDungeon** is designed as an accessible English-learning platform for anyone who wants playful, structured language practice. Through interactive games, guided lessons, progress tracking, and social features, learners can improve debugging skills, coding concepts, reading comprehension, and communication skills while enjoying the process.
 
 ## Key Features
 
@@ -20,7 +20,7 @@
 - Save/load game functionality
 - Multiple game worlds and environments
 - Auto-detection currency system (Essence & Shards)
-- **Grammar Heroes**: Real-time grammar action game with waves, enemies, and boss encounters
+- **coding concepts Heroes**: Real-time coding concepts action game with waves, enemies, and boss encounters
 
 ### Social Features
 

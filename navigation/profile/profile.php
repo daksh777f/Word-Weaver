@@ -359,7 +359,7 @@ $crescents_count = $user_fame ? $user_fame['cresents'] : 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include '../../includes/favicon.php'; ?>
-    <title>Profile - Word Weavers</title>
+    <title>Profile - CodeDungeon</title>
     <link rel="stylesheet" href="../../styles.css">
     <link rel="stylesheet" href="../shared/navigation.css?v=<?php echo filemtime('../shared/navigation.css'); ?>">
     <link rel="stylesheet" href="../../notif/toast.css?v=<?php echo filemtime('../../notif/toast.css'); ?>">
@@ -379,7 +379,7 @@ $crescents_count = $user_fame ? $user_fame['cresents'] : 0;
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-logo">
-            <img src="../../assets/menu/Word-Weavers.png" alt="Word Weavers" class="sidebar-logo-img">
+            <span class="codedungeon-logo sidebar-logo-img"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
         </div>
         <nav class="sidebar-nav">
             <a href="../../menu.php" class="nav-link">
@@ -512,7 +512,7 @@ $crescents_count = $user_fame ? $user_fame['cresents'] : 0;
                         $is_teacher = ($user['grade_level'] === 'Teacher');
                         
                         if ($is_jaderby): ?>
-                            <div class="badge-wrapper" onclick="showBadgeInfo('Developer', 'Lead Developer of Word Weavers'); return false;">
+                            <div class="badge-wrapper" onclick="showBadgeInfo('Developer', 'Lead Developer of CodeDungeon'); return false;">
                                 <img src="../../assets/badges/developer.png" alt="Developer Badge" class="user-badge">
                                 <div class="badge-tooltip">
                                     <span class="badge-title">Developer</span>

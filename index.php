@@ -10,9 +10,9 @@ if (isLoggedIn()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Weavers - Learn English Through Play</title>
-    <meta name="description" content="Word Weavers is an interactive edtech platform for anyone who wants to improve English skills through immersive language arts games, guided practice, and progress tracking.">
-    <link rel="icon" type="image/webp" href="assets/menu/ww_logo_main.webp">
+    <title>CodeDungeon — Debug. Battle. Level Up.</title>
+    <meta name="description" content="CodeDungeon — an AI-powered coding platform where you learn by hunting bugs, fixing broken code, and growing your knowledge graph.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="includes/loader.css">
     <link rel="stylesheet" href="includes/mobile-sidebar.css">
@@ -864,8 +864,8 @@ if (isLoggedIn()) {
     <!-- ─── Sticky Navigation ─── -->
     <nav class="top-bar" id="topBar">
         <div class="brand">
-            <img src="assets/menu/ww_logo_main.webp" alt="Word Weavers">
-            <span>Word Weavers</span>
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+            <span>CodeDungeon</span>
         </div>
         <div class="nav-links">
             <a href="#">
@@ -918,10 +918,10 @@ if (isLoggedIn()) {
         <div class="container hero-inner">
             <div class="hero-text hero-anim">
                 <h1 class="hero-anim-d1">
-                    Master English<br>Through <span class="text-blue">Interactive</span> <span class="text-yellow">Play</span>
+                    Descend Into the<br><span class="text-yellow">Dungeon.</span>
                 </h1>
                 <p class="subtitle hero-anim-d2">
-                    Empowering the next generation of learners through gamified education.
+                    Every level is broken code. Every boss is a bug. Your weapon is logic.
                 </p>
             </div>
             
@@ -933,11 +933,11 @@ if (isLoggedIn()) {
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
                         </svg>
                     </a>
-                    <a href="#features" class="btn-outline">
+                    <a href="#games" class="btn-outline">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A11.952 11.952 0 0 1 12 15c-2.998 0-5.74-1.1-7.843-2.918m0 0c-.185-.72-.284-1.475-.284-2.253 0-.778.099-1.533.284-2.253" />
                         </svg>
-                        Explore Features
+                        See the Games
                     </a>
                 </div>
             </div>
@@ -955,9 +955,9 @@ if (isLoggedIn()) {
     <section id="why">
         <div class="container">
             <div class="reveal">
-                <span class="section-label"><span class="bar"></span> Why Word Weavers?</span>
-                <h2 class="section-heading">Why Learn with<br><span class="text-blue">Word</span> <span class="text-yellow">Weavers?</span></h2>
-                <p class="section-desc">Our platform transforms the way people learn English by combining proven learning design with the energy of game-based practice.</p>
+                <span class="section-label"><span class="bar"></span> WHY CODEDUNGEON?</span>
+                <h2 class="section-heading">Why Learn to Code with<br><span class="text-blue">CodeDungeon?</span></h2>
+                <p class="section-desc">Our platform transforms the way people learn to code by combining proven learning design with the energy of game-based practice.</p>
             </div>
 
             <div class="why-grid">
@@ -965,24 +965,24 @@ if (isLoggedIn()) {
                     <div class="why-icon">
                         <img src="MainGame/vocabworld/assets/menu/playsys.png" alt="Gamified Learning">
                     </div>
-                    <h3>Gamified Learning</h3>
-                    <p>Explore various games that teaches new vocabulary, grammar rules, and reading comprehension skills.</p>
+                    <h3>Debug-First Learning</h3>
+                    <p>Real developers learn by fixing broken code. We made that the game. Every bug has a backstory, a consequence, and a lesson.</p>
                 </div>
 
                 <div class="why-card reveal reveal-d2">
                     <div class="why-icon">
                         <img src="MainGame/vocabworld/assets/menu/vocabsys.png" alt="Classroom-based Learning">
                     </div>
-                    <h3>Classroom-based Learning</h3>
-                    <p>Bridge the gap between digital play and traditional education with curriculum-aligned lessons designed for the modern classroom.</p>
+                    <h3>AI Mentor, Always Watching</h3>
+                    <p>Our AI reads your code as you type — not after you submit. It catches wrong approaches early, like a senior dev pair programming with you.</p>
                 </div>
 
                 <div class="why-card reveal reveal-d3">
                     <div class="why-icon">
                         <img src="assets/pixels/trophy.png" alt="Social & Fun">
                     </div>
-                    <h3>Social & Fun</h3>
-                    <p>Compete on global leaderboards, add friends, give cresents, and learn together in a vibrant community of learners.</p>
+                    <h3>Your Knowledge, Visualized</h3>
+                    <p>Every challenge you solve grows an interactive graph of what you know. See your skills connect in real time — not a course checklist.</p>
                 </div>
             </div>
         </div>
@@ -991,11 +991,11 @@ if (isLoggedIn()) {
     <!-- ─── Features Section ─── -->
     <div class="section-divider"></div>
     <section id="features">
-        <div class="container">
+        <div class="container" id="games">
             <div class="reveal">
-                <span class="section-label"><span class="bar"></span> Features</span>
-                <h2 class="section-heading">Unique Features,<br><span class="text-blue">Built for</span> <span class="text-yellow">Learning</span></h2>
-                <p class="section-desc">Everything you need to master English, all in one.</p>
+                <span class="section-label"><span class="bar"></span> FEATURES</span>
+                <h2 class="section-heading">Three Games,<br><span class="text-blue">One AI Mentor</span></h2>
+                <p class="section-desc">Everything you need to think like a developer.</p>
             </div>
 
             <div class="features-grid">
@@ -1005,9 +1005,13 @@ if (isLoggedIn()) {
                         <div class="feature-icon">
                             <img src="MainGame/vocabworld/assets/menu/vocab_new.png" alt="Vocabworld">
                         </div>
-                        <h3>Vocabworld</h3>
-                        <p>Explore a top-down educational RPG featuring character customization, dual currency systems with Essence & Shards, level-based progression, and multiple game worlds.</p>
-                        <span class="feature-tag">NEW GAME</span>
+                        <h3>Bug Hunt Arena</h3>
+                        <p>Drop into production code riddled with real bugs. Find the issue, fix it, and get a full AI code review. Each bug has a backstory and a real-world consequence — because that's how devs actually learn.</p>
+                        <span class="feature-tag">🐛 DEBUG MODE</span>
+                        <span class="feature-tag" style="background: #22d3ee; color: #051018; margin-left: 8px;">AI-Powered</span>
+                        <div style="margin-top: 16px;">
+                            <a href="bug-hunt.php" class="btn-outline">Hunt Bugs →</a>
+                        </div>
                     </div>
                     <div class="feature-visual">
                         <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;">
@@ -1021,24 +1025,26 @@ if (isLoggedIn()) {
                     <div class="feature-icon">
                         <img src="MainGame/vocabworld/assets/menu/vocabsys.png" alt="Curriculum Aligned">
                     </div>
-                    <h3>Learn and Play</h3>
-                    <p>Study guided lessons and practice sets curated by educators and creators before jumping into immersive educational gameplay.</p>
+                    <h3>Daily Bug Sprint</h3>
+                    <p>3 bugs. 10 minutes. One attempt per day. Race the clock and climb the global leaderboard.</p>
+                    <div style="margin-top: 12px;"><a href="daily-sprint.php" style="color: var(--text-muted); text-decoration: underline;">Play today's sprint →</a></div>
                 </div>
 
                 <div class="feature-card reveal reveal-d2">
                     <div class="feature-icon">
                         <img src="MainGame/vocabworld/assets/menu/instructionicon.png" alt="Teacher Console">
                     </div>
-                    <h3>Creator Studio</h3>
-                    <p>Manage lessons and vocabulary collections, monitor learner progress, and access real-time performance analytics from a dedicated dashboard.</p>
+                    <h3>Live Coding Arena</h3>
+                    <p>Write real solutions from scratch while your AI mentor watches. Get a Code Obituary after every submission — roast, complexity analysis, and all.</p>
+                    <div style="margin-top: 12px;"><a href="live-coding.php" style="color: var(--text-muted); text-decoration: underline;">Enter the Arena →</a></div>
                 </div>
 
                 <div class="feature-card reveal reveal-d1">
                     <div class="feature-icon">
                         <img src="assets/pixels/save.png" alt="Smart Analytics">
                     </div>
-                    <h3>Smart Analytics</h3>
-                    <p>Automatic Mastery Score calculations, global leaderboard rankings, and detailed progress reports all in one place.</p>
+                    <h3>Knowledge Graph</h3>
+                    <p>An interactive visual map of every concept you've touched — arrays, recursion, hashing, and more. Click any node to see what to learn next.</p>
                 </div>
 
                 <div class="feature-card reveal reveal-d2">
@@ -1058,20 +1064,19 @@ if (isLoggedIn()) {
         <div class="footer-content">
             <div class="footer-col footer-brand">
                 <div class="f-logo">
-                    <img src="assets/menu/ww_logo_main.webp" alt="Word Weavers">
-                    <span>Word Weavers</span>
+                    <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+                    <span>CodeDungeon</span>
                 </div>
-                <p>
-                    Empowering the next generation of learners through gamified education. Developed by Daksh Goel and Chirag Aggarwal.
-                </p>
+                <p>Where bugs are the final boss.</p>
             </div>
 
             <div class="footer-col">
                 <h4>Platform</h4>
                 <ul>
-                    <li><a href="#features">Gamified Learning</a></li>
-                    <li><a href="#features">Curriculum Alignment</a></li>
+                    <li><a href="bug-hunt.php">Bug Hunt Arena</a></li>
                     <li><a href="#features">Progress Tracking</a></li>
+                    <li><a href="daily-sprint.php">Daily Bug Sprint</a></li>
+                    <li><a href="live-coding.php">Live Coding Arena</a></li>
                     <li><a href="#features">For Creators</a></li>
                 </ul>
             </div>
@@ -1097,11 +1102,8 @@ if (isLoggedIn()) {
         </div>
 
         <div class="footer-bottom">
-            <p>
-                &copy; <?php echo date('Y'); ?> Word Weavers. All rights reserved.
-                <span style="margin: 0 10px; opacity: .3">|</span>
-                Developed by Daksh Goel and Chirag Aggarwal
-            </p>
+            <p>&copy; <?php echo date('Y'); ?> CodeDungeon. All rights reserved.</p>
+            <small style="display:block; margin-top:8px; color: var(--text-dim);">Developed by Daksh Goel and Chirag Aggarwal</small>
         </div>
     </footer>
 
@@ -1151,7 +1153,7 @@ if (isLoggedIn()) {
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <aside class="mobile-sidebar" id="mobileSidebar">
         <div class="sidebar-header">
-            <img src="assets/menu/ww_logo_main.webp" alt="Word Weavers" style="height: 40px; width: auto; object-fit: contain;">
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
             <button class="close-btn" id="closeSidebar">&times;</button>
         </div>
         <nav class="mobile-nav-links">

@@ -43,7 +43,7 @@ $notification_count = count($friend_requests) + count($cresent_notifications);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include '../includes/favicon.php'; ?>
-    <title>Overview - Word Weavers</title>
+    <title>Overview - CodeDungeon</title>
     <link rel="stylesheet" href="../navigation/shared/navigation.css?v=<?php echo filemtime('../navigation/shared/navigation.css'); ?>">
     <link rel="stylesheet" href="../styles.css?v=<?php echo filemtime('../styles.css'); ?>">
     <link rel="stylesheet" href="overview.css?v=<?php echo filemtime('overview.css'); ?>">
@@ -60,7 +60,7 @@ $notification_count = count($friend_requests) + count($cresent_notifications);
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-logo">
-            <img src="../assets/menu/Word-Weavers.png" alt="Word Weavers Logo" class="sidebar-logo-img">
+            <span class="codedungeon-logo sidebar-logo-img"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
         </div>
         <nav class="sidebar-nav">
             <a href="../menu.php" class="nav-link">
@@ -157,10 +157,10 @@ $notification_count = count($friend_requests) + count($cresent_notifications);
                 <div class="overview-card">
                     <div class="content-wrapper">
                         <div class="title-image">
-                            <img src="../assets/menu/Word_weavers.png" alt="Word Weavers" class="title-logo">
+                            <span class="codedungeon-logo title-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
                         </div>
                         <div class="text-section">
-                            <p><strong>Word Weavers</strong> is a comprehensive web-based educational platform developed by Daksh Goel and Chirag Aggarwal. This interactive platform helps learners improve their English skills through immersive language arts web games featuring vocabulary building, grammar challenges, and social learning features.</p>
+                            <p><strong>CodeDungeon</strong> is a comprehensive web-based educational platform developed by Daksh Goel and Chirag Aggarwal. This interactive platform helps learners improve their coding skills through immersive coding challenge games featuring debugging skills building, coding concepts challenges, and social learning features.</p>
                             <div class="separator"></div>
                             <p>This website was developed in response to the growing need for modern learning tools that combine effective teaching methods with the specific learning needs of adolescents. Many students learn better through visual and interactive experiences rather than traditional lectures, so this platform aims to make learning more engaging, enjoyable, and effective for them.</p>
                         </div>

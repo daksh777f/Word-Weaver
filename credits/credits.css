@@ -27,20 +27,22 @@ body {
 }
 
 @media (max-width: 768px) {
+
     /* Prevent scrolling on tablets */
-    html, body {
+    html,
+    body {
         height: 100%;
         overflow: hidden;
         position: fixed;
         width: 100%;
     }
-    
+
     .main-content {
         height: 100vh;
         overflow: hidden;
         position: relative;
     }
-    
+
     .credits-container {
         margin: 0.5rem auto;
         padding: 1rem;
@@ -53,20 +55,22 @@ body {
 }
 
 @media (max-width: 480px) {
+
     /* Prevent scrolling on mobile */
-    html, body {
+    html,
+    body {
         height: 100%;
         overflow: hidden;
         position: fixed;
         width: 100%;
     }
-    
+
     .main-content {
         height: 100vh;
         overflow: hidden;
         position: relative;
     }
-    
+
     .credits-container {
         margin: 0.25rem auto;
         padding: 0.75rem;
@@ -111,7 +115,7 @@ body {
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
 }
 
-/* Styling for the additional Word Weavers logo */
+/* Styling for the additional CodeDungeon logo */
 .credits-big-logo {
     max-width: 300px;
     height: auto;
@@ -131,7 +135,7 @@ body {
     }
 }
 
-/* Mobile scaling for Word Weavers logo */
+/* Mobile scaling for CodeDungeon logo */
 @media (max-width: 768px) {
     .credits-big-logo {
         max-width: 200px;
@@ -189,7 +193,7 @@ body {
         font-size: 0.5rem;
         margin-bottom: 0.6rem;
     }
-    
+
     .developer-container h2 {
         font-size: 0.6rem !important;
     }
@@ -201,7 +205,7 @@ body {
         margin-bottom: 0.4rem;
         margin-top: -1%;
     }
-    
+
     .developer-container h2 {
         font-size: 0.5rem !important;
     }
@@ -222,11 +226,11 @@ body {
         margin: 0 auto 1.2rem;
         padding: 0.4rem;
     }
-    
+
     .developer-container {
         margin-top: -1.2rem;
     }
-    
+
     .github-container {
         margin-top: -1rem;
     }
@@ -240,11 +244,11 @@ body {
         margin: 0 auto 1rem;
         padding: 0.3rem;
     }
-    
+
     .developer-container {
         margin-top: -1rem;
     }
-    
+
     .github-container {
         margin-top: -0.8rem;
     }
@@ -323,7 +327,7 @@ body {
     .credits-section h2 {
         font-size: 0.5rem;
     }
-    
+
     .developer-container h2 {
         font-size: 0.6rem !important;
     }
@@ -439,7 +443,7 @@ body {
     .github-container {
         gap: 1.5rem;
     }
-    
+
     .github-logo,
     .discord-logo,
     .email-logo {
@@ -451,7 +455,7 @@ body {
     .github-container {
         gap: 1rem;
     }
-    
+
     .github-logo,
     .discord-logo,
     .email-logo {
@@ -734,129 +738,129 @@ body {
 
 /* Mobile responsiveness for Gravatar card */
 @media (max-width: 768px) {
-.gravatar-card-container {
-width: 95%;
-max-width: 300px;
-}
+    .gravatar-card-container {
+        width: 95%;
+        max-width: 300px;
+    }
 
-.gravatar-hovercard__header {
-margin-top: -38px;
-padding: 0 12px 12px;
-}
+    .gravatar-hovercard__header {
+        margin-top: -38px;
+        padding: 0 12px 12px;
+    }
 
-.gravatar-hovercard__avatar-link {
-width: 76px;
-height: 76px;
-border-width: 2px;
-}
+    .gravatar-hovercard__avatar-link {
+        width: 76px;
+        height: 76px;
+        border-width: 2px;
+    }
 
-.gravatar-hovercard__name {
-font-size: 16px;
-}
+    .gravatar-hovercard__name {
+        font-size: 16px;
+    }
 
-.gravatar-hovercard__job {
-font-size: 11px;
-}
+    .gravatar-hovercard__job {
+        font-size: 11px;
+    }
 
-.gravatar-hovercard__body {
-padding: 0 12px 12px;
-}
+    .gravatar-hovercard__body {
+        padding: 0 12px 12px;
+    }
 
-.gravatar-hovercard__description {
-font-size: 12px;
-}
+    .gravatar-hovercard__description {
+        font-size: 12px;
+    }
 
-.gravatar-hovercard__social-links {
-padding: 12px;
-gap: 8px;
-}
+    .gravatar-hovercard__social-links {
+        padding: 12px;
+        gap: 8px;
+    }
 
-.gravatar-hovercard__social-link {
-width: 30px;
-height: 30px;
-}
+    .gravatar-hovercard__social-link {
+        width: 30px;
+        height: 30px;
+    }
 
-.gravatar-hovercard__social-icon {
-width: 16px;
-height: 16px;
-}
+    .gravatar-hovercard__social-icon {
+        width: 16px;
+        height: 16px;
+    }
 
-.gravatar-hovercard__footer {
-padding: 10px 12px;
-}
+    .gravatar-hovercard__footer {
+        padding: 10px 12px;
+    }
 
-.gravatar-hovercard__profile-url {
-font-size: 11px;
-max-width: 100px;
-}
+    .gravatar-hovercard__profile-url {
+        font-size: 11px;
+        max-width: 100px;
+    }
 
-.gravatar-hovercard__profile-link {
-font-size: 11px;
-}
+    .gravatar-hovercard__profile-link {
+        font-size: 11px;
+    }
 }
 
 @media (max-width: 480px) {
-.gravatar-card-container {
-width: 98%;
-max-width: 280px;
-}
+    .gravatar-card-container {
+        width: 98%;
+        max-width: 280px;
+    }
 
-.gravatar-hovercard__header-image {
-height: 70px;
-}
+    .gravatar-hovercard__header-image {
+        height: 70px;
+    }
 
-.gravatar-hovercard__header {
-margin-top: -35px;
-padding: 0 10px 10px;
-}
+    .gravatar-hovercard__header {
+        margin-top: -35px;
+        padding: 0 10px 10px;
+    }
 
-.gravatar-hovercard__avatar-link {
-width: 70px;
-height: 70px;
-border-width: 2px;
-}
+    .gravatar-hovercard__avatar-link {
+        width: 70px;
+        height: 70px;
+        border-width: 2px;
+    }
 
-.gravatar-hovercard__name {
-font-size: 14px;
-}
+    .gravatar-hovercard__name {
+        font-size: 14px;
+    }
 
-.gravatar-hovercard__job {
-font-size: 10px;
-}
+    .gravatar-hovercard__job {
+        font-size: 10px;
+    }
 
-.gravatar-hovercard__body {
-padding: 0 10px 10px;
-}
+    .gravatar-hovercard__body {
+        padding: 0 10px 10px;
+    }
 
-.gravatar-hovercard__description {
-font-size: 11px;
-}
+    .gravatar-hovercard__description {
+        font-size: 11px;
+    }
 
-.gravatar-hovercard__social-links {
-padding: 10px;
-gap: 8px;
-}
+    .gravatar-hovercard__social-links {
+        padding: 10px;
+        gap: 8px;
+    }
 
-.gravatar-hovercard__social-link {
-width: 28px;
-height: 28px;
-}
+    .gravatar-hovercard__social-link {
+        width: 28px;
+        height: 28px;
+    }
 
-.gravatar-hovercard__social-icon {
-width: 14px;
-height: 14px;
-}
+    .gravatar-hovercard__social-icon {
+        width: 14px;
+        height: 14px;
+    }
 
-.gravatar-hovercard__footer {
-padding: 8px 10px;
-}
+    .gravatar-hovercard__footer {
+        padding: 8px 10px;
+    }
 
-.gravatar-hovercard__profile-url {
-font-size: 10px;
-max-width: 90px;
-}
+    .gravatar-hovercard__profile-url {
+        font-size: 10px;
+        max-width: 90px;
+    }
 
-.gravatar-hovercard__profile-link {
-font-size: 10px;
-}
+    .gravatar-hovercard__profile-link {
+        font-size: 10px;
+    }
 }

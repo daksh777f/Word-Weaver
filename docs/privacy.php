@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy — Word Weavers</title>
-    <link rel="icon" type="image/webp" href="../assets/menu/ww_logo_main.webp">
+    <title>Privacy Policy — CodeDungeon</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../includes/loader.css">
     <link rel="stylesheet" href="../includes/mobile-sidebar.css">
@@ -105,8 +105,8 @@
     <div class="bg"><div class="aurora"></div></div>
     <nav class="top-bar">
         <a href="../index.php" class="brand">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers">
-            <span>Word Weavers</span>
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+            <span>CodeDungeon</span>
         </a>
         <div class="nav-links">
             <a href="../index.php">Home</a>
@@ -138,7 +138,7 @@
         <section class="glass-panel">
             <p style="font-size: 0.85rem; opacity: 0.6; margin-bottom: 20px;">Last updated: March 1, 2026</p>
             <p>
-                Word Weavers is developed by Daksh Goel and Chirag Aggarwal. This Privacy Policy explains how we collect, use, and protect your information when you use our platform.
+                CodeDungeon is developed by Daksh Goel and Chirag Aggarwal. This Privacy Policy explains how we collect, use, and protect your information when you use our platform.
             </p>
         </section>
 
@@ -182,13 +182,13 @@
         <section class="glass-panel">
             <h2>Data Sharing</h2>
             <p>
-                We do not sell, trade, or share your personal information with third parties. Your data is used solely within the Word Weavers platform for educational purposes. As this is a thesis project, data may be referenced in academic documentation in anonymized form.
+                We do not sell, trade, or share your personal information with third parties. Your data is used solely within the CodeDungeon platform for educational purposes. As this is a thesis project, data may be referenced in academic documentation in anonymized form.
             </p>
         </section>
 
         <section class="glass-panel">
             <h2>Contact Us</h2>
-            <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:wordweavershccci@gmail.com" style="color: var(--primary); text-decoration: none;">wordweavershccci@gmail.com</a></p>
+            <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:codedungeonhccci@gmail.com" style="color: var(--primary); text-decoration: none;">codedungeonhccci@gmail.com</a></p>
         </section>
     </main>
 
@@ -201,7 +201,7 @@
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <aside class="mobile-sidebar" id="mobileSidebar">
         <div class="sidebar-header">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers" style="height: 40px; width: auto; object-fit: contain;">
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
             <button class="close-btn" id="closeSidebar">&times;</button>
         </div>
         <nav class="mobile-nav-links">

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service — Word Weavers</title>
-    <link rel="icon" type="image/webp" href="../assets/menu/ww_logo_main.webp">
+    <title>Terms of Service — CodeDungeon</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../includes/loader.css">
     <link rel="stylesheet" href="../includes/mobile-sidebar.css">
@@ -104,8 +104,8 @@
     <div class="bg"><div class="aurora"></div></div>
     <nav class="top-bar">
         <a href="../index.php" class="brand">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers">
-            <span>Word Weavers</span>
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+            <span>CodeDungeon</span>
         </a>
         <div class="nav-links">
             <a href="../index.php">Home</a>
@@ -137,14 +137,14 @@
         <section class="glass-panel">
             <p style="font-size: 0.85rem; opacity: 0.6; margin-bottom: 20px;">Last updated: March 1, 2026</p>
             <p>
-                Welcome to Word Weavers. By accessing or using this platform, you agree to the following terms and conditions. Word Weavers is developed by Daksh Goel and Chirag Aggarwal.
+                Welcome to CodeDungeon. By accessing or using this platform, you agree to the following terms and conditions. CodeDungeon is developed by Daksh Goel and Chirag Aggarwal.
             </p>
         </section>
 
         <section class="glass-panel">
             <h2>Use of the Platform</h2>
             <ul>
-                <li>Word Weavers is an educational platform designed for learners and creators</li>
+                <li>CodeDungeon is an educational platform designed for learners and creators</li>
                 <li>You must provide accurate information during registration</li>
                 <li>You are responsible for maintaining the security of your account credentials</li>
                 <li>The platform is intended for educational purposes only</li>
@@ -174,20 +174,20 @@
         <section class="glass-panel">
             <h2>Intellectual Property</h2>
             <p>
-                All content, designs, game assets, and code within Word Weavers are the intellectual property of the development team. This project is developed as part of an academic thesis and is protected under the project's license terms.
+                All content, designs, game assets, and code within CodeDungeon are the intellectual property of the development team. This project is developed as part of an academic thesis and is protected under the project's license terms.
             </p>
         </section>
 
         <section class="glass-panel">
             <h2>Disclaimer</h2>
             <p>
-                Word Weavers is provided "as is" as a thesis project. While we strive for reliability, we do not guarantee uninterrupted service or the absence of errors. The platform is primarily intended for academic demonstration and educational use.
+                CodeDungeon is provided "as is" as a thesis project. While we strive for reliability, we do not guarantee uninterrupted service or the absence of errors. The platform is primarily intended for academic demonstration and educational use.
             </p>
         </section>
 
         <section class="glass-panel">
             <h2>Contact</h2>
-            <p>For questions regarding these terms, contact us at <a href="mailto:wordweavershccci@gmail.com" style="color: var(--primary); text-decoration: none;">wordweavershccci@gmail.com</a></p>
+            <p>For questions regarding these terms, contact us at <a href="mailto:codedungeonhccci@gmail.com" style="color: var(--primary); text-decoration: none;">codedungeonhccci@gmail.com</a></p>
         </section>
     </main>
 
@@ -200,7 +200,7 @@
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <aside class="mobile-sidebar" id="mobileSidebar">
         <div class="sidebar-header">
-            <img src="../assets/menu/ww_logo_main.webp" alt="Word Weavers" style="height: 40px; width: auto; object-fit: contain;">
+            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
             <button class="close-btn" id="closeSidebar">&times;</button>
         </div>
         <nav class="mobile-nav-links">
