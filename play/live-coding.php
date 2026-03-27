@@ -633,6 +633,102 @@ try {
         </div>
     </div>
 
+    <!-- RECOMMENDATION CARD -->
+    <div id="recommendation-card"
+        style="display: none;
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 320px;
+        z-index: 10000;
+        transform: translateY(20px);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;">
+        
+        <div class="challenge-card"
+            style="border: 1px solid rgba(88, 225, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            padding: 16px;">
+            
+            <!-- Header -->
+            <div style="display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;">
+                <div style="font-size: 0.75rem;
+                font-weight: bold;
+                color: rgba(88, 225, 255, 0.8);
+                text-transform: uppercase;
+                letter-spacing: 1px;">
+                    🧠 Try This Next
+                </div>
+                <button id="rec-dismiss-btn"
+                    style="background: none;
+                    border: none;
+                    cursor: pointer;
+                    color: rgba(184, 194, 235, 0.6);
+                    font-size: 1rem;
+                    line-height: 1;
+                    padding: 0;">
+                    ×
+                </button>
+            </div>
+            
+            <!-- Challenge title -->
+            <div id="rec-title"
+                style="font-weight: bold;
+                font-size: 1rem;
+                margin-bottom: 6px;">
+            </div>
+            
+            <!-- Difficulty badge -->
+            <div id="rec-difficulty"
+                class="difficulty-pill"
+                style="display: inline-block;
+                margin-bottom: 10px;
+                font-size: 0.7rem;">
+            </div>
+            
+            <!-- AI reason -->
+            <div id="rec-reason"
+                style="font-size: 0.82rem;
+                color: rgba(184, 194, 235, 0.8);
+                line-height: 1.5;
+                margin-bottom: 14px;
+                font-style: italic;">
+            </div>
+            
+            <!-- Concept tags -->
+            <div id="rec-concepts"
+                style="display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                margin-bottom: 14px;">
+            </div>
+            
+            <!-- CTA Button -->
+            <a id="rec-play-btn"
+                href="#"
+                class="play-again"
+                style="display: block;
+                text-align: center;
+                text-decoration: none;
+                width: 100%;
+                box-sizing: border-box;">
+                Play This Next →
+            </a>
+            
+            <!-- Skill level update -->
+            <div id="rec-skill-update"
+                style="text-align: center;
+                margin-top: 8px;
+                font-size: 0.75rem;
+                color: rgba(184, 194, 235, 0.6);">
+            </div>
+            
+        </div>
+    </div>
+
     <script>
         const arenaChallenge = <?php echo json_encode($challengeObj); ?>;
         const arenaUserId = <?php echo (int)$_SESSION['user_id']; ?>;
@@ -648,8 +744,14 @@ try {
             isSubmitting: false,
             intentDebounceTimer: null,
             lastHintTime: 0,
-            sessionStartTime: Date.now()
+            sessionStartTime: Date.now(),
+            lastSentCode: '',
+            lastIntentTime: 0
         };
+
+        // ── SMART DEBOUNCE TRACKING ────────────
+        const minimumCharacterDelta = 3;
+        const minimumTimeBetweenCalls = 10000;
 
         const lcCodeEditor = document.getElementById('lc-code-editor');
         const lcLineNumbers = document.getElementById('lc-lineNumbers');
@@ -710,7 +812,21 @@ try {
             const penalties = [100, 150, 200];
             const penalty = penalties[hintIndex] || 0;
             lcHintLabel.textContent = `Mentor Hint [${hintIndex + 1}/3]:`;
-            lcMentorHintText.textContent = text;
+            
+            // Clear and rebuild hint text with specificity label
+            lcMentorHintText.innerHTML = '';
+            
+            // Add specificity label
+            const labelDiv = document.createElement('div');
+            labelDiv.style.cssText = 'font-size:0.75rem;color:rgba(255,255,255,0.7);margin-bottom:0.35rem;font-weight:600;';
+            labelDiv.textContent = 'Based on what you wrote';
+            lcMentorHintText.appendChild(labelDiv);
+            
+            // Add hint text
+            const hintDiv = document.createElement('div');
+            hintDiv.textContent = text;
+            lcMentorHintText.appendChild(hintDiv);
+            
             lcHintPenaltyText.textContent = `(-${penalty} points)`;
             lcMentorHint.classList.add('show');
 
@@ -784,9 +900,59 @@ try {
             }
         }
 
+        // ── SMART INTENT CHECK GATE ────────────
+        function shouldFireIntentApi(currentCode) {
+            // GATE 1: minimum time between calls
+            const now = Date.now();
+            if (now - arenaState.lastIntentTime < minimumTimeBetweenCalls) {
+                return false;
+            }
+
+            // GATE 2: meaningful change in code
+            const currentTrimmed = currentCode.trim();
+            const lastTrimmed = arenaState.lastSentCode.trim();
+            
+            if (currentTrimmed === lastTrimmed) {
+                return false;
+            }
+            
+            const lengthDiff = Math.abs(
+                currentTrimmed.length - lastTrimmed.length
+            );
+            
+            const contentChanged = 
+                currentTrimmed !== lastTrimmed;
+            
+            if (lengthDiff < minimumCharacterDelta 
+                && contentChanged) {
+                return false;
+            }
+
+            // GATE 3: minimum code length
+            const noWhitespace = currentTrimmed
+                .replace(/\s+/g, '');
+            if (noWhitespace.length < 10) {
+                return false;
+            }
+
+            // GATE 4: code must have changed from original
+            const originalCode = 
+                arenaChallenge.starter_code || '';
+            if (currentTrimmed === originalCode.trim()) {
+                return false;
+            }
+
+            return true;
+        }
+
         async function checkIntent() {
             const current = lcCodeEditor.value;
             if (!current.trim()) {
+                return;
+            }
+
+            // Apply gates before calling API
+            if (!shouldFireIntentApi(current)) {
                 return;
             }
 
@@ -795,8 +961,14 @@ try {
                         partial_code: current,
                         language: arenaChallenge.language,
                         challenge_id: arenaChallenge.id,
+                        game_type: 'live_coding',
                         session_token: 'bug_hunt_session'
                 });
+                
+                // Update tracking after successful call
+                arenaState.lastSentCode = current.trim();
+                arenaState.lastIntentTime = Date.now();
+                
                 if (data && data.should_show === true && data.hint) {
                     lcHintBtn.classList.add('lc-hint-btn-pulse');
                 }
@@ -886,6 +1058,8 @@ try {
             (graphData.nodes || []).forEach((node) => knownConcepts.add(String(node.id).toLowerCase()));
         }
 
+        let lastObituaryData = null;
+
         function openObituaryModal(payload, finalScore, finalXp) {
             document.getElementById('lc-obitScore').textContent = String(finalScore);
             document.getElementById('lc-obitXp').textContent = String(finalXp);
@@ -906,11 +1080,28 @@ try {
                 edgeWrap.innerHTML = '<ul>' + edgeCases.map(item => `<li class="edge-warning">${escapeHtml(String(item))}</li>`).join('') + '</ul>';
             }
 
+            // Store obituary data for recommendation fetch
+            lastObituaryData = payload;
             lcObituaryModal.hidden = false;
         }
 
         function closeObituaryModal() {
             lcObituaryModal.hidden = true;
+            
+            // Trigger recommendation fetch after modal closes
+            if (lastObituaryData) {
+                fetchRecommendation(
+                    arenaChallenge.id || 0,
+                    'live_coding',
+                    lastObituaryData.score || 0,
+                    lastObituaryData.hints_used || 0,
+                    arenaState.timerSeconds,
+                    lastObituaryData.difficulty || 'beginner'
+                ).then(data => {
+                    showRecommendationCard(data);
+                });
+                lastObituaryData = null;
+            }
         }
 
         class ConceptGraphRenderer {
@@ -1374,6 +1565,157 @@ try {
 
         lcPlayAgainBtn.addEventListener('click', () => {
             window.location.href = 'live-coding.php';
+        });
+
+        // ── RECOMMENDATION SYSTEM ─────────────
+        async function fetchRecommendation(
+            challengeId,
+            gameType,
+            score,
+            hintsUsed,
+            timeTaken,
+            difficulty
+        ) {
+            try {
+                const response = await fetch('recommend_api.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        challenge_id: challengeId,
+                        game_type: gameType,
+                        score: score,
+                        hints_used: hintsUsed,
+                        time_taken: timeTaken,
+                        difficulty: difficulty
+                    })
+                });
+                
+                if (!response.ok) {
+                    return null;
+                }
+                
+                const text = await response.text();
+                if (!text.trim()) {
+                    return null;
+                }
+                
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.error('Recommendation parse error');
+                    return null;
+                }
+            } catch (err) {
+                console.error('Recommendation fetch error:', err);
+                return null;
+            }
+        }
+
+        function showRecommendationCard(data) {
+            if (!data || !data.success) {
+                return;
+            }
+            
+            const rec = data.recommendation;
+            const skillUpdate = data.skill_update;
+            const card = document.getElementById('recommendation-card');
+            
+            if (!card || !rec) {
+                return;
+            }
+            
+            // Populate title
+            const titleEl = document.getElementById('rec-title');
+            if (titleEl) {
+                titleEl.textContent = rec.title;
+            }
+            
+            // Populate difficulty badge
+            const diffEl = document.getElementById('rec-difficulty');
+            if (diffEl) {
+                diffEl.textContent = rec.difficulty;
+                const diffColors = {
+                    beginner: '#67e59f',
+                    intermediate: '#ffcc70',
+                    advanced: '#ff6b6b'
+                };
+                diffEl.style.color = diffColors[rec.difficulty] || '#58e1ff';
+            }
+            
+            // Populate AI reason
+            const reasonEl = document.getElementById('rec-reason');
+            if (reasonEl) {
+                reasonEl.textContent = '"' + rec.reason + '"';
+            }
+            
+            // Populate concept tags
+            const conceptsEl = document.getElementById('rec-concepts');
+            if (conceptsEl && rec.concept_tags) {
+                conceptsEl.innerHTML = '';
+                const tags = rec.concept_tags.split(',');
+                tags.forEach(tag => {
+                    tag = tag.trim();
+                    if (!tag) return;
+                    const pill = document.createElement('span');
+                    pill.className = 'concept-pill';
+                    pill.textContent = tag;
+                    pill.style.fontSize = '0.7rem';
+                    conceptsEl.appendChild(pill);
+                });
+            }
+            
+            // Set play button href
+            const playBtn = document.getElementById('rec-play-btn');
+            if (playBtn) {
+                playBtn.href = rec.game_url;
+            }
+            
+            // Show skill level change
+            const skillEl = document.getElementById('rec-skill-update');
+            if (skillEl && skillUpdate) {
+                const diff = skillUpdate.new_level - skillUpdate.old_level;
+                const sign = diff >= 0 ? '+' : '';
+                const color = diff >= 0 ? '#67e59f' : '#ff6b6b';
+                skillEl.innerHTML = 
+                    'Skill level: <span style="color:' + color + '">' +
+                    sign + diff.toFixed(1) +
+                    '</span> → ' +
+                    skillUpdate.new_level.toFixed(1) + '/100';
+            }
+            
+            // Show card with animation
+            card.style.display = 'block';
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.opacity = '1';
+                });
+            });
+            
+            // Auto dismiss after 30 seconds
+            setTimeout(() => {
+                dismissRecommendation();
+            }, 30000);
+        }
+
+        function dismissRecommendation() {
+            const card = document.getElementById('recommendation-card');
+            if (!card) {
+                return;
+            }
+            card.style.transform = 'translateY(20px)';
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.style.display = 'none';
+            }, 300);
+        }
+
+        // Dismiss button
+        document.addEventListener('DOMContentLoaded', function() {
+            const dismissBtn = document.getElementById('rec-dismiss-btn');
+            if (dismissBtn) {
+                dismissBtn.addEventListener('click', dismissRecommendation);
+            }
         });
 
         lcCloseObitBtn.addEventListener('click', closeObituaryModal);

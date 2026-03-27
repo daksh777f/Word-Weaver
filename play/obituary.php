@@ -194,6 +194,8 @@ try {
         'senior_dev_comment' => $analysis['senior_dev_comment'],
         'score' => $finalScore,
         'xp_awarded' => $xpAwarded,
+        'difficulty' => $challenge['difficulty'] ?? 'beginner',
+        'hints_used' => (int)($hintsUsed ?? 0),
     ];
 
     $pdo->beginTransaction();
@@ -244,6 +246,21 @@ try {
     }
 
     $pdo->commit();
+
+    // Update streak and total XP on challenge completion
+    require_once '../includes/streak_manager.php';
+    $streakData = updateUserActivity(
+        $userId,
+        $xpAwarded,
+        true,
+        $pdo
+    );
+
+    // Add streak data to response
+    $responsePayload['current_streak'] = $streakData['current_streak'];
+    $responsePayload['streak_message'] = $streakData['streak_message'];
+    $responsePayload['total_xp'] = $streakData['total_xp'];
+
     obituaryRespond($responsePayload);
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {
