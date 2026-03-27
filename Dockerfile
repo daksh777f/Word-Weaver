@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache modules
 RUN a2enmod rewrite
 
+# Configure Apache MPM (disable all MPMs and enable prefork for PHP compatibility)
+RUN a2dismod mpm_event mpm_worker && a2enmod mpm_prefork
+
 # Copy application files
 COPY . /var/www/html/
 
