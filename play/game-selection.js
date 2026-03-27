@@ -179,6 +179,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         window.location.href = 'live-coding.php';
                     }, 100);
+                } else if (gameType === 'duel') {
+                    const logData = JSON.stringify({
+                        action: 'Clicked Bug Duel Arena',
+                        details: 'User started Bug Duel Arena search'
+                    });
+
+                    if (navigator.sendBeacon) {
+                        navigator.sendBeacon('../api/admin-log.php', logData);
+                    } else {
+                        fetch('../api/admin-log.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: logData,
+                            keepalive: true
+                        }).catch(err => console.error('Log failed', err));
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = 'duel_lobby.php';
+                    }, 100);
                 } else if (!gameType) {
                     showToast('Coming Soon!');
                 } else {

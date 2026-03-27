@@ -1,6 +1,7 @@
 <?php
 require_once '../onboarding/config.php';
 require_once '../includes/greeting.php';
+require_once 'adaptive_engine.php';
 
 // Check if user is logged in, redirect to login if not
 if (!isLoggedIn()) {
@@ -10,7 +11,7 @@ if (!isLoggedIn()) {
 
 // Get user information
 $user_id = $_SESSION['user_id'];
-$stmt = $pdo->prepare("SELECT username, email, grade_level, profile_image FROM users WHERE id = ?");
+$stmt = $pdo->prepare("SELECT username, email, grade_level, profile_image, COALESCE(duel_wins, 0) AS duel_wins, COALESCE(duel_losses, 0) AS duel_losses, COALESCE(duel_win_streak, 0) AS duel_win_streak FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
@@ -19,6 +20,39 @@ if (!$user) {
     session_destroy();
     header('Location: ../onboarding/login.php');
     exit();
+}
+
+// Build performance profile for adaptive recommendations
+$profile = buildPerformanceProfile($user_id, $pdo);
+
+// Determine which games to recommend
+$skillLevel = $profile['skill_level'];
+$weakConcepts = array_map('strtolower', array_column(array_values($profile['weak_concepts']), 'concept_name'));
+$gameTypeBreakdown = $profile['game_type_breakdown'];
+
+$recommendBugHunt = false;
+$recommendLiveCoding = false;
+$recommendSprint = false;
+
+$bugHuntCount = (int)($gameTypeBreakdown['bug_hunt'] ?? 0);
+$liveCodingCount = (int)($gameTypeBreakdown['live_coding'] ?? 0);
+
+if ($bugHuntCount < 3) {
+    // New to bug hunting
+    $recommendBugHunt = true;
+} elseif (!empty($weakConcepts) && $skillLevel < 60) {
+    // Has weak spots, debugging helps
+    $recommendBugHunt = true;
+}
+
+if ($liveCodingCount >= 3 && $skillLevel >= 60) {
+    // Ready for writing from scratch
+    $recommendLiveCoding = true;
+}
+
+if ($profile['current_streak'] >= 2) {
+    // Has momentum, sprint to maintain it
+    $recommendSprint = true;
 }
 
 // Get user's game progress for all games shown in selection
@@ -58,6 +92,13 @@ $liveCodingChallengeCount = (int)$liveCodingCountStmt->fetchColumn();
 $conceptGraphCountStmt = $pdo->prepare("SELECT COUNT(*) FROM concept_graph WHERE user_id = ?");
 $conceptGraphCountStmt->execute([$user_id]);
 $conceptGraphCount = (int)$conceptGraphCountStmt->fetchColumn();
+
+// Build recommendations array for template use
+$recommendations = [
+    'bughunt' => ['recommended' => $recommendBugHunt],
+    'livecoding' => ['recommended' => $recommendLiveCoding],
+    'dailysprint' => ['recommended' => $recommendSprint]
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -252,6 +293,12 @@ $conceptGraphCount = (int)$conceptGraphCountStmt->fetchColumn();
                             <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;"><?php echo $bugChallengeCount; ?> bugs available</div>
                             <a href="bug-hunt.php" style="display:none;" aria-hidden="true">Play Bug Hunt Arena</a>
                         </div>
+                        <?php if (isset($recommendations['bughunt']) && $recommendations['bughunt']['recommended']): ?>
+                        <div class="recommendation-badge">
+                            <i class="fas fa-star"></i>
+                            <span>Recommended</span>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <div class="btns">
                         <div class="likes">
@@ -302,12 +349,18 @@ $conceptGraphCount = (int)$conceptGraphCountStmt->fetchColumn();
                 </div>
 
                 <!-- Live Coding Arena Card -->
-                <div class="main card game-card" data-game="livecoding">
+                <div class="main card game-card <?php echo $recommendLiveCoding ? 'recommended-game' : ''; ?>" data-game="livecoding">
                     <div class="card_content">
                         <img src="../assets/selection/Grammarbg.webp" alt="Live Coding Arena Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 7px;">
                         <div class="play-icon-overlay">
                             <i class="fas fa-play"></i>
                         </div>
+                        <?php if ($recommendLiveCoding): ?>
+                        <div class="recommendation-badge">
+                            <span class="recommendation-star">⭐</span>
+                            <span class="recommendation-text">Recommended</span>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <div class="card_back"></div>
                     <div class="data">
@@ -320,6 +373,11 @@ $conceptGraphCount = (int)$conceptGraphCountStmt->fetchColumn();
                             <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">Code · Beginner → Advanced</div>
                             <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;"><?php echo $liveCodingChallengeCount; ?> challenges available</div>
                             <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;"><?php echo $conceptGraphCount > 0 ? ($conceptGraphCount . ' concepts in your graph') : 'Start building your graph →'; ?></div>
+                            <?php if ($recommendLiveCoding): ?>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem; color: #58e1ff;">
+                                <i class="fas fa-brain"></i> AI recommends: Ready for coding from scratch!
+                            </div>
+                            <?php endif; ?>
                             <a href="live-coding.php" style="display:none;" aria-hidden="true">Play Live Coding Arena</a>
                         </div>
                     </div>
@@ -331,6 +389,50 @@ $conceptGraphCount = (int)$conceptGraphCountStmt->fetchColumn();
                         <div class="comments">
                             <svg class="comments_svg" viewBox="-405.9 238 56.3 54.8" title="Concepts"><path d="M-391 291.4c0 1.5 1.2 1.7 1.9 1.2 1.8-1.6 15.9-14.6 15.9-14.6h19.3c3.8 0 4.4-.8 4.4-4.5v-31.1c0-3.7-.8-4.5-4.4-4.5h-47.4c-3.6 0-4.4.9-4.4 4.5v31.1c0 3.7.7 4.4 4.4 4.4h10.4v13.5z"></path></svg>
                             <span class="comments_text"><?php echo $conceptGraphCount; ?></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bug Duel Arena Card (NEW) -->
+                <div class="main card game-card" data-game="duel">
+                    <div class="card_content">
+                        <img src="../assets/selection/Grammarbg.webp" alt="Bug Duel Arena Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 7px;">
+                        <div class="play-icon-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="new-badge" style="position: absolute; top: 8px; left: 8px; background: rgba(255, 102, 102, 0.9); color: white; font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 999px;">NEW</div>
+                    </div>
+                    <div class="card_back"></div>
+                    <div class="data">
+                        <div class="img">
+                            <span class="codedungeon-logo"><span class="logo-icon">⚔️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+                        </div>
+                        <div class="text">
+                            <div class="text_m">Bug Duel Arena</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">Challenge a developer to a real-time bug fixing race. Same broken code. First fix wins.</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">⚔️ Live · 1v1</div>
+                            <?php
+                            $stmt = $pdo->query("SELECT COUNT(*) FROM duel_history WHERE DATE(played_at) = CURDATE()");
+                            $todayDuelCount = (int)$stmt->fetchColumn();
+                            ?>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;"><?php echo $todayDuelCount; ?> duels played today</div>
+                            <?php
+                            $duelWins = (int)($user['duel_wins'] ?? 0);
+                            $duelLosses = (int)($user['duel_losses'] ?? 0);
+                            $duelStreak = (int)($user['duel_win_streak'] ?? 0);
+                            ?>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem; color: #ffd700;">Your record: <?php echo $duelWins; ?>-<?php echo $duelLosses; ?></div>
+                            <a href="duel_lobby.php" style="display:none;" aria-hidden="true">Play Bug Duel Arena</a>
+                        </div>
+                    </div>
+                    <div class="btns">
+                        <div class="likes">
+                            <svg class="likes_svg" viewBox="-2 0 105 92"><path d="M85.24 2.67C72.29-3.08 55.75 2.67 50 14.9 44.25 2 27-3.8 14.76 2.67 1.1 9.14-5.37 25 5.42 44.38 13.33 58 27 68.11 50 86.81 73.73 68.11 87.39 58 94.58 44.38c10.79-18.7 4.32-35.24-9.34-41.71Z"></path></svg>
+                            <span class="likes_text"><?php echo $duelWins; ?></span>
+                        </div>
+                        <div class="comments">
+                            <svg class="comments_svg" viewBox="-405.9 238 56.3 54.8" title="Streak"><path d="M-391 291.4c0 1.5 1.2 1.7 1.9 1.2 1.8-1.6 15.9-14.6 15.9-14.6h19.3c3.8 0 4.4-.8 4.4-4.5v-31.1c0-3.7-.8-4.5-4.4-4.5h-47.4c-3.6 0-4.4.9-4.4 4.5v31.1c0 3.7.7 4.4 4.4 4.4h10.4v13.5z"></path></svg>
+                            <span class="comments_text"><?php echo $duelStreak; ?></span>
                         </div>
                     </div>
                 </div>
