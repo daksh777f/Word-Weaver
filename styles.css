@@ -502,3 +502,19 @@ html body .main-content {
         width: 100% !important;
     }
 }
+
+/* Duel Score Banner Styling */
+.duel-score-banner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+/* Duel Player Card Styling */
+.duel-player-card {
+    display: flex;
+    flex-direction: column;
+}

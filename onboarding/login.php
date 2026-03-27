@@ -61,6 +61,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     error_log("Failed to create session record: " . $e->getMessage());
                 }
 
+                // Track daily streak on login
+                require_once '../includes/streak_manager.php';
+                $streakData = updateUserActivity(
+                    $_SESSION['user_id'],
+                    0,
+                    false,
+                    $pdo
+                );
+                $_SESSION['current_streak'] = $streakData['current_streak'];
+                $_SESSION['streak_message'] = $streakData['streak_message'];
+
                 // AUDIT LOG: Login Success
                 require_once '../includes/Logger.php';
                 logAudit('Login Success', $user['id'], $user['username']);
