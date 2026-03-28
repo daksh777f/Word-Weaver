@@ -199,6 +199,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         window.location.href = 'duel_lobby.php';
                     }, 100);
+                } else if (gameType === 'saboteur') {
+                    const logData = JSON.stringify({
+                        action: 'Clicked Bug Saboteur',
+                        details: 'User started Bug Saboteur multiplayer game'
+                    });
+
+                    if (navigator.sendBeacon) {
+                        navigator.sendBeacon('../api/admin-log.php', logData);
+                    } else {
+                        fetch('../api/admin-log.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: logData,
+                            keepalive: true
+                        }).catch(err => console.error('Log failed', err));
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = 'saboteur_lobby.php';
+                    }, 100);
                 } else if (!gameType) {
                     showToast('Coming Soon!');
                 } else {

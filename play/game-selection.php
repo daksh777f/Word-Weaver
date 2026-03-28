@@ -436,6 +436,40 @@ $recommendations = [
                         </div>
                     </div>
                 </div>
+
+                <!-- Bug Saboteur Game Card (MULTIPLAYER) -->
+                <div class="main card game-card" data-game="saboteur">
+                    <div class="card_content">
+                        <img src="../assets/selection/Grammarbg.webp" alt="Bug Saboteur Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 7px;">
+                        <div class="play-icon-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="new-badge" style="position: absolute; top: 8px; left: 8px; background: rgba(139, 92, 246, 0.9); color: white; font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 999px;">NEW</div>
+                    </div>
+                    <div class="card_back"></div>
+                    <div class="data">
+                        <div class="img">
+                            <span class="codedungeon-logo"><span class="logo-icon">🕵️</span><span class="logo-text">Code<span class="logo-accent">Dungeon</span></span></span>
+                        </div>
+                        <div class="text">
+                            <div class="text_m">Bug Saboteur</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">Find the saboteur! One player breaks the code while others try to fix it and vote them out.</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">🕵️ Multiplayer · 2-5 players</div>
+                            <div style="font-size: 0.65rem; opacity: 0.9; margin-top: 0.15rem;">Social deduction meets coding challenges</div>
+                            <a href="saboteur_lobby.php" style="display:none;" aria-hidden="true">Play Bug Saboteur</a>
+                        </div>
+                    </div>
+                    <div class="btns">
+                        <div class="likes">
+                            <svg class="likes_svg" viewBox="-2 0 105 92"><path d="M85.24 2.67C72.29-3.08 55.75 2.67 50 14.9 44.25 2 27-3.8 14.76 2.67 1.1 9.14-5.37 25 5.42 44.38 13.33 58 27 68.11 50 86.81 73.73 68.11 87.39 58 94.58 44.38c10.79-18.7 4.32-35.24-9.34-41.71Z"></path></svg>
+                            <span class="likes_text">🎮</span>
+                        </div>
+                        <div class="comments">
+                            <svg class="comments_svg" viewBox="-405.9 238 56.3 54.8" title="Players"><path d="M-391 291.4c0 1.5 1.2 1.7 1.9 1.2 1.8-1.6 15.9-14.6 15.9-14.6h19.3c3.8 0 4.4-.8 4.4-4.5v-31.1c0-3.7-.8-4.5-4.4-4.5h-47.4c-3.6 0-4.4.9-4.4 4.5v31.1c0 3.7.7 4.4 4.4 4.4h10.4v13.5z"></path></svg>
+                            <span class="comments_text">2-5</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <nav class="menu-buttons">
