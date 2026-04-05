@@ -46,6 +46,16 @@ if ($existingLock) {
     $sprint_lock_id = (int)$pdo->lastInsertId();
 }
 
+$languageStmt = $pdo->query("SELECT DISTINCT LOWER(language) AS language FROM bug_challenges WHERE challenge_type = 'bug_fix' AND language IS NOT NULL AND language <> '' ORDER BY language ASC");
+$availableLanguages = array_values(array_filter(array_map(static function ($row) {
+    return strtolower(trim((string)($row['language'] ?? '')));
+}, $languageStmt->fetchAll(PDO::FETCH_ASSOC))));
+
+$selectedLanguage = strtolower(trim((string)($_GET['language'] ?? '')));
+if ($selectedLanguage !== '' && !in_array($selectedLanguage, $availableLanguages, true)) {
+    $selectedLanguage = '';
+}
+
 if ($already_completed):
 ?>
 <!DOCTYPE html>
@@ -58,11 +68,9 @@ if ($already_completed):
     <link rel="stylesheet" href="../styles.css?v=<?php echo filemtime('../styles.css'); ?>">
     <link rel="stylesheet" href="../MainGame/grammarheroes/game.css?v=<?php echo filemtime('../MainGame/grammarheroes/game.css'); ?>">
     <link rel="stylesheet" href="../notif/toast.css?v=<?php echo filemtime('../notif/toast.css'); ?>">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
             --bh-bg-soft: rgba(13, 22, 51, 0.86);
-            --bh-border: rgba(255, 255, 255, 0.16);
             --bh-muted: #b8c2eb;
             --bh-primary: #58e1ff;
             --bh-success: #67e59f;
@@ -119,7 +127,7 @@ if ($already_completed):
             <div class="countdown-next" id="nextSprintCountdown">00:00:00</div>
             <div class="action-bar" style="margin-top: 0.8rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
                 <button class="play-again" onclick="window.location.href='../navigation/leaderboards/leaderboards.php?game=daily_sprint'">View Leaderboard</button>
-                <button class="ghost-btn" onclick="window.location.href='bug-hunt.php'">Play Bug Hunt Arena</button>
+                <button class="ghost-btn" onclick="window.location.href='bug-hunt.php<?php echo $selectedLanguage !== '' ? '?language=' . urlencode($selectedLanguage) : ''; ?>'">Play Bug Hunt Arena</button>
             </div>
         </section>
     </div>
@@ -148,8 +156,19 @@ if ($already_completed):
 exit();
 endif;
 
-$challengeStmt = $pdo->query("SELECT * FROM bug_challenges WHERE challenge_type = 'bug_fix' ORDER BY RAND() LIMIT 3");
-$challenges = $challengeStmt->fetchAll(PDO::FETCH_ASSOC);
+if ($selectedLanguage !== '') {
+    $challengeStmt = $pdo->prepare("SELECT * FROM bug_challenges WHERE challenge_type = 'bug_fix' AND LOWER(language) = ? ORDER BY RAND() LIMIT 3");
+    $challengeStmt->execute([$selectedLanguage]);
+    $challenges = $challengeStmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    $challengeStmt = $pdo->query("SELECT * FROM bug_challenges WHERE challenge_type = 'bug_fix' ORDER BY RAND() LIMIT 3");
+    $challenges = $challengeStmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+if (count($challenges) < 3 && $selectedLanguage !== '') {
+    header('Location: seed.php?message=' . urlencode('Daily Sprint needs at least 3 challenges for language ' . strtoupper($selectedLanguage) . '. Add more seeded challenges.'));
+    exit();
+}
 
 if (count($challenges) < 3) {
     header('Location: seed.php?message=' . urlencode('Daily Sprint needs at least 3 bug challenges.'));
@@ -534,7 +553,19 @@ if (count($challenges) < 3) {
             <div class="hud-item"><span>Total Score</span><strong id="score">0</strong></div>
             <div class="hud-item"><span>XP</span><strong id="xpEarned">0</strong></div>
             <div class="hud-item"><span>Countdown</span><strong id="sprintTimer" class="sprint-timer">10:00</strong></div>
-            <div class="hud-item full"><span>Sprint</span><strong id="sprintHeaderText">Bug 1 of 3</strong></div>
+            <div class="hud-item full" style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+                <span>Sprint</span>
+                <strong id="sprintHeaderText">Bug 1 of 3</strong>
+                <form method="GET" action="daily-sprint.php" style="display:flex;align-items:center;gap:0.35rem;margin-left:auto;">
+                    <label for="sprintLanguage" style="font-size:0.72rem;color:var(--bh-muted);font-weight:700;">Language</label>
+                    <select id="sprintLanguage" name="language" onchange="this.form.submit()" style="background:#060b1a;color:var(--bh-text);border:1px solid var(--bh-border);border-radius:8px;padding:0.28rem 0.5rem;font-size:0.72rem;">
+                        <option value="" <?php echo $selectedLanguage === '' ? 'selected' : ''; ?>>All</option>
+                        <?php foreach ($availableLanguages as $lang): ?>
+                            <option value="<?php echo htmlspecialchars($lang); ?>" <?php echo $selectedLanguage === $lang ? 'selected' : ''; ?>><?php echo htmlspecialchars(strtoupper($lang)); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
+            </div>
         </section>
 
         <section class="progress-wrap">
@@ -623,7 +654,7 @@ if (count($challenges) < 3) {
 
             <div class="result-actions" style="margin-top:0.8rem;">
                 <button class="play-again" onclick="window.location.href='../navigation/leaderboards/leaderboards.php?game=daily_sprint'">View Full Leaderboard</button>
-                <button class="ghost-btn" onclick="window.location.href='bug-hunt.php'">Play Bug Hunt Arena</button>
+                <button class="ghost-btn" onclick="window.location.href='bug-hunt.php<?php echo $selectedLanguage !== '' ? '?language=' . urlencode($selectedLanguage) : ''; ?>'">Play Bug Hunt Arena</button>
             </div>
         </div>
     </div>
@@ -786,7 +817,7 @@ if (count($challenges) < 3) {
             setTimeout(() => {
                 backstoryText.textContent = challenge.backstory || '';
                 consequenceText.textContent = `⚠️ Real-world consequence: ${challenge.real_world_consequence || ''}`;
-                languagePill.textContent = String(challenge.language || 'javascript').toUpperCase();
+                languagePill.textContent = String(challenge.language || 'unknown').toUpperCase();
                 backstoryPanel.style.opacity = '1';
             }, 200);
 

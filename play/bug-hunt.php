@@ -23,8 +23,33 @@ if (!$user) {
     exit();
 }
 
-$challengeStmt = $pdo->query("SELECT * FROM bug_challenges WHERE challenge_type = 'bug_fix' ORDER BY RAND() LIMIT 1");
-$challenge = $challengeStmt->fetch(PDO::FETCH_ASSOC);
+$languageStmt = $pdo->query("SELECT DISTINCT LOWER(language) AS language FROM bug_challenges WHERE challenge_type = 'bug_fix' AND language IS NOT NULL AND language <> '' ORDER BY language ASC");
+$availableLanguages = array_values(array_filter(array_map(static function ($row) {
+    return strtolower(trim((string)($row['language'] ?? '')));
+}, $languageStmt->fetchAll(PDO::FETCH_ASSOC))));
+
+$selectedLanguage = strtolower(trim((string)($_GET['language'] ?? '')));
+if ($selectedLanguage !== '' && !in_array($selectedLanguage, $availableLanguages, true)) {
+    $selectedLanguage = '';
+}
+
+$challenge = null;
+
+if ($selectedLanguage !== '') {
+    $challengeStmt = $pdo->prepare("SELECT * FROM bug_challenges WHERE challenge_type = 'bug_fix' AND LOWER(language) = ? ORDER BY RAND() LIMIT 1");
+    $challengeStmt->execute([$selectedLanguage]);
+    $challenge = $challengeStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$challenge) {
+        header('Location: seed.php?message=' . urlencode('No Bug Hunt challenges found for language ' . strtoupper($selectedLanguage) . '. Run seed to add more challenges.'));
+        exit();
+    }
+}
+
+if (empty($challenge)) {
+    $challengeStmt = $pdo->query("SELECT * FROM bug_challenges WHERE challenge_type = 'bug_fix' ORDER BY RAND() LIMIT 1");
+    $challenge = $challengeStmt->fetch(PDO::FETCH_ASSOC);
+}
 
 if (!$challenge) {
     header('Location: seed.php?message=' . urlencode('No challenges found. Seed data first.'));
@@ -308,7 +333,21 @@ $debugMode = isset($_GET['debug']) && $_GET['debug'] === '1';
         <section class="challenge-card">
             <div class="editor-label">
                 <h3>🐛 Broken Code — find the bug and fix it</h3>
-                <span class="lang-pill"><?php echo htmlspecialchars($challenge['language']); ?></span>
+                <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;justify-content:flex-end;">
+                    <form method="GET" action="bug-hunt.php" style="display:flex;align-items:center;gap:0.35rem;">
+                        <?php if ($debugMode): ?>
+                            <input type="hidden" name="debug" value="1">
+                        <?php endif; ?>
+                        <label for="languageFilter" style="font-size:0.72rem;color:var(--bh-muted);font-weight:700;">Language</label>
+                        <select id="languageFilter" name="language" onchange="this.form.submit()" style="background:#060b1a;color:var(--bh-text);border:1px solid var(--bh-border);border-radius:8px;padding:0.28rem 0.5rem;font-size:0.72rem;">
+                            <option value="" <?php echo $selectedLanguage === '' ? 'selected' : ''; ?>>All</option>
+                            <?php foreach ($availableLanguages as $lang): ?>
+                                <option value="<?php echo htmlspecialchars($lang); ?>" <?php echo $selectedLanguage === $lang ? 'selected' : ''; ?>><?php echo htmlspecialchars(strtoupper($lang)); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </form>
+                    <span class="lang-pill"><?php echo htmlspecialchars($challenge['language']); ?></span>
+                </div>
             </div>
             <div class="editor-shell">
                 <div class="line-numbers" id="lineNumbers">1</div>
@@ -317,7 +356,7 @@ $debugMode = isset($_GET['debug']) && $_GET['debug'] === '1';
             <div class="action-bar">
                 <button id="submitFixBtn" class="play-again">Submit Fix</button>
                 <button id="startOverBtn" class="ghost-btn">Start Over</button>
-                <a class="skip-link" href="bug-hunt.php">Skip Challenge</a>
+                <a class="skip-link" href="bug-hunt.php<?php echo $selectedLanguage !== '' ? '?language=' . urlencode($selectedLanguage) : ''; ?>">Skip Challenge</a>
             </div>
         </section>
 
@@ -491,6 +530,7 @@ $debugMode = isset($_GET['debug']) && $_GET['debug'] === '1';
         const BUG_HUNT_CONFIG = {
             challengeId: <?php echo (int)$challenge['id']; ?>,
             language: <?php echo json_encode((string)$challenge['language']); ?>,
+            selectedLanguage: <?php echo json_encode((string)$selectedLanguage); ?>,
             originalCode: <?php echo json_encode((string)$challenge['broken_code']); ?>,
             userId: <?php echo (int)$user_id; ?>,
             debugMode: <?php echo $debugMode ? 'true' : 'false'; ?>
@@ -832,7 +872,8 @@ $debugMode = isset($_GET['debug']) && $_GET['debug'] === '1';
         });
 
         playAgainBtn.addEventListener('click', () => {
-            window.location.href = 'bug-hunt.php';
+            const qs = BUG_HUNT_CONFIG.selectedLanguage ? ('?language=' + encodeURIComponent(BUG_HUNT_CONFIG.selectedLanguage)) : '';
+            window.location.href = 'bug-hunt.php' + qs;
         });
 
         closeObitBtn.addEventListener('click', closeObituaryModal);

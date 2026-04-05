@@ -21,7 +21,21 @@ if (!isLoggedIn()) {
 
 $user_id = (int)$_SESSION['user_id'];
 $request_data = json_decode(file_get_contents('php://input'), true);
+if (!is_array($request_data)) {
+    $request_data = [];
+}
+
 $mode = $request_data['mode'] ?? 'easy'; // easy, medium, hard
+$requestedLanguage = strtolower(trim((string)($request_data['language'] ?? '')));
+
+$allowedLanguageStmt = $pdo->query("SELECT DISTINCT LOWER(language) AS language FROM bug_challenges WHERE challenge_type = 'bug_fix' AND language IS NOT NULL AND language <> ''");
+$allowedLanguages = array_values(array_filter(array_map(static function ($row) {
+    return strtolower(trim((string)($row['language'] ?? '')));
+}, $allowedLanguageStmt->fetchAll(PDO::FETCH_ASSOC))));
+
+if ($requestedLanguage !== '' && !in_array($requestedLanguage, $allowedLanguages, true)) {
+    $requestedLanguage = '';
+}
 
 try {
     // ── Check if user already in active room ────────────────────────
@@ -55,7 +69,26 @@ try {
         ORDER BY RAND()
         LIMIT 1
     ");
-    $stmt->execute([$difficulty]);
+    if ($requestedLanguage !== '') {
+        $stmt = $pdo->prepare("\n            SELECT id, title, difficulty, concept_tags, broken_code, language
+            FROM bug_challenges
+            WHERE challenge_type = 'bug_fix'
+            AND difficulty = ?
+            AND LOWER(language) = ?
+            ORDER BY RAND()
+            LIMIT 1
+        ");
+        $stmt->execute([$difficulty, $requestedLanguage]);
+    } else {
+        $stmt = $pdo->prepare("\n            SELECT id, title, difficulty, concept_tags, broken_code, language
+            FROM bug_challenges
+            WHERE challenge_type = 'bug_fix'
+            AND difficulty = ?
+            ORDER BY RAND()
+            LIMIT 1
+        ");
+        $stmt->execute([$difficulty]);
+    }
     $challenge = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$challenge) {
@@ -117,6 +150,7 @@ try {
         'matched' => true,
         'room_code' => $roomCode,
         'is_bot' => true,
+        'language' => $requestedLanguage,
         'message' => 'Bot duel ready!'
     ]);
 

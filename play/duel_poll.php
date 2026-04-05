@@ -50,11 +50,11 @@ try {
         exit;
     }
 
-    // Fetch both player records
+    // Fetch both player records (bot may not exist in users table)
     $stmt = $pdo->prepare("
-        SELECT dp.*, u.username
+        SELECT dp.*, COALESCE(u.username, CASE WHEN dp.user_id = -1 THEN 'Code Bot' ELSE NULL END) AS username
         FROM duel_players dp
-        JOIN users u ON u.id = dp.user_id
+        LEFT JOIN users u ON u.id = dp.user_id
         WHERE dp.room_id = ?
         ORDER BY dp.player_number ASC
     ");
@@ -64,7 +64,15 @@ try {
     // Find my player and opponent
     $myPlayer = null;
     $opponentPlayer = null;
+    $p1 = null;
+    $p2 = null;
     foreach ($players as $p) {
+        if ((int)$p['player_number'] === 1) {
+            $p1 = $p;
+        } elseif ((int)$p['player_number'] === 2) {
+            $p2 = $p;
+        }
+
         if ((int)$p['user_id'] === $user_id) {
             $myPlayer = $p;
         } else {
@@ -113,17 +121,51 @@ try {
         $duelElapsed = time() - strtotime($room['duel_started_at']);
     }
 
-    // Build opponent progress indicator (abstracted)
-    $opponentProgress = null;
-    if ($opponentPlayer) {
-        $opponentProgress = [
-            'username' => (string)$opponentPlayer['username'],
-            'has_edited' => (int)$opponentPlayer['edit_count'] > 0,
-            'edit_count' => (int)$opponentPlayer['edit_count'],
-            'has_submitted' => !is_null($opponentPlayer['submitted_at']),
-            'submitted_at' => (string)($opponentPlayer['submitted_at'] ?? ''),
-            'result' => (string)$opponentPlayer['result']
-        ];
+    $playerStatusFromRow = static function ($row, string $roomStatus): string {
+        if (!is_array($row)) {
+            return 'waiting';
+        }
+        if (!empty($row['submitted_at'])) {
+            return 'submitted';
+        }
+        if ($roomStatus === 'active') {
+            return 'editing';
+        }
+        if ((int)($row['edit_count'] ?? 0) > 0) {
+            return 'editing';
+        }
+        return 'waiting';
+    };
+
+    $p1Status = $playerStatusFromRow($p1, (string)$room['status']);
+    $p2Status = $playerStatusFromRow($p2, (string)$room['status']);
+
+    if ($phase === 'result' && $myPlayer) {
+        $feedback = [];
+        if (!empty($myPlayer['ai_feedback'])) {
+            $decoded = json_decode((string)$myPlayer['ai_feedback'], true);
+            if (is_array($decoded)) {
+                $feedback = $decoded;
+            }
+        }
+
+        ob_end_clean();
+        echo json_encode([
+            'status' => $room['status'],
+            'result' => (string)($myPlayer['result'] ?? 'pending'),
+            'score' => (int)($myPlayer['score'] ?? 0),
+            'xp' => (int)($myPlayer['xp_earned'] ?? 0),
+            'roast' => (string)($feedback['roast'] ?? ''),
+            'time_complexity' => (string)($feedback['time_complexity'] ?? ''),
+            'space_complexity' => (string)($feedback['space_complexity'] ?? ''),
+            'edge_cases' => isset($feedback['edge_cases_missed'])
+                ? (is_array($feedback['edge_cases_missed']) ? implode(', ', $feedback['edge_cases_missed']) : (string)$feedback['edge_cases_missed'])
+                : '',
+            'cleaner' => (string)($feedback['cleaner_alternative'] ?? ''),
+            'senior_advice' => (string)($feedback['senior_dev_comment'] ?? ''),
+            'duel_comment' => (string)($feedback['duel_comment'] ?? '')
+        ]);
+        exit;
     }
 
     ob_end_clean();
@@ -132,9 +174,14 @@ try {
         'countdown_remaining' => $countdownRemaining,
         'duel_elapsed' => $duelElapsed,
         'winner_id' => $room['winner_id'],
+        'player1_id' => isset($p1['user_id']) ? (int)$p1['user_id'] : null,
+        'player2_id' => isset($p2['user_id']) ? (int)$p2['user_id'] : null,
+        'p1_status' => $p1Status,
+        'p2_status' => $p2Status,
+        'p1_submitted_at' => $p1['submitted_at'] ?? null,
+        'p2_submitted_at' => $p2['submitted_at'] ?? null,
         'my_result' => $myPlayer['result'] ?? 'pending',
         'my_submitted' => !is_null($myPlayer['submitted_at'] ?? null),
-        'opponent' => $opponentProgress,
         'challenge_id' => (int)$room['challenge_id'],
         'player_count' => $room['player2_id'] ? 2 : 1
     ]);

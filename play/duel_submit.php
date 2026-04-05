@@ -20,9 +20,10 @@ if (!isLoggedIn()) {
 
 $user_id = (int)$_SESSION['user_id'];
 $input = json_decode(file_get_contents('php://input'), true);
+$input = is_array($input) ? $input : [];
 
-$room_code = $input['room_code'] ?? '';
-$submitted_code = trim($input['submitted_code'] ?? '');
+$room_code = trim((string)($input['room_code'] ?? ''));
+$submitted_code = trim((string)($input['submitted_code'] ?? ($input['code'] ?? '')));
 $time_taken = max(0, (int)($input['time_taken'] ?? 0));
 
 // Validate inputs
@@ -71,6 +72,13 @@ try {
         ob_end_clean();
         echo json_encode(['success' => false, 'message' => 'Challenge not found']);
         exit;
+    }
+
+    if ($time_taken <= 0 && !empty($room['duel_started_at'])) {
+        $startedTs = strtotime((string)$room['duel_started_at']);
+        if ($startedTs !== false) {
+            $time_taken = max(0, time() - $startedTs);
+        }
     }
 
     // Calculate score

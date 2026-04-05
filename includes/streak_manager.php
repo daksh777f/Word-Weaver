@@ -16,12 +16,12 @@ define('STREAK_MANAGER_LOADED', true);
  * Update user activity, streak, and XP
  * Called on login and challenge completion
  * @param int $user_id User ID
+ * @param PDO $conn Database connection
  * @param int $xp_earned XP from this event
  * @param bool $challenge_completed Whether challenge was just completed
- * @param PDO $conn Database connection
  * @return array Streak and XP update data
  */
-function updateUserActivity($user_id, $xp_earned = 0, $challenge_completed = false, $conn) {
+function updateUserActivity($user_id, $conn, $xp_earned = 0, $challenge_completed = false) {
     $today = date('Y-m-d');
     $yesterday = date('Y-m-d', strtotime('-1 day'));
 

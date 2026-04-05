@@ -115,7 +115,7 @@ printResult('TEST 4 — CEREBRAS ENDPOINT REACHABILITY', $test4);
 
 // TEST 5 — FULL CEREBRAS API CALL TEST
 $payload = json_encode([
-    'model' => 'llama3.1-8b',
+    'model' => 'qwen-3-235b-a22b-instruct-2507',
     'max_tokens' => 100,
     'messages' => [[
         'role' => 'user',

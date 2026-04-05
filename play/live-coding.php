@@ -26,16 +26,58 @@ if (!$user) {
 }
 
 $tagFilter = strtolower(trim((string)($_GET['tag'] ?? '')));
+
+$languageStmt = $pdo->query("SELECT DISTINCT LOWER(language) AS language FROM live_coding_challenges WHERE language IS NOT NULL AND language <> '' ORDER BY language ASC");
+$availableLanguages = array_values(array_filter(array_map(static function ($row) {
+    return strtolower(trim((string)($row['language'] ?? '')));
+}, $languageStmt->fetchAll(PDO::FETCH_ASSOC))));
+
+$selectedLanguage = strtolower(trim((string)($_GET['language'] ?? '')));
+if ($selectedLanguage !== '' && !in_array($selectedLanguage, $availableLanguages, true)) {
+    $selectedLanguage = '';
+}
+
+$challenge = null;
+
+$where = [];
+$params = [];
 if ($tagFilter !== '') {
-    $challengeStmt = $pdo->prepare("SELECT * FROM live_coding_challenges WHERE concept_tags LIKE ? ORDER BY RAND() LIMIT 1");
+    $where[] = 'concept_tags LIKE ?';
+    $params[] = '%' . $tagFilter . '%';
+}
+if ($selectedLanguage !== '') {
+    $where[] = 'LOWER(language) = ?';
+    $params[] = $selectedLanguage;
+}
+
+$sql = 'SELECT * FROM live_coding_challenges';
+if (!empty($where)) {
+    $sql .= ' WHERE ' . implode(' AND ', $where);
+}
+$sql .= ' ORDER BY RAND() LIMIT 1';
+
+$challengeStmt = $pdo->prepare($sql);
+$challengeStmt->execute($params);
+$challenge = $challengeStmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$challenge && $tagFilter !== '' && $selectedLanguage !== '') {
+    $challengeStmt = $pdo->prepare('SELECT * FROM live_coding_challenges WHERE LOWER(language) = ? ORDER BY RAND() LIMIT 1');
+    $challengeStmt->execute([$selectedLanguage]);
+    $challenge = $challengeStmt->fetch(PDO::FETCH_ASSOC);
+}
+
+if (!$challenge && $selectedLanguage !== '') {
+    header('Location: live_coding_seed.php?message=' . urlencode('No Live Coding challenges found for language ' . strtoupper($selectedLanguage) . '. Add more seeded challenges.'));
+    exit();
+}
+
+if (!$challenge && $tagFilter !== '') {
+    $challengeStmt = $pdo->prepare('SELECT * FROM live_coding_challenges WHERE concept_tags LIKE ? ORDER BY RAND() LIMIT 1');
     $challengeStmt->execute(['%' . $tagFilter . '%']);
     $challenge = $challengeStmt->fetch(PDO::FETCH_ASSOC);
+}
 
-    if (!$challenge) {
-        $challengeStmt = $pdo->query("SELECT * FROM live_coding_challenges ORDER BY RAND() LIMIT 1");
-        $challenge = $challengeStmt->fetch(PDO::FETCH_ASSOC);
-    }
-} else {
+if (!$challenge) {
     $challengeStmt = $pdo->query("SELECT * FROM live_coding_challenges ORDER BY RAND() LIMIT 1");
     $challenge = $challengeStmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -541,7 +583,21 @@ try {
         <section class="challenge-card">
             <div class="editor-label">
                 <h3>Your Solution — complete the implementation</h3>
-                <span class="lang-pill"><?php echo htmlspecialchars((string)$challenge['language']); ?></span>
+                <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;justify-content:flex-end;">
+                    <form method="GET" action="live-coding.php" style="display:flex;align-items:center;gap:0.35rem;">
+                        <?php if ($tagFilter !== ''): ?>
+                            <input type="hidden" name="tag" value="<?php echo htmlspecialchars($tagFilter); ?>">
+                        <?php endif; ?>
+                        <label for="liveCodingLanguage" style="font-size:0.72rem;color:var(--muted-color);font-weight:700;">Language</label>
+                        <select id="liveCodingLanguage" name="language" onchange="this.form.submit()" style="background:#060b1a;color:var(--text);border:1px solid var(--border-color);border-radius:8px;padding:0.28rem 0.5rem;font-size:0.72rem;">
+                            <option value="" <?php echo $selectedLanguage === '' ? 'selected' : ''; ?>>All</option>
+                            <?php foreach ($availableLanguages as $lang): ?>
+                                <option value="<?php echo htmlspecialchars($lang); ?>" <?php echo $selectedLanguage === $lang ? 'selected' : ''; ?>><?php echo htmlspecialchars(strtoupper($lang)); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </form>
+                    <span class="lang-pill"><?php echo htmlspecialchars((string)$challenge['language']); ?></span>
+                </div>
             </div>
             <div class="editor-shell">
                 <div class="line-numbers" id="lc-lineNumbers">1</div>
@@ -735,6 +791,8 @@ try {
         const initialGraphData = <?php echo json_encode($graph_data); ?>;
         const arenaHints = <?php echo json_encode($hintsDecoded); ?>;
         const arenaSessionId = <?php echo (int)$arenaSessionId; ?>;
+        const LIVE_CODING_SELECTED_LANGUAGE = <?php echo json_encode((string)$selectedLanguage); ?>;
+        const LIVE_CODING_TAG_FILTER = <?php echo json_encode((string)$tagFilter); ?>;
 
         const arenaState = {
             hintsUsed: 0,
@@ -1393,7 +1451,7 @@ try {
                 const uniqueConnected = Array.from(new Set(connected));
 
                 const practiceLink = masteryPct < 50
-                    ? `<a href="live-coding.php?tag=${encodeURIComponent(String(node.id))}" style="color: var(--primary); text-decoration: underline;">Practice this more — try a challenge tagged with ${escapeHtml(String(node.id))}</a>`
+                    ? `<a href="live-coding.php?tag=${encodeURIComponent(String(node.id))}${LIVE_CODING_SELECTED_LANGUAGE ? `&language=${encodeURIComponent(LIVE_CODING_SELECTED_LANGUAGE)}` : ''}" style="color: var(--primary); text-decoration: underline;">Practice this more — try a challenge tagged with ${escapeHtml(String(node.id))}</a>`
                     : '';
 
                 detail.innerHTML = `
@@ -1564,7 +1622,15 @@ try {
         });
 
         lcPlayAgainBtn.addEventListener('click', () => {
-            window.location.href = 'live-coding.php';
+            const params = new URLSearchParams();
+            if (LIVE_CODING_TAG_FILTER) {
+                params.set('tag', LIVE_CODING_TAG_FILTER);
+            }
+            if (LIVE_CODING_SELECTED_LANGUAGE) {
+                params.set('language', LIVE_CODING_SELECTED_LANGUAGE);
+            }
+            const qs = params.toString();
+            window.location.href = 'live-coding.php' + (qs ? ('?' + qs) : '');
         });
 
         // ── RECOMMENDATION SYSTEM ─────────────

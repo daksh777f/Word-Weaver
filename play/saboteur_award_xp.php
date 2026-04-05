@@ -32,7 +32,7 @@ if (empty($room_code)) {
 try {
     // ── Find room ──────────────────────────
     $stmt = $pdo->prepare("
-        SELECT sr.id, sr.status, sr.winner, sp.role, sr.challenge_id
+        SELECT sr.id, sr.status, sr.winner, sp.id AS player_id, sp.role, sp.xp_awarded, sr.challenge_id
         FROM saboteur_rooms sr
         INNER JOIN saboteur_players sp ON sp.room_id = sr.id
         WHERE sr.room_code = ? AND sp.user_id = ?
@@ -53,8 +53,22 @@ try {
     }
 
     $room_id = (int)$room_player['id'];
+    $player_id = (int)$room_player['player_id'];
     $player_role = $room_player['role'];
     $winner = $room_player['winner'];
+
+    if ((int)$room_player['xp_awarded'] === 1) {
+        ob_end_clean();
+        echo json_encode([
+            'success' => true,
+            'xp_awarded' => 0,
+            'player_role' => $player_role,
+            'game_result' => $winner,
+            'winner_bonus' => 0,
+            'message' => 'XP already awarded'
+        ]);
+        exit;
+    }
 
     // ── Calculate XP ──────────────────────────
     $base_xp = 50;
@@ -68,11 +82,14 @@ try {
 
     $total_xp = $base_xp + $winner_bonus;
 
+    $pdo->beginTransaction();
+
     // ── Award XP to user ──────────────────────────
-    $stmt = $pdo->prepare("
-        UPDATE users SET total_xp = total_xp + ? WHERE id = ?
-    ");
+    $stmt = $pdo->prepare("UPDATE users SET total_xp = total_xp + ? WHERE id = ?");
     $stmt->execute([$total_xp, $user_id]);
+
+    $stmt = $pdo->prepare("UPDATE saboteur_players SET xp_awarded = 1 WHERE id = ?");
+    $stmt->execute([$player_id]);
 
     // ── Get user details ──────────────────────────
     $stmt = $pdo->prepare("SELECT username, total_xp FROM users WHERE id = ?");
@@ -104,6 +121,8 @@ try {
         $shortHash
     ]);
 
+    $pdo->commit();
+
     ob_end_clean();
     echo json_encode([
         'success' => true,
@@ -111,11 +130,14 @@ try {
         'player_role' => $player_role,
         'game_result' => $winner,
         'winner_bonus' => $winner_bonus,
-        'total_user_xp' => (int)$user['total_xp'] + $total_xp,
+        'total_user_xp' => (int)$user['total_xp'],
         'message' => 'XP awarded'
     ]);
 
 } catch (Exception $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     ob_end_clean();
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }

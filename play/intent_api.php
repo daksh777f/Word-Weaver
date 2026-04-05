@@ -47,7 +47,8 @@ $language = strtolower(trim((string)($data['language'] ?? '')));
 $challengeId = (int)($data['challenge_id'] ?? 0);
 $gameType = strtolower(trim((string)($data['game_type'] ?? 'bug_hunt')));
 
-if ($challengeId <= 0 || ($language !== 'javascript' && $language !== 'python')) {
+$allowedLanguages = ['javascript', 'python', 'java', 'cpp', 'csharp', 'typescript', 'php'];
+if ($challengeId <= 0 || !in_array($language, $allowedLanguages, true)) {
     intentFallback();
 }
 

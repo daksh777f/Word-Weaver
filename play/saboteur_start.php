@@ -54,9 +54,16 @@ try {
     if (empty($room['challenge_id']) || $room['challenge_id'] == 0) {
         $category = $room['category'];
         if (empty($category)) {
-            ob_end_clean();
-            echo json_encode(['success' => false, 'message' => 'Category not selected']);
-            exit;
+            $stmt = $pdo->query("SELECT category, COUNT(*) AS challenge_count FROM saboteur_challenges GROUP BY category ORDER BY challenge_count DESC, category ASC LIMIT 1");
+            $fallbackCategory = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$fallbackCategory || empty($fallbackCategory['category'])) {
+                ob_end_clean();
+                echo json_encode(['success' => false, 'message' => 'No challenge categories available']);
+                exit;
+            }
+            $category = $fallbackCategory['category'];
+            $stmt = $pdo->prepare("UPDATE saboteur_rooms SET category = ? WHERE id = ?");
+            $stmt->execute([$category, $room_id]);
         }
 
         $stmt = $pdo->prepare("

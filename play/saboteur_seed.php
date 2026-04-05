@@ -25,7 +25,7 @@ $challenges = [
         'title' => 'Counter Class',
         'category' => 'Object Oriented',
         'difficulty' => 'beginner',
-        'base_code' => `class Counter {
+        'base_code' => "class Counter {
   constructor() {
     this.count = 0;
     this.history = [];
@@ -57,7 +57,7 @@ $challenges = [
   last_change() {
     // Fix me!
   }
-}`,
+}",
         'test_cases' => json_encode([
             [
                 'id' => 1,
@@ -114,7 +114,7 @@ $challenges = [
         'title' => 'Bank Account Class',
         'category' => 'Object Oriented',
         'difficulty' => 'intermediate',
-        'base_code' => `class BankAccount {
+        'base_code' => "class BankAccount {
   constructor(owner, initialBalance = 0) {
     this.owner = owner;
     this.balance = initialBalance;
@@ -150,7 +150,7 @@ $challenges = [
   get_history() {
     // Fix me!
   }
-}`,
+}",
         'test_cases' => json_encode([
             [
                 'id' => 1,
@@ -210,7 +210,7 @@ $challenges = [
         'title' => 'Shopping Cart',
         'category' => 'Arrays and Loops',
         'difficulty' => 'beginner',
-        'base_code' => `class ShoppingCart {
+        'base_code' => "class ShoppingCart {
   constructor() {
     this.items = [];
   }
@@ -246,7 +246,7 @@ $challenges = [
   get_item_count() {
     // Fix me!
   }
-}`,
+}",
         'test_cases' => json_encode([
             [
                 'id' => 1,
@@ -304,7 +304,7 @@ $challenges = [
         'title' => 'Score Tracker',
         'category' => 'Arrays and Loops',
         'difficulty' => 'intermediate',
-        'base_code' => `class ScoreTracker {
+        'base_code' => "class ScoreTracker {
   constructor() {
     this.scores = [];
   }
@@ -340,7 +340,7 @@ $challenges = [
   get_rank() {
     // Fix me!
   }
-}`,
+}",
         'test_cases' => json_encode([
             [
                 'id' => 1,
@@ -403,7 +403,7 @@ $challenges = [
         'title' => 'Text Processor',
         'category' => 'String Manipulation',
         'difficulty' => 'beginner',
-        'base_code' => `class TextProcessor {
+        'base_code' => "class TextProcessor {
   static capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
@@ -422,11 +422,11 @@ $challenges = [
     // Fix me!
   }
 
-  // TODO: Implement truncate — limit string to n chars + "..."
+  // TODO: Implement truncate — limit string to n chars + \"...\"
   static truncate(str, length = 20) {
     // Fix me!
   }
-}`,
+}",
         'test_cases' => json_encode([
             [
                 'id' => 1,
@@ -486,7 +486,7 @@ $challenges = [
         'title' => 'Password Validator',
         'category' => 'String Manipulation',
         'difficulty' => 'intermediate',
-        'base_code' => `class PasswordValidator {
+        'base_code' => "class PasswordValidator {
   static check_length(pwd, min = 8) {
     return pwd.length >= min;
   }
@@ -509,7 +509,7 @@ $challenges = [
   static get_strength(pwd) {
     // Fix me!
   }
-}`,
+}",
         'test_cases' => json_encode([
             [
                 'id' => 1,
@@ -572,7 +572,7 @@ $challenges = [
         'title' => 'Stack Implementation',
         'category' => 'Data Structures',
         'difficulty' => 'intermediate',
-        'base_code' => `class Stack {
+        'base_code' => "class Stack {
   constructor() {
     this.items = [];
   }
@@ -600,7 +600,7 @@ $challenges = [
   get_size() {
     // Fix me!
   }
-}`,
+}",
         'test_cases' => json_encode([
             [
                 'id' => 1,
@@ -660,7 +660,7 @@ $challenges = [
         'title' => 'Queue Implementation',
         'category' => 'Data Structures',
         'difficulty' => 'advanced',
-        'base_code' => `class Queue {
+        'base_code' => "class Queue {
   constructor() {
     this.items = [];
     this.front = 0;
@@ -689,7 +689,7 @@ $challenges = [
   clear() {
     // Fix me!
   }
-}`,
+}",
         'test_cases' => json_encode([
             [
                 'id' => 1,

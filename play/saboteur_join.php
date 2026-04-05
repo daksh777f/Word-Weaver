@@ -21,7 +21,10 @@ if (!isLoggedIn()) {
 
 $user_id = (int)$_SESSION['user_id'];
 $request_data = json_decode(file_get_contents('php://input'), true);
-$room_code = trim($request_data['room_code'] ?? '');
+if (!is_array($request_data)) {
+    $request_data = [];
+}
+$room_code = strtoupper(trim((string)($request_data['room_code'] ?? '')));
 
 if (empty($room_code)) {
     ob_end_clean();
@@ -41,18 +44,41 @@ try {
     }
 
     // ── Check if user already in another active room ──────────────────────────
-    $stmt = $pdo->prepare("
-        SELECT sr.room_code FROM saboteur_rooms sr
+        $stmt = $pdo->prepare("
+            SELECT sr.room_code, sr.status FROM saboteur_rooms sr
         INNER JOIN saboteur_players sp ON sr.id = sp.room_id
         WHERE sp.user_id = ? AND sr.status IN ('lobby', 'role_reveal', 'playing', 'voting')
         LIMIT 1
     ");
     $stmt->execute([$user_id]);
-    if ($stmt->fetch()) {
-        ob_end_clean();
-        echo json_encode(['success' => false, 'message' => 'Already in active room']);
-        exit;
-    }
+        $existingActiveRoom = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($existingActiveRoom) {
+            $existingCode = (string)$existingActiveRoom['room_code'];
+            $existingStatus = (string)$existingActiveRoom['status'];
+            $redirectUrl = ($existingStatus === 'lobby')
+                ? ('saboteur_lobby.php?room=' . urlencode($existingCode))
+                : ('saboteur_game.php?room=' . urlencode($existingCode));
+
+            if (strcasecmp((string)$existingActiveRoom['room_code'], $room_code) === 0) {
+                ob_end_clean();
+                echo json_encode([
+                    'success' => true,
+                    'room_code' => $existingCode,
+                    'message' => 'Already in this room',
+                    'redirect_url' => $redirectUrl
+                ]);
+                exit;
+            }
+
+            ob_end_clean();
+            echo json_encode([
+                'success' => false,
+                'message' => 'Already in active room',
+                'room_code' => $existingCode,
+                'redirect_url' => $redirectUrl
+            ]);
+            exit;
+        }
 
     // ── Find room ──────────────────────────
     $stmt = $pdo->prepare("SELECT id, status FROM saboteur_rooms WHERE room_code = ?");
@@ -116,7 +142,8 @@ try {
         'room_id' => $room_id,
         'room_code' => $room_code,
         'player_count' => $player_count + 1,
-        'message' => 'Joined room'
+        'message' => 'Joined room',
+        'redirect_url' => 'saboteur_lobby.php?room=' . urlencode($room_code)
     ]);
 
 } catch (Exception $e) {

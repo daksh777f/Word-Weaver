@@ -24,6 +24,16 @@ if (!$user) {
     exit();
 }
 
+$languageStmt = $pdo->query("SELECT DISTINCT LOWER(language) AS language FROM bug_challenges WHERE challenge_type = 'bug_fix' AND language IS NOT NULL AND language <> '' ORDER BY language ASC");
+$availableLanguages = array_values(array_filter(array_map(static function ($row) {
+  return strtolower(trim((string)($row['language'] ?? '')));
+}, $languageStmt->fetchAll(PDO::FETCH_ASSOC))));
+
+$selectedLanguage = strtolower(trim((string)($_GET['language'] ?? '')));
+if ($selectedLanguage !== '' && !in_array($selectedLanguage, $availableLanguages, true)) {
+  $selectedLanguage = '';
+}
+
 // Check if user already has active duel
 $stmt = $pdo->prepare("
     SELECT dr.* FROM duel_rooms dr
@@ -242,6 +252,15 @@ $skillLevel = (int)$user['skill_level'];
                     <div id="lobby-state">
                         <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--g-text);">Challenge!</div>
                         <div style="font-size: 0.85rem; color: var(--g-muted); margin-bottom: 1.5rem; line-height: 1.5;">Race another dev to fix the same bug.</div>
+                        <form method="GET" action="duel_lobby.php" style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.9rem;">
+                          <label for="duelLanguage" style="font-size:0.75rem;color:var(--g-muted);font-weight:700;">Language</label>
+                          <select id="duelLanguage" name="language" onchange="this.form.submit()" style="flex:1;background:#080c1e;color:var(--g-text);border:1px solid var(--g-border);border-radius:8px;padding:0.4rem 0.5rem;font-size:0.78rem;">
+                            <option value="" <?php echo $selectedLanguage === '' ? 'selected' : ''; ?>>All languages</option>
+                            <?php foreach ($availableLanguages as $lang): ?>
+                              <option value="<?php echo htmlspecialchars($lang); ?>" <?php echo $selectedLanguage === $lang ? 'selected' : ''; ?>><?php echo htmlspecialchars(strtoupper($lang)); ?></option>
+                            <?php endforeach; ?>
+                          </select>
+                        </form>
                         <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                             <button id="find-opponent-btn" class="play-again">
                                 <i class="fas fa-sword"></i> Find Opponent
@@ -274,6 +293,7 @@ const botBtn = document.getElementById('play-bot-btn');
 const cancelBtn = document.getElementById('cancel-search-btn');
 const waitElapsed = document.getElementById('wait-elapsed');
 const roomCodeDisplay = document.getElementById('room-code-display');
+const selectedLanguage = <?php echo json_encode((string)$selectedLanguage); ?>;
 
 // ── FIND OPPONENT ──────────────────────────────────────
 
@@ -285,7 +305,8 @@ if (findBtn) {
     try {
       const response = await fetch('duel_matchmaker.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: selectedLanguage || null })
       });
       
       const data = await response.json();
@@ -357,7 +378,8 @@ if (botBtn) {
     try {
       const response = await fetch('duel_bot_matchmaker.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: selectedLanguage || null })
       });
       
       const data = await response.json();

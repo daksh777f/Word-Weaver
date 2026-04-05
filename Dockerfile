@@ -17,12 +17,21 @@ RUN a2enmod rewrite
 # Configure Apache MPM (disable all MPMs and enable prefork for PHP compatibility)
 RUN a2dismod mpm_event mpm_worker && a2enmod mpm_prefork
 
+# Create session directory and set permissions
+RUN mkdir -p /var/lib/php/sessions && \
+    chmod 1733 /var/lib/php/sessions
+
+# Configure PHP session settings
+RUN echo "session.save_path = /var/lib/php/sessions" > /usr/local/etc/php/conf.d/sessions.ini && \
+    echo "session.auto_start = 0" >> /usr/local/etc/php/conf.d/sessions.ini
+
 # Copy application files
 COPY . /var/www/html/
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+    && chmod -R 755 /var/www/html \
+    && chown -R www-data:www-data /var/lib/php/sessions
 
 # Expose port 80
 EXPOSE 80

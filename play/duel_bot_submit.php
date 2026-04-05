@@ -53,9 +53,8 @@ try {
     // ── Update bot player status to submitted ──────────────────────────
     $stmt = $pdo->prepare("
         UPDATE duel_players
-        SET submitted_code = ?,
-            status = 'submitted',
-            submitted_at = NOW()
+            SET submitted_code = ?,
+                submitted_at = NOW()
         WHERE id = ?
     ");
     $stmt->execute([$code, (int)$botPlayer['id']]);

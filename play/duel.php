@@ -385,7 +385,7 @@ $xpAvailable = $xpByDifficulty[$difficulty] ?? 100;
             <div class="duel-vs-badge" style="grid-column: 1;">⚔️ Bug Duel</div>
             <div class="hud-item" style="grid-column: 2; text-align: center; background: transparent; border: none; padding: 0;">
                 <span style="font-size: 0.8rem;">Time</span>
-                <strong style="display: block; font-size: 1.6rem; color: var(--g-warning); margin-top: 0.2rem;" id="duel-timer">3</strong>
+                <strong style="display: block; font-size: 1.6rem; color: var(--g-warning); margin-top: 0.2rem;" id="duel-timer">3:00</strong>
             </div>
             <div style="grid-column: 3; text-align: right; color: var(--g-muted); font-size: 0.85rem;">
                 <small><?php echo htmlspecialchars($challenge['title']); ?></small>
@@ -542,6 +542,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Submit button handling
     if (submitBtn) {
         submitBtn.addEventListener('click', handleSubmit);
+        submitBtn.disabled = editorEl.value.trim().length === 0;
         editorEl.addEventListener('input', () => {
             submitBtn.disabled = editorEl.value.trim().length === 0;
         });
@@ -555,7 +556,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Bot AI: Auto-submit after countdown
     if (isVsBot) {
-        await showCountdown();
         botAutoSubmit();
     }
 });
@@ -617,6 +617,11 @@ function startGamePolling() {
         try {
             const resp = await fetch('duel_poll.php?room=' + duelRoomCode + '&phase=game');
             const data = await resp.json();
+
+            if (data.error) {
+                console.error('Duel poll returned error:', data.error);
+                return;
+            }
             
             // Update states
             if (data.p1_status) duelState.p1_status = data.p1_status;
@@ -628,18 +633,27 @@ function startGamePolling() {
             const isPlayer1 = duelUserId === data.player1_id;
             const myNewStatus = isPlayer1 ? data.p1_status : data.p2_status;
             const oppNewStatus = isPlayer1 ? data.p2_status : data.p1_status;
+
+            const applyStatus = (el, status, progressEl) => {
+                el.classList.remove('submitted', 'editing');
+                if (status === 'submitted') {
+                    el.textContent = '✓ Submitted';
+                    el.classList.add('submitted');
+                    progressEl.style.width = '100%';
+                } else if (status === 'editing') {
+                    el.textContent = 'Editing...';
+                    el.classList.add('editing');
+                    if (progressEl.style.width === '0%' || !progressEl.style.width) {
+                        progressEl.style.width = '35%';
+                    }
+                } else {
+                    el.textContent = 'Waiting...';
+                    progressEl.style.width = '0%';
+                }
+            };
             
-            if (myNewStatus === 'submitted') {
-                myStatus.textContent = '✓ Submitted';
-                myStatus.classList.add('submitted');
-                myProgress.style.width = '100%';
-            }
-            
-            if (oppNewStatus === 'submitted') {
-                oppStatus.textContent = '✓ Submitted';
-                oppStatus.classList.add('submitted');
-                oppProgress.style.width = '100%';
-            }
+            applyStatus(myStatus, myNewStatus, myProgress);
+            applyStatus(oppStatus, oppNewStatus, oppProgress);
             
             // If both submitted or time up, show results
             if ((myNewStatus === 'submitted' && oppNewStatus === 'submitted') || timeRemaining <= 0) {
@@ -767,7 +781,7 @@ async function botAutoSubmit() {
 // Generate simple bot fix code
 function generateBotCode() {
     // Extract broken code from the challenge
-    let code = '<?php echo addslashes($challenge['broken_code']); ?>';
+    let code = <?php echo json_encode((string)$challenge['broken_code']); ?>;
     
     // Simple bot "fixes" - add comments and fix common issues
     const fixes = [

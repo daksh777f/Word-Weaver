@@ -17,10 +17,7 @@ header('Content-Type: text/plain; charset=utf-8');
 
 try {
     $seedCheck = $pdo->query("SELECT COUNT(*) FROM live_coding_seed_flag WHERE id = 1")->fetchColumn();
-    if ((int)$seedCheck > 0) {
-        echo "Live coding challenges already seeded.\n";
-        exit();
-    }
+    $alreadySeeded = (int)$seedCheck > 0;
 
     $challenges = [
         [
@@ -243,12 +240,82 @@ try {
                 'Mutate visited land to water (or track visited set) so it is not counted twice.',
             ],
         ],
+        [
+            'title' => 'Merge Overlapping Intervals',
+            'description' => 'Implement mergeIntervals(intervals) that merges overlapping [start, end] pairs and returns a sorted non-overlapping list.',
+            'backstory' => 'At TimetableCore, period blocks are duplicated after a sync job and teachers see impossible schedules. Your patch must merge collisions before the planner opens for enrollment edits.',
+            'starter_code' => "def merge_intervals(intervals):\n    # TODO: merge overlapping intervals\n    pass\n",
+            'reference_solution' => "def merge_intervals(intervals):\n    if not intervals:\n        return []\n\n    intervals.sort(key=lambda pair: pair[0])\n    merged = [intervals[0][:]]\n\n    for start, end in intervals[1:]:\n        last = merged[-1]\n        if start <= last[1]:\n            last[1] = max(last[1], end)\n        else:\n            merged.append([start, end])\n\n    return merged\n",
+            'language' => 'python',
+            'concept_tags' => 'arrays, sorting, conditionals',
+            'difficulty' => 'intermediate',
+            'expected_output' => 'Merged list of non-overlapping intervals.',
+            'test_cases' => [
+                ['input' => [[[1,3],[2,6],[8,10],[15,18]]], 'expected_output' => [[1,6],[8,10],[15,18]]],
+                ['input' => [[[1,4],[4,5]]], 'expected_output' => [[1,5]]],
+                ['input' => [[]], 'expected_output' => []],
+                ['input' => [[[5,7],[1,2]]], 'expected_output' => [[1,2],[5,7]]],
+            ],
+            'hints' => [
+                'Sort intervals by start time first so overlaps are adjacent.',
+                'Compare each interval with the end of the last merged interval.',
+                'If they overlap, extend end; otherwise append a new interval.',
+            ],
+        ],
+        [
+            'title' => 'Balanced Brackets Validator',
+            'description' => 'Implement isBalanced(s) that returns true if (), {}, and [] are properly balanced and nested.',
+            'backstory' => 'ExamScript validates answer-template tokens before grading, but malformed brackets now crash a release candidate. The parsing pass must be fixed before the nightly publish cut-off.',
+            'starter_code' => "public class Brackets {\n    public static boolean isBalanced(String s) {\n        // TODO: implement stack-based validation\n        return false;\n    }\n}\n",
+            'reference_solution' => "import java.util.ArrayDeque;\nimport java.util.Deque;\n\npublic class Brackets {\n    public static boolean isBalanced(String s) {\n        Deque<Character> stack = new ArrayDeque<>();\n        for (int i = 0; i < s.length(); i++) {\n            char ch = s.charAt(i);\n            if (ch == '(' || ch == '{' || ch == '[') {\n                stack.push(ch);\n            } else if (ch == ')' || ch == '}' || ch == ']') {\n                if (stack.isEmpty()) return false;\n                char open = stack.pop();\n                if ((ch == ')' && open != '(') || (ch == '}' && open != '{') || (ch == ']' && open != '[')) {\n                    return false;\n                }\n            }\n        }\n        return stack.isEmpty();\n    }\n}\n",
+            'language' => 'java',
+            'concept_tags' => 'data-structures, strings, conditionals',
+            'difficulty' => 'beginner',
+            'expected_output' => 'Boolean indicating balanced bracket structure.',
+            'test_cases' => [
+                ['input' => ['()[]{}'], 'expected_output' => true],
+                ['input' => ['([)]'], 'expected_output' => false],
+                ['input' => ['{[]}'], 'expected_output' => true],
+                ['input' => [']'], 'expected_output' => false],
+            ],
+            'hints' => [
+                'A stack helps match each closing bracket with the latest opening bracket.',
+                'Push opening chars; on closing chars, pop and validate pair type.',
+                'Any mismatch or leftover stack elements means invalid structure.',
+            ],
+        ],
+        [
+            'title' => 'Product Except Self',
+            'description' => 'Implement productExceptSelf(nums) that returns an array where each index is the product of all other numbers without using division.',
+            'backstory' => 'ScoreForge computes aggregate multipliers for ranking signals, but divide-by-zero cases from sparse inputs broke rollout metrics. The team needs a prefix/suffix fix before leaderboard refresh.',
+            'starter_code' => "#include <vector>\nusing namespace std;\n\nvector<int> productExceptSelf(const vector<int>& nums) {\n    // TODO: return product of all numbers except self\n    return {};\n}\n",
+            'reference_solution' => "#include <vector>\nusing namespace std;\n\nvector<int> productExceptSelf(const vector<int>& nums) {\n    int n = static_cast<int>(nums.size());\n    vector<int> out(n, 1);\n\n    int prefix = 1;\n    for (int i = 0; i < n; i++) {\n        out[i] = prefix;\n        prefix *= nums[i];\n    }\n\n    int suffix = 1;\n    for (int i = n - 1; i >= 0; i--) {\n        out[i] *= suffix;\n        suffix *= nums[i];\n    }\n\n    return out;\n}\n",
+            'language' => 'cpp',
+            'concept_tags' => 'arrays, loops, dynamic-programming',
+            'difficulty' => 'advanced',
+            'expected_output' => 'Array of products excluding current index.',
+            'test_cases' => [
+                ['input' => [[1,2,3,4]], 'expected_output' => [24,12,8,6]],
+                ['input' => [[-1,1,0,-3,3]], 'expected_output' => [0,0,9,0,0]],
+                ['input' => [[5]], 'expected_output' => [1]],
+                ['input' => [[0,2]], 'expected_output' => [2,0]],
+            ],
+            'hints' => [
+                'Build left-product and right-product information in two passes.',
+                'First pass stores product of elements before each index.',
+                'Second pass multiplies by product of elements after each index.',
+            ],
+        ],
     ];
 
     $insertChallenge = $pdo->prepare(
         "INSERT INTO live_coding_challenges
         (title, description, backstory, starter_code, reference_solution, language, concept_tags, difficulty, expected_output, test_cases, hints)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    );
+
+    $existsChallenge = $pdo->prepare(
+        "SELECT id FROM live_coding_challenges WHERE title = ? AND language = ? LIMIT 1"
     );
 
     $conceptPairs = [
@@ -275,31 +342,41 @@ try {
 
     $pdo->beginTransaction();
 
+    $inserted = 0;
+
     foreach ($challenges as $challenge) {
-        $insertChallenge->execute([
-            $challenge['title'],
-            $challenge['description'],
-            $challenge['backstory'],
-            $challenge['starter_code'],
-            $challenge['reference_solution'],
-            $challenge['language'],
-            $challenge['concept_tags'],
-            $challenge['difficulty'],
-            $challenge['expected_output'],
-            json_encode($challenge['test_cases'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-            json_encode($challenge['hints'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-        ]);
+        $existsChallenge->execute([$challenge['title'], $challenge['language']]);
+        if (!$existsChallenge->fetch(PDO::FETCH_ASSOC)) {
+            $insertChallenge->execute([
+                $challenge['title'],
+                $challenge['description'],
+                $challenge['backstory'],
+                $challenge['starter_code'],
+                $challenge['reference_solution'],
+                $challenge['language'],
+                $challenge['concept_tags'],
+                $challenge['difficulty'],
+                $challenge['expected_output'],
+                json_encode($challenge['test_cases'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                json_encode($challenge['hints'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            ]);
+            $inserted++;
+        }
     }
 
     foreach ($conceptPairs as $pair) {
         $insertConnection->execute([$pair[0], $pair[1]]);
     }
 
-    $pdo->exec("INSERT INTO live_coding_seed_flag (id) VALUES (1)");
+    $pdo->exec("INSERT IGNORE INTO live_coding_seed_flag (id) VALUES (1)");
 
     $pdo->commit();
 
-    echo "Live Coding Arena seed complete. Inserted 10 challenges and concept connections.\n";
+    if ($alreadySeeded) {
+        echo "Live Coding Arena updated. Added {$inserted} new challenge(s).\n";
+    } else {
+        echo "Live Coding Arena seed complete. Inserted {$inserted} challenge(s) and concept connections.\n";
+    }
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();

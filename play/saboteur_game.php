@@ -449,6 +449,109 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
             background: var(--sab-primary);
             border-color: var(--sab-primary);
         }
+
+        /* ════════════════════════════════ */
+        /* CURSOR TRACKING & PLAYER ACTIVITY */
+        /* ════════════════════════════════ */
+
+        .sabotage-tasks {
+            background: rgba(255, 107, 107, 0.05);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .sabotage-tasks .panel-title {
+            color: var(--sab-danger);
+            margin-bottom: 0.8rem;
+        }
+
+        .sabotage-task {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid var(--sab-border);
+            border-radius: 6px;
+            padding: 0.8rem;
+            margin-bottom: 0.6rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sabotage-task:hover {
+            border-color: var(--sab-primary);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .sabotage-task.completed {
+            background: rgba(81, 207, 102, 0.1);
+            border-color: var(--sab-success);
+            opacity: 0.6;
+        }
+
+        .task-id {
+            font-weight: 600;
+            margin-right: 0.4rem;
+            color: var(--sab-primary);
+        }
+
+        .task-desc {
+            font-size: 0.8rem;
+            color: var(--sab-text);
+            word-break: break-word;
+        }
+
+        .player-activity {
+            background: rgba(139, 92, 246, 0.02);
+            border: 1px solid var(--sab-border);
+            border-radius: 6px;
+            padding: 0.6rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.75rem;
+        }
+
+        .activity-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.4rem;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .cursor-overlay {
+            position: absolute;
+            height: 20px;
+            width: 2px;
+            animation: blink 1s infinite;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        @keyframes blink {
+            0%, 49%, 100% { opacity: 1; }
+            50%, 99% { opacity: 0; }
+        }
+
+        .editor-container-wrapper {
+            position: relative;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.4rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 20;
+        }
     </style>
 </head>
 <body>
@@ -459,16 +562,23 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
             <div class="round-info">
                 <div class="timer" id="timer">01:00</div>
             </div>
-            <button class="ghost-btn" onclick="if(confirm('Leave game?')) window.location.href='saboteur_lobby.php'" style="margin-left: auto;">
+            <button class="ghost-btn" onclick="if(confirm('Leave game?')) leaveGame();" style="margin-left: auto;">
                 <i class="fas fa-door-open"></i> Quit
             </button>
         </div>
 
-        <!-- LEFT PANEL: PLAYERS & TESTS -->
+        <!-- LEFT PANEL: PLAYERS & TESTS & SABOTAGE TASKS -->
         <div class="left-panel">
+            <!-- SABOTAGE TASKS (Only for Saboteur) -->
+            <div class="sabotage-tasks" id="sabotageTasksPanel" style="display: none;">
+                <div class="panel-title">🎯 Sabotage Tasks</div>
+                <div id="sabotageTasksList"></div>
+            </div>
+
             <div class="panel-section">
                 <div class="panel-title">🧑 Players</div>
                 <div id="playersList"></div>
+                <div id="playerActivity" style="margin-top: 0.8rem; font-size: 0.75rem; color: var(--sab-muted);"></div>
                 <button id="emergencyBtn" class="sab-btn sab-btn-danger" style="width: 100%; margin-top: 0.8rem; font-size: 0.8rem;">🚨 Emergency Meeting</button>
             </div>
 
@@ -487,9 +597,12 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
                     <p style="margin: 0.3rem 0; font-size: 0.85rem; color: var(--sab-muted);"><?php echo join(', ', $todo_descriptions ?? []); ?></p>
                 </div>
 
-                <div class="editor-shell">
-                    <div class="line-numbers" id="lineNumbers">1</div>
-                    <textarea id="sab-code-editor" spellcheck="false"><?php echo htmlspecialchars($challenge['base_code']); ?></textarea>
+                <div class="editor-container-wrapper">
+                    <div class="editor-shell">
+                        <div class="line-numbers" id="lineNumbers">1</div>
+                        <textarea id="sab-code-editor" spellcheck="false"><?php echo htmlspecialchars($challenge['base_code']); ?></textarea>
+                    </div>
+                    <div id="cursorOverlays"></div>
                 </div>
 
                 <div class="action-buttons">
@@ -520,7 +633,7 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
             <div id="roleDisplay" style="font-size: 2rem; margin: 2rem 0; text-align: center;"></div>
             <p id="roleDescription" style="text-align: center; color: var(--sab-muted); line-height: 1.6;"></p>
             <div class="modal-buttons">
-                <button class="sab-btn sab-btn-primary" style="width: 100%;" onclick="document.getElementById('roleRevealModal').classList.remove('show');">Ready to Play</button>
+                <button class="sab-btn sab-btn-primary" style="width: 100%;" onclick="closeRoleModal();">Ready to Play</button>
             </div>
         </div>
     </div>
@@ -543,7 +656,7 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
             <div class="modal-title" id="gameOverTitle">Game Over</div>
             <div id="gameOverContent" style="text-align: center;"></div>
             <div class="modal-buttons">
-                <button class="sab-btn sab-btn-primary" style="width: 100%;" onclick="window.location.href='saboteur_lobby.php';">Back to Lobby</button>
+                <button class="sab-btn sab-btn-primary" style="width: 100%;" onclick="leaveGame();">Back to Lobby</button>
             </div>
         </div>
     </div>
@@ -566,21 +679,40 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
         let roundEndTime = null;
         let selectedVoteTarget = null;
         let lastChatId = 0;
+        let roleModalShown = false;  // Flag to prevent repeated modal showing
+        let voteModalShown = false;
+        let gameOverShown = false;
 
         // ════════════════════════════════
         // INITIALIZATION
         // ════════════════════════════════
 
         function init() {
+            const editor = document.getElementById('sab-code-editor');
+
+            // Chat listeners
             document.getElementById('sendChatBtn').addEventListener('click', sendChat);
             document.getElementById('sab-chat-input').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendChat();
             });
 
+            // Button listeners
             document.getElementById('runTestsBtn').addEventListener('click', runTests);
             document.getElementById('submitBtn').addEventListener('click', submitCode);
             document.getElementById('checkSabotageBtn').addEventListener('click', checkSabotage);
             document.getElementById('emergencyBtn').addEventListener('click', callEmergency);
+
+            // Editor listeners for cursor tracking
+            editor.addEventListener('click', syncCursorPosition);
+            editor.addEventListener('keyup', syncCursorPosition);
+            editor.addEventListener('selectionchange', syncCursorPosition);
+
+            // Update line numbers
+            editor.addEventListener('input', (e) => {
+                const lines = e.target.value.split('\n').length;
+                const lineNum = document.getElementById('lineNumbers');
+                lineNum.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('\n');
+            });
 
             // Start game loop
             pollGame();
@@ -612,20 +744,41 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
                 // Update displays
                 document.getElementById('roundNum').textContent = data.room.current_round;
                 updatePlayersList(data.players);
+                renderRemoteCursors(data.players);
+                updatePlayerActivity(data.players);
                 updateTimer(data.room.round_remaining);
                 updateChat(data.chat_messages);
 
+                // Show sabotage tasks for saboteurs
+                if (data.current_player.role === 'saboteur') {
+                    renderSabotgeTasks(data.current_player.sabotage_tasks, data.challenge);
+                } else {
+                    document.getElementById('sabotageTasksPanel').style.display = 'none';
+                }
+
                 // Handle state transitions
-                if (data.room.status === 'role_reveal' && !document.getElementById('roleRevealModal').classList.contains('show')) {
-                    showRoleReveal(data.current_player.role);
+                if (data.room.status === 'role_reveal' && !roleModalShown) {
+                    roleModalShown = true;  // Mark as shown so it only shows once
+                    if (data.current_player.role) {
+                        showRoleReveal(data.current_player.role);
+                    }
                 }
 
                 if (data.room.status === 'voting') {
-                    showVotingModal(data.players);
+                    if (!voteModalShown) {
+                        showVotingModal(data.players);
+                        voteModalShown = true;
+                    }
+                } else {
+                    voteModalShown = false;
+                    document.getElementById('votingModal').classList.remove('show');
                 }
 
                 if (data.room.status === 'finished') {
-                    showGameOver(data.room.winner, data.current_player.role);
+                    if (!gameOverShown) {
+                        showGameOver(data.room.winner, data.current_player.role);
+                        gameOverShown = true;
+                    }
                 }
             } catch (err) {
                 console.error('Poll error:', err);
@@ -785,6 +938,129 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
             }
         }
 
+        // ════════════════════════════════
+        // CURSOR TRACKING & REAL-TIME UX
+        // ════════════════════════════════
+
+        let playerCursors = {};
+        let lastCursorSync = 0;
+
+        function getCursorPosition() {
+            const editor = document.getElementById('sab-code-editor');
+            const start = editor.selectionStart;
+            const lineNum = editor.value.substring(0, start).split('\n').length;
+            const colNum = start - editor.value.lastIndexOf('\n', start - 1);
+            return { line: lineNum, col: colNum, pos: start };
+        }
+
+        async function syncCursorPosition() {
+            const now = Date.now();
+            if (now - lastCursorSync < 500) return; // Throttle to 500ms
+            lastCursorSync = now;
+
+            const cursor = getCursorPosition();
+            try {
+                await fetch('saboteur_cursor_track.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        room_code: GAME_CONFIG.roomCode,
+                        cursor_line: cursor.line,
+                        cursor_col: cursor.col,
+                        cursor_pos: cursor.pos
+                    })
+                });
+            } catch (err) {
+                console.error('Failed to sync cursor:', err);
+            }
+        }
+
+        function renderRemoteCursors(players) {
+            const container = document.getElementById('cursorOverlays');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            const colorMap = {
+                red: '#ff6b6b',
+                blue: '#339af0',
+                green: '#51cf66',
+                orange: '#ff922b',
+                purple: '#a78bfa'
+            };
+
+            players.forEach(p => {
+                if (p.is_you || !p.cursor_line) return;
+
+                const cursor = document.createElement('div');
+                cursor.className = 'cursor-overlay';
+                cursor.style.borderLeftColor = colorMap[p.color] || '#666';
+                cursor.title = p.username + ' (Line ' + p.cursor_line + ', Col ' + p.cursor_col + ')';
+
+                // Approximate position based on line number
+                const lineHeight = 20; // Match editor line height
+                const charWidth = 8;
+                const topOffset = (p.cursor_line - 1) * lineHeight + 4;
+                const leftOffset = (p.cursor_col - 1) * charWidth + 48; // Account for line numbers
+
+                cursor.style.top = topOffset + 'px';
+                cursor.style.left = leftOffset + 'px';
+
+                cursor.innerHTML = `<span class="tooltip">${htmlEscape(p.username)}</span>`;
+                container.appendChild(cursor);
+            });
+        }
+
+        function renderSabotgeTasks(tasks, challenge) {
+            const panel = document.getElementById('sabotageTasksPanel');
+            const list = document.getElementById('sabotageTasksList');
+
+            if (!tasks || tasks.length === 0) {
+                panel.style.display = 'none';
+                return;
+            }
+
+            panel.style.display = 'block';
+            list.innerHTML = tasks.map((task, idx) => {
+                const completed = task.completed || false;
+                const functionRegex = new RegExp(`function\\s+${task.target_function}`);
+                const isHighlighted = challenge && functionRegex.test(challenge.base_code);
+
+                return `
+                    <div class="sabotage-task ${completed ? 'completed' : ''}" onclick="toggleTaskCompletion(${idx})">
+                        <input type="checkbox" ${completed ? 'checked' : ''} style="cursor: pointer;">
+                        <span>${htmlEscape(task.description || task.action || '')}</span>
+                        <small>${isHighlighted ? '→ ' + task.target_function : ''}</small>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleTaskCompletion(taskIdx) {
+            // Placeholder for tracking task completion
+            console.log('Task toggled:', taskIdx);
+        }
+
+        function updatePlayerActivity(players) {
+            const activity = document.getElementById('playerActivity');
+            const editing = players.filter(p => !p.is_you && Number(p.cursor_pos) > 0);
+
+            if (editing.length === 0) {
+                activity.innerHTML = '';
+                return;
+            }
+
+            activity.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span>👁️ Watching:</span>
+                    ${editing.map(p => `
+                        <div class="player-color ${p.color}" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; position: relative;">
+                            <span class="player-activity" style="position: absolute; width: 6px; height: 6px; background: #51cf66; border-radius: 50%; top: -2px; right: -2px;"></span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
         async function callEmergency() {
             try {
                 const response = await fetch('saboteur_emergency.php', {
@@ -824,14 +1100,21 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
             modal.classList.add('show');
         }
 
+        function closeRoleModal() {
+            const modal = document.getElementById('roleRevealModal');
+            modal.classList.remove('show');
+            // Keep it closed - don't show it again
+        }
+
         function showVotingModal(players) {
             const modal = document.getElementById('votingModal');
             const options = document.getElementById('votingOptions');
+            selectedVoteTarget = null;
 
             options.innerHTML = players
                 .filter(p => !p.is_eliminated && !p.is_you)
                 .map(p => `
-                    <div class="player-vote-option" onclick="selectVote(${p.id}, this)">
+                    <div class="player-vote-option" onclick="selectVote(${p.user_id}, this)">
                         <div class="radio-circle"></div>
                         <div class="player-color ${p.color}" style="width: 12px; height: 12px;"></div>
                         <span>${htmlEscape(p.username)}</span>
@@ -849,6 +1132,11 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         async function castVote() {
+            if (!selectedVoteTarget) {
+                showToast('Select a player before voting', 'warning');
+                return;
+            }
+
             try {
                 const response = await fetch('saboteur_vote.php', {
                     method: 'POST',
@@ -862,6 +1150,7 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 if (data.success) {
                     document.getElementById('votingModal').classList.remove('show');
+                    voteModalShown = false;
                     showToast('Vote cast!', 'success');
                 } else {
                     showToast('Error: ' + data.message, 'error');
@@ -908,7 +1197,8 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
         // ════════════════════════════════
 
         function htmlEscape(str) {
-            return str.replace(/[&<>"']/g, (ch) => {
+            const safe = String(str ?? '');
+            return safe.replace(/[&<>"']/g, (ch) => {
                 const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'};
                 return map[ch];
             });
@@ -930,6 +1220,20 @@ $current_player = $stmt->fetch(PDO::FETCH_ASSOC);
             `;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
+        }
+
+        async function leaveGame() {
+            try {
+                await fetch('saboteur_leave.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ room_code: GAME_CONFIG.roomCode })
+                });
+            } catch (err) {
+                console.error('Leave game error:', err);
+            } finally {
+                window.location.href = 'saboteur_lobby.php';
+            }
         }
 
         // Start the game

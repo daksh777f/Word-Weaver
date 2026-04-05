@@ -15,11 +15,6 @@ try {
     $seededStmt = $pdo->query("SELECT COUNT(*) FROM bug_hunt_seed_flag");
     $alreadySeeded = (int)$seededStmt->fetchColumn() > 0;
 
-    if ($alreadySeeded) {
-        echo 'Already seeded';
-        exit();
-    }
-
     $challenges = [
         [
             'title' => 'Checkout Batch Loop',
@@ -148,6 +143,39 @@ CODE,
             'difficulty' => 'advanced',
             'challenge_type' => 'bug_fix'
         ],
+        [
+            'title' => 'Schedule Comparator Null Crash',
+            'backstory' => 'BeaconDistrict compares class periods to detect overlap before publishing teacher schedules. A null period slipped through from an import job and now approvals fail for entire departments.',
+            'broken_code' => "public class ScheduleCheck {\n    static boolean hasOverlap(Integer startA, Integer endA, Integer startB, Integer endB) {\n        if (startA.equals(startB) || endA.equals(endB)) {\n            return true;\n        }\n        return startA < endB && startB < endA;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(hasOverlap(null, 10, 8, 12));\n    }\n}",
+            'language' => 'java',
+            'bug_description' => 'Calling equals on a potentially null Integer throws a NullPointerException.',
+            'real_world_consequence' => 'Schedule publishing is blocked and teachers cannot finalize class rosters.',
+            'concept_tags' => 'null-handling,conditionals,type-safety',
+            'difficulty' => 'intermediate',
+            'challenge_type' => 'bug_fix'
+        ],
+        [
+            'title' => 'Reverse Buffer Off-by-One',
+            'backstory' => 'Skyline Exams reverses encrypted seat tokens before validation in a C++ service. A single memory write is tripping sanitizer alarms and stopping nightly batch verification.',
+            'broken_code' => "#include <iostream>\n#include <string>\n\nstd::string reverseToken(const std::string& token) {\n    std::string out(token.size(), ' ');\n    for (size_t i = 0; i <= token.size(); ++i) {\n        out[token.size() - 1 - i] = token[i];\n    }\n    return out;\n}\n\nint main() {\n    std::cout << reverseToken(\"ABCD\") << std::endl;\n    return 0;\n}",
+            'language' => 'cpp',
+            'bug_description' => 'The loop condition writes one index past valid bounds, causing undefined behavior.',
+            'real_world_consequence' => 'Token validation jobs fail and exam-room access cannot be confirmed automatically.',
+            'concept_tags' => 'off-by-one,arrays,loops',
+            'difficulty' => 'advanced',
+            'challenge_type' => 'bug_fix'
+        ],
+        [
+            'title' => 'Attendance Sum Type Mismatch',
+            'backstory' => 'CampusPulse aggregates attendance minutes in a C# worker before reporting to district analytics. The latest deploy started returning impossible totals in production snapshots.',
+            'broken_code' => "using System;\n\nclass Program {\n    static int SumMinutes(string[] values) {\n        int total = 0;\n        foreach (var value in values) {\n            total += value;\n        }\n        return total;\n    }\n\n    static void Main() {\n        Console.WriteLine(SumMinutes(new[] { \"45\", \"30\", \"15\" }));\n    }\n}",
+            'language' => 'csharp',
+            'bug_description' => 'A string is added directly to an integer accumulator instead of being parsed first.',
+            'real_world_consequence' => 'Attendance totals become unreliable and weekly compliance exports are rejected.',
+            'concept_tags' => 'type-coercion,loops,math',
+            'difficulty' => 'beginner',
+            'challenge_type' => 'bug_fix'
+        ],
     ];
 
     $pdo->beginTransaction();
@@ -159,16 +187,33 @@ CODE,
             (:title, :backstory, :broken_code, :language, :bug_description, :real_world_consequence, :concept_tags, :difficulty, :challenge_type)"
     );
 
+    $existsStmt = $pdo->prepare(
+        "SELECT id FROM bug_challenges WHERE title = :title AND challenge_type = :challenge_type LIMIT 1"
+    );
+
+    $inserted = 0;
+
     foreach ($challenges as $challenge) {
-        $insertStmt->execute($challenge);
+        $existsStmt->execute([
+            ':title' => $challenge['title'],
+            ':challenge_type' => $challenge['challenge_type'],
+        ]);
+        if (!$existsStmt->fetch(PDO::FETCH_ASSOC)) {
+            $insertStmt->execute($challenge);
+            $inserted++;
+        }
     }
 
-    $flagStmt = $pdo->prepare("INSERT INTO bug_hunt_seed_flag (id) VALUES (1)");
+    $flagStmt = $pdo->prepare("INSERT IGNORE INTO bug_hunt_seed_flag (id) VALUES (1)");
     $flagStmt->execute();
 
     $pdo->commit();
 
-    echo 'Bug Hunt Arena seeded successfully';
+    if ($alreadySeeded) {
+        echo "Bug Hunt Arena updated. Added {$inserted} new challenge(s).";
+    } else {
+        echo "Bug Hunt Arena seeded successfully ({$inserted} challenges inserted).";
+    }
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();

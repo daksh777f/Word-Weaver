@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Mafia - Game Layout Test</title>
+    <link rel="stylesheet" href="retro-game.css">
+    <style>
+        body {
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            grid-template-rows: 1fr 40px;
+            gap: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: var(--card-bg);
+        }
+
+        .game-panel {
+            background: var(--card-bg);
+            border-right: 3px solid var(--card-border);
+            padding: 0.75rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .left-panel {
+            border-right: 3px solid var(--card-border);
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .center-panel {
+            display: flex;
+            flex-direction: column;
+            border-right: 3px solid var(--card-border);
+            padding: 0;
+            grid-column: 2;
+            grid-row: 1;
+            overflow: hidden;
+        }
+
+        .right-panel {
+            border-left: 3px solid var(--card-border);
+            display: flex;
+            flex-direction: column;
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        .panel-header {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--card-border);
+            padding-bottom: 0.4rem;
+        }
+
+        .panel-section {
+            margin-bottom: 1rem;
+        }
+
+        .player-item {
+            display: flex;
+            align-items: center;
+            padding: 0.3rem 0.25rem;
+            margin-bottom: 0.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 2px solid #ccc;
+            font-size: 1.5rem;
+        }
+
+        .player-color {
+            width: 10px;
+            height: 10px;
+            margin-right: 0.4rem;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+        }
+
+        .player-name {
+            flex: 1;
+            text-transform: uppercase;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .test-case {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--card-border);
+            padding: 0.3rem 0.25rem;
+            margin-bottom: 0.3rem;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .test-case input[type="radio"] {
+            margin-right: 0.3rem;
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .top-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 3px solid var(--card-border);
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.4rem;
+            gap: 0.5rem;
+            flex-shrink: 0;
+            min-height: 70px;
+        }
+
+        .round-badge {
+            background: var(--btn-primary);
+            color: white;
+            padding: 0.5rem 0.8rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 1.3rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+            border: 2px solid #B8620E;
+            box-shadow: inset -1px -1px 0 rgba(0,0,0,0.3);
+        }
+
+        #challengeName {
+            flex: 1;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: bold;
+            font-size: 1.6rem;
+            color: #000;
+            padding: 0 1rem;
+        }
+
+        #aliveCount {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .timer {
+            background: var(--code-dark);
+            border: 3px solid #0f0;
+            padding: 0.4rem 0.8rem;
+            font-family: 'Courier New', monospace;
+            font-size: 1.7rem;
+            text-align: center;
+            color: #0f0;
+            flex-shrink: 0;
+            min-width: 90px;
+            font-weight: bold;
+            box-shadow: inset 0 0 10px rgba(0,255,0,0.2);
+        }
+
+        .editor-area {
+            flex: 1;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .code-editor {
+            flex: 1;
+            background: var(--code-dark);
+            border: 3px solid var(--card-border);
+            padding: 0.75rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #0f0;
+            overflow: auto;
+            resize: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+            justify-content: center;
+        }
+
+        .emergency-btn {
+            background: var(--btn-danger);
+            border-color: #B71C1C;
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1.6rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .chat-messages {
+            flex: 1;
+            list-style: none;
+            overflow-y: auto;
+            margin-bottom: 0.5rem;
+            padding: 0.4rem;
+            font-size: 1.3rem;
+        }
+
+        .chat-message {
+            margin-bottom: 0.3rem;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
+        .chat-message strong {
+            text-transform: uppercase;
+            font-size: 1.2rem;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 0.2rem;
+            padding: 0 0.4rem 0.4rem;
+            flex-shrink: 0;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            font-size: 1.2rem;
+            padding: 0.3rem;
+            min-width: 0;
+        }
+
+        .chat-input-area button {
+            padding: 0.3rem 0.5rem;
+            font-size: 1.2rem;
+            background: var(--btn-primary);
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .test-note {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+
+        .ground {
+            grid-column: 1 / -1;
+            grid-row: 2;
+            background: var(--ground-green);
+            border-top: 3px solid var(--card-border);
+        }
+    </style>
+</head>
+<body>
+    <!-- LEFT PANEL -->
+    <div class="game-panel left-panel">
+        <!-- Players -->
+        <div class="panel-section">
+            <div class="panel-header">👥 Players</div>
+            <div class="player-item">
+                <div class="player-color" style="background: #E53935;"></div>
+                <div class="player-name">Chira (YOU)</div>
+            </div>
+            <div class="player-item">
+                <div class="player-color" style="background: #1E88E5;"></div>
+                <div class="player-name">Daksh</div>
+            </div>
+        </div>
+
+        <!-- Test Cases -->
+        <div class="panel-section">
+            <div class="panel-header">✅ Test Cases (1/3)</div>
+            <div class="test-case" style="background: rgba(76, 175, 80, 0.2); border-color: #43A047;">
+                <input type="radio" name="test" checked>
+                <label>increment works ✓</label>
+            </div>
+            <div class="test-case">
+                <input type="radio" name="test">
+                <label>decrement works</label>
+            </div>
+            <div class="test-case">
+                <input type="radio" name="test">
+                <label>reset works</label>
+            </div>
+            <div class="test-note">Tests lock once passed ✓</div>
+        </div>
+    </div>
+
+    <!-- CENTER PANEL -->
+    <div class="center-panel">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <span class="round-badge">Round 1/4</span>
+            <span id="challengeName">Counter Class</span>
+            <span id="aliveCount">2 Alive</span>
+            <div class="timer">0:00</div>
+        </div>
+
+        <!-- Editor Area -->
+        <div class="editor-area">
+            <textarea class="code-editor" readonly>class Counter {
+    CONSTRUCTOR() {
+        THIS.COUNT = 0;
+        THIS.HISTORY = [];
+    }
+
+    INCREMENT() {
+        THIS.COUNT += 1;
+        THIS.HISTORY.PUSH('INCREMENT');
+        RETURN THIS.COUNT;
+    }
+
+    DECREMENT() {
+        THIS.COUNT -= 1;
+        THIS.HISTORY.PUSH('DECREMENT');
+        RETURN THIS.COUNT;
+    }
+
+    // TODO: IMPLEMENT RESET - SHOULD SET COUNT TO 0 AND CLEAR HISTORY
+    RESET() {
+        // FIX ME!
+    }
+
+    // TODO: IMPLEMENT VALUE - SHOULD RETURN CURRENT COUNT
+    VALUE() {
+        // FIX ME!
+    }
+
+    // TODO: IMPLEMENT LAST_CHANGE - SHOULD RETURN LAST ACTION FROM HISTORY
+    LAST_CHANGE() {
+        // FIX ME!
+    }
+}</textarea>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="emergency-btn" onclick="alert('Emergency Meeting!')">
+                    ⚠ EMERGENCY
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="game-panel right-panel">
+        <div class="panel-header">💬 Chat</div>
+        <ul class="chat-messages" id="chatMessages">
+            <li class="chat-message"><strong style="color: #E53935;">Chira:</strong> Hello everyone!</li>
+            <li class="chat-message"><strong style="color: #1E88E5;">Daksh:</strong> Let's solve this!</li>
+        </ul>
+
+        <div class="chat-input-area">
+            <input 
+                type="text" 
+                placeholder="Type..."
+            >
+            <button>📤</button>
+        </div>
+    </div>
+
+    <!-- Ground -->
+    <div class="ground"></div>
+</body>
+</html>

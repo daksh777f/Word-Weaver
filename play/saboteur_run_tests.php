@@ -13,6 +13,24 @@ require_once '../onboarding/config.php';
 
 header('Content-Type: application/json');
 
+function safePatternMatch(string $pattern, string $code): bool {
+    if ($pattern === '') {
+        return false;
+    }
+
+    $quotedResult = @preg_match('/' . preg_quote($pattern, '/') . '/i', $code);
+    if ($quotedResult === 1) {
+        return true;
+    }
+
+    $rawResult = @preg_match($pattern, $code);
+    if ($rawResult === false) {
+        return stripos($code, $pattern) !== false;
+    }
+
+    return $rawResult === 1;
+}
+
 if (!isLoggedIn()) {
     ob_end_clean();
     echo json_encode(['success' => false, 'message' => 'Not logged in']);
@@ -32,13 +50,23 @@ if (empty($room_code)) {
 
 try {
     // ── Find room ──────────────────────────
-    $stmt = $pdo->prepare("SELECT challenge_id FROM saboteur_rooms WHERE room_code = ?");
+    $stmt = $pdo->prepare("SELECT id, challenge_id FROM saboteur_rooms WHERE room_code = ?");
     $stmt->execute([$room_code]);
     $room = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$room) {
         ob_end_clean();
         echo json_encode(['success' => false, 'message' => 'Room not found']);
+        exit;
+    }
+
+    $room_id = (int)$room['id'];
+
+    $stmt = $pdo->prepare("SELECT id FROM saboteur_players WHERE room_id = ? AND user_id = ?");
+    $stmt->execute([$room_id, $user_id]);
+    if (!$stmt->fetch()) {
+        ob_end_clean();
+        echo json_encode(['success' => false, 'message' => 'Player not in room']);
         exit;
     }
 
@@ -68,10 +96,9 @@ try {
         $is_match = false;
 
         if ($check_type === 'contains') {
-            $is_match = preg_match('/' . preg_quote($pattern) . '/i', $code) || 
-                       preg_match($pattern, $code);
+            $is_match = safePatternMatch($pattern, $code);
         } elseif ($check_type === 'has_function') {
-            $is_match = preg_match('/\b' . preg_quote($pattern) . '\s*\(/i', $code);
+            $is_match = (@preg_match('/\b' . preg_quote($pattern, '/') . '\s*\(/i', $code) === 1);
         }
 
         if ($negate) {

@@ -65,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 require_once '../includes/streak_manager.php';
                 $streakData = updateUserActivity(
                     $_SESSION['user_id'],
+                    $pdo,
                     0,
-                    false,
-                    $pdo
+                    false
                 );
                 $_SESSION['current_streak'] = $streakData['current_streak'];
                 $_SESSION['streak_message'] = $streakData['streak_message'];
@@ -75,6 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // AUDIT LOG: Login Success
                 require_once '../includes/Logger.php';
                 logAudit('Login Success', $user['id'], $user['username']);
+                
+                // Explicitly flush session to disk before redirect
+                session_write_close();
                 
                 // Redirect to index page
                 header('Location: ../menu.php');

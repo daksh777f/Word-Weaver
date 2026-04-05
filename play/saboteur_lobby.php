@@ -25,7 +25,7 @@ if (!$user) {
     exit();
 }
 
-// Check if user already in active room
+// Check if user already in an unfinished room
 $stmt = $pdo->prepare("
     SELECT sr.room_code, sr.status FROM saboteur_rooms sr
     INNER JOIN saboteur_players sp ON sp.room_id = sr.id
@@ -35,9 +35,9 @@ $stmt = $pdo->prepare("
 $stmt->execute([$user_id]);
 $activeRoom = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($activeRoom && in_array($activeRoom['status'], ['role_reveal', 'playing', 'voting'])) {
-    header('Location: saboteur_game.php?room=' . urlencode($activeRoom['room_code']));
-    exit();
+// Only auto-restore lobby rooms; active matches should not force-open from game selection.
+if ($activeRoom && $activeRoom['status'] !== 'lobby') {
+    $activeRoom = null;
 }
 
 // Get categories
@@ -199,6 +199,22 @@ $categories = array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'category');
             text-align: center;
         }
 
+        .start-btn-area.visible {
+            display: block !important;
+        }
+
+        .categories-card.visible {
+            display: block !important;
+        }
+
+        #readyBtn.hidden {
+            display: none !important;
+        }
+
+        #readyBtn.visible {
+            display: block !important;
+        }
+
         .status-message {
             text-align: center;
             padding: 1rem;
@@ -348,11 +364,19 @@ $categories = array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'category');
                 });
                 const data = await response.json();
                 if (data.success) {
+                    if (data.redirect_url) {
+                        window.location.href = data.redirect_url;
+                        return;
+                    }
                     currentRoom = code;
                     isHost = false;
                     showWaitingRoom();
                     startPolling();
                 } else {
+                    if (data.redirect_url) {
+                        window.location.href = data.redirect_url;
+                        return;
+                    }
                     showToast('Error: ' + data.message, 'error');
                 }
             } catch (err) {
@@ -374,16 +398,30 @@ $categories = array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'category');
                 });
                 const data = await response.json();
                 if (data.success) {
-                    document.getElementById('readyBtn').style.display = 'none';
-                    pollRoom();
+                    showToast('✓ You\'re ready to play!', 'success');
+                    document.getElementById('readyBtn').classList.remove('visible');
+                    document.getElementById('readyBtn').classList.add('hidden');
+                    // Immediate poll to sync with server
+                    setTimeout(pollRoom, 300);
+                } else {
+                    showToast('Error: ' + data.message, 'error');
                 }
             } catch (err) {
                 showToast('Failed to mark ready', 'error');
+                console.error(err);
             }
         }
 
         async function startGame() {
-            if (!currentRoom || !isHost) return;
+            if (!currentRoom) {
+                showToast('No room selected', 'error');
+                return;
+            }
+            
+            if (!isHost) {
+                showToast('Only the host can start the game', 'error');
+                return;
+            }
 
             try {
                 const response = await fetch('saboteur_start.php', {
@@ -391,19 +429,43 @@ $categories = array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'category');
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ room_code: currentRoom })
                 });
-                const data = await response.json();
+                
+                let data;
+                try {
+                    data = await response.json();
+                } catch (e) {
+                    console.error('Failed to parse response:', response.text());
+                    showToast('Server error - check console', 'error');
+                    return;
+                }
+
                 if (data.success) {
-                    window.location.href = 'saboteur_game.php?room=' + encodeURIComponent(currentRoom);
+                    showToast('Starting game...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'saboteur_game.php?room=' + encodeURIComponent(currentRoom);
+                    }, 500);
                 } else {
-                    showToast('Error: ' + data.message, 'error');
+                    showToast('Error: ' + (data.message || 'Unknown error'), 'error');
+                    console.error('Start game error:', data);
                 }
             } catch (err) {
                 showToast('Failed to start game', 'error');
+                console.error('Start game exception:', err);
             }
         }
 
         async function leaveRoom() {
-            if (currentRoom) {
+            if (!currentRoom) return;
+
+            try {
+                await fetch('saboteur_leave.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ room_code: currentRoom })
+                });
+            } catch (err) {
+                console.error('Leave room error:', err);
+            } finally {
                 currentRoom = null;
                 isHost = false;
                 showEntryCard();
@@ -423,16 +485,46 @@ $categories = array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'category');
                 });
                 const data = await response.json();
                 if (data.success) {
+                    // Update isHost from poll response (handles page refresh)
+                    isHost = data.current_player.is_host;
+                    
                     updatePlayerList(data.players, data.current_player);
                     document.getElementById('playerCount').textContent = data.players.length;
 
+                    // Show/hide buttons based on role and ready status
+                    const startBtnArea = document.getElementById('startBtnArea');
+                    const categoriesSection = document.getElementById('categoriesSection');
+                    const readyBtn = document.getElementById('readyBtn');
+
                     if (isHost) {
-                        document.getElementById('startBtnArea').style.display = 'block';
-                        document.getElementById('categoriesSection').style.display = 'block';
+                        // Host: show start game button and category selector
+                        startBtnArea.classList.add('visible');
+                        startBtnArea.style.display = 'block';
+                        categoriesSection.classList.add('visible');
+                        categoriesSection.style.display = 'block';
+                        readyBtn.classList.add('hidden');
+                        readyBtn.classList.remove('visible');
+                        readyBtn.style.display = 'none';
                     } else {
-                        document.getElementById('readyBtn').style.display = 'block';
+                        // Non-host: show ready button only if not ready yet
+                        startBtnArea.classList.remove('visible');
+                        startBtnArea.style.display = 'none';
+                        categoriesSection.classList.remove('visible');
+                        categoriesSection.style.display = 'none';
+
+                        const playerIsReady = data.current_player.is_ready;
+                        if (playerIsReady) {
+                            readyBtn.classList.add('hidden');
+                            readyBtn.classList.remove('visible');
+                            readyBtn.style.display = 'none';
+                        } else {
+                            readyBtn.classList.add('visible');
+                            readyBtn.classList.remove('hidden');
+                            readyBtn.style.display = 'block';
+                        }
                     }
 
+                    // If room status changes from lobby, redirect to game
                     if (data.room.status !== 'lobby') {
                         window.location.href = 'saboteur_game.php?room=' + encodeURIComponent(currentRoom);
                     }

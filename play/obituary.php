@@ -251,9 +251,9 @@ try {
     require_once '../includes/streak_manager.php';
     $streakData = updateUserActivity(
         $userId,
+        $pdo,
         $xpAwarded,
-        true,
-        $pdo
+        true
     );
 
     // Add streak data to response

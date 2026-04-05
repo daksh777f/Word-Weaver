@@ -23,6 +23,10 @@ $user_id = (int)$_SESSION['user_id'];
 $request_data = json_decode(file_get_contents('php://input'), true);
 $category = trim($request_data['category'] ?? '');
 
+if ($category === '') {
+    $category = 'Object Oriented';
+}
+
 try {
     // ── Get user details ──────────────────────────────────
     $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
@@ -81,10 +85,11 @@ try {
     $colors = ['red', 'blue', 'green', 'orange', 'purple'];
     $host_color = $colors[0];
 
+    // Host does NOT need to be ready - they just start the game
     $stmt = $pdo->prepare("
         INSERT INTO saboteur_players
         (room_id, user_id, username, color, is_host, is_ready)
-        VALUES (?, ?, ?, ?, 1, 1)
+        VALUES (?, ?, ?, ?, 1, 0)
     ");
     $stmt->execute([$room_id, $user_id, $user['username'], $host_color]);
 

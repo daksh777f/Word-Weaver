@@ -13,6 +13,24 @@ require_once '../onboarding/config.php';
 
 header('Content-Type: application/json');
 
+function safePatternMatch(string $pattern, string $code): bool {
+    if ($pattern === '') {
+        return false;
+    }
+
+    $quotedResult = @preg_match('/' . preg_quote($pattern, '/') . '/i', $code);
+    if ($quotedResult === 1) {
+        return true;
+    }
+
+    $rawResult = @preg_match($pattern, $code);
+    if ($rawResult === false) {
+        return stripos($code, $pattern) !== false;
+    }
+
+    return $rawResult === 1;
+}
+
 if (!isLoggedIn()) {
     ob_end_clean();
     echo json_encode(['success' => false, 'message' => 'Not logged in']);
@@ -76,8 +94,7 @@ try {
         $pattern = $task['detection_pattern'] ?? '';
         $negate = (bool)($task['negate'] ?? false);
 
-        $is_detected = preg_match('/' . preg_quote($pattern) . '/i', $code) || 
-                      preg_match($pattern, $code);
+        $is_detected = safePatternMatch($pattern, $code);
 
         if ($negate) {
             $is_detected = !$is_detected;
