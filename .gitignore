@@ -20,3 +20,15 @@ cd_logo.webp
 
 database/
 landing_page/
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
