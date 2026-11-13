@@ -77,3 +77,9 @@ If challenge content is missing, run seed routes once while logged in:
 
 The project is actively evolving from the original Word Weavers platform into CodeDungeon, including rebranding, new coding game loops, and AI-assisted feedback flows.
 
+## Team
+
+- Chirag Aggarwal ([@Chirag-agg](https://github.com/Chirag-agg))
+- Daksh Goel ([@daksh777f](https://github.com/daksh777f))
+
+<!-- TODO (Daksh): after each name, add one line on what that person built, e.g. "backend API and data pipeline". Hidden comments like this one do not show on GitHub. -->
